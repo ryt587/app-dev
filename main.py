@@ -8,6 +8,14 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
+@app.route('/seller')
+def home():
+    return render_template('seller.html')
+
+@app.route('/staff')
+def home():
+    return render_template('staff.html')
+
 @app.route('/contactUs')
 def contact_us():
     return render_template('contactUs.html')
@@ -24,7 +32,7 @@ def create_user():
         except:
             print("Error in retrieving Users from user.db.")
 
-        user = User.User(create_user_form.first_name.data, create_user_form.last_name.data, create_user_form.gender.data)
+        user = User.User(create_user_form.first_name.data, create_user_form.last_name.data, create_user_form.password.data)
         users_dict[user.get_user_id()] = user
         db['Users'] = users_dict
 
@@ -46,7 +54,7 @@ def create_customer():
             print("Error in retrieving Customers from customer.db.")
 
         customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
-                                     create_customer_form.gender.data, create_customer_form.email.data,
+                                     create_customer_form.password.data, create_customer_form.email.data,
                                      create_customer_form.date_joined.data,
                                      create_customer_form.address.data, )
         customers_dict[customer.get_customer_id()] = customer
@@ -97,7 +105,7 @@ def update_user(id):
         user = users_dict.get(id)
         user.set_first_name(update_user_form.first_name.data)
         user.set_last_name(update_user_form.last_name.data)
-        user.set_gender(update_user_form.gender.data)
+        user.set_gender(update_user_form.password.data)
 
         db['Users'] = users_dict
         db.close()
@@ -112,7 +120,7 @@ def update_user(id):
         user = users_dict.get(id)
         update_user_form.first_name.data = user.get_first_name()
         update_user_form.last_name.data = user.get_last_name()
-        update_user_form.gender.data = user.get_gender()
+        update_user_form.gender.data = user.get_password()
 
         return render_template('updateUser.html', form=update_user_form)
     
@@ -127,9 +135,8 @@ def update_customer(id):
         customer = customers_dict.get(id)
         customer.set_first_name(update_customer_form.first_name.data)
         customer.set_last_name(update_customer_form.last_name.data)
-        customer.set_gender(update_customer_form.gender.data)
+        customer.set_gender(update_customer_form.password.data)
         customer.set_email(update_customer_form.email.data)
-        customer.set_date_joined(update_customer_form.date_joined.data)
         customer.set_address(update_customer_form.address.data)
 
         db['Customers'] = customers_dict
@@ -145,7 +152,7 @@ def update_customer(id):
         customer = customers_dict.get(id)
         update_customer_form.first_name.data = customer.get_first_name()
         update_customer_form.last_name.data = customer.get_last_name()
-        update_customer_form.gender.data = customer.get_gender()
+        update_customer_form.password.data = customer.get_password()
         update_customer_form.email.data=customer.get_email()
         update_customer_form.date_joined.data=customer.get_date_joined()
         update_customer_form.address.data=customer.get_address()
