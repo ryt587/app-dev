@@ -71,3 +71,23 @@ body {
   min-width: initial;
   padding: 0.5rem;
 }
+#image {
+	display: block;
+	margin: 0 auto;
+}
+section h4 {
+	font-weight: lighter;
+}
+
+section {
+	font-size: 15px;
+	line-height: 22px;
+	text-align: justify;
+	margin: 0px;
+	padding: 30px;
+	min-height: 180px;
+}
+
+section ul li {
+	list-style-type: square;
+}
