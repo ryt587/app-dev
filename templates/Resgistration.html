@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+{% extends "homepage.html" %}
+{% block title %}Library Loan System - Create Customer Account{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
@@ -76,3 +80,4 @@
   </div>
 </body>
 </html>
+{% endblock %}
