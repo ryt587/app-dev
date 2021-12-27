@@ -9,11 +9,11 @@ def home():
     return render_template('Homepage.html')
 
 @app.route('/seller')
-def home():
+def seller():
     return render_template('seller.html')
 
 @app.route('/staff')
-def home():
+def staff():
     return render_template('staff.html')
 
 @app.route('/contactUs')
