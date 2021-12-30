@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Homepage</title>
+    <title>{% block title %}Homepage{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -85,6 +85,7 @@
     </style>  
   </head>
   <body>
+    {% block content %}
     <!-- Header Start -->
     <header class="site-header">
       <div class="site-header__top">
@@ -188,15 +189,15 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
-        <img src="{{url_for('static', filename='images/1877.png')}}"  alt="shoes" style="width:100%;">
+        <img src="{{url_for('static', filename='images/1877.jpg')}}"  alt="shoes" style="width:100%;">
       </div>
 
       <div class="item">
-        <img src="{{url_for('static', filename='images/1877.png')}}" alt="shoes" style="width:100%;">
+        <img src="{{url_for('static', filename='images/1877.jpg')}}" alt="shoes" style="width:100%;">
       </div>
     
       <div class="item">
-        <img src="{{url_for('static', filename='images/1877.png')}}" alt="shoes" style="width:100%;">
+        <img src="{{url_for('static', filename='images/1877.jpg')}}" alt="shoes" style="width:100%;">
       </div>
     </div>
 
@@ -227,10 +228,11 @@
 <img src="{{url_for('static', filename='images/phones.jpg')}}" alt="eggudebenedict">
 <h3>Phones</h3>
 </div>
-
+{% endblock %}
 </div>
-
 	  </section>  
-    <script src="js/homepage.js"></script>
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>]\
+    {% endblock %}
   </body>
 </html>
