@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	      <link rel="stylesheet" href="styles/reset.min.css" />
-    <link rel="stylesheet" href="styles/style.css" />
-    <link rel="stylesheet" href="styles/homepage.css" />
+	      <link rel="stylesheet" href="{{ url_for('static', filename='styles/reset.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/homepage.css') }}"/>
 	  
 	<style type="text/css">
       .gallery{
@@ -99,7 +99,7 @@
             
           </div>
           <div class="site-header__end top">
-            <a href="login.html">Login</a>
+            <a href="/login">Login</a>
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@
               </button>
 				
               <ul class="nav__wrapper">
-				  <a href="#" class="brand"><img src="images/logo.png" alt="logo" height="55" width="55" style="margin-right: 20px"></a>
+				  <a href="#" class="brand"><img src="{{url_for('static', filename='images/logo.png')}}"  alt="logo" height="55" width="55" style="margin-right: 20px"></a>
                 <li class="nav__item"><a href="#">Home</a></li>
                 <li class="nav__item"><a href="#">About</a></li>
                 <li class="nav__item"><a href="#">Services</a></li>
@@ -188,15 +188,15 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
-        <img src="images/1877.jpg" alt="shoes" style="width:100%;">
+        <img src="{{url_for('static', filename='images/1877.png')}}"  alt="shoes" style="width:100%;">
       </div>
 
       <div class="item">
-        <img src="images/1877.jpg" alt="shoes" style="width:100%;">
+        <img src="{{url_for('static', filename='images/1877.png')}}" alt="shoes" style="width:100%;">
       </div>
     
       <div class="item">
-        <img src="images/1877.jpg" alt="shoes" style="width:100%;">
+        <img src="{{url_for('static', filename='images/1877.png')}}" alt="shoes" style="width:100%;">
       </div>
     </div>
 
@@ -216,15 +216,15 @@
 <section> 
 <div class="gallery" id="frenchtoast">
 <div class="content">
-<img src="images/tengaeggs.png" alt="frenchtoast">
+<img src="{{url_for('static', filename='images/tengaeggs.png')}}" alt="frenchtoast">
 <h3>Tenga Eggs</h3>
 </div>
 <div class="content">
-<img src="images/sports.jpg" alt="tapiocadrink">
+<img src="{{url_for('static', filename='images/sports.jpg')}}" alt="tapiocadrink">
 <h3>Sports</h3>
 </div>
 <div class="content">
-<img src="images/phones.jpg" alt="eggudebenedict">
+<img src="{{url_for('static', filename='images/phones.jpg')}}" alt="eggudebenedict">
 <h3>Phones</h3>
 </div>
 
