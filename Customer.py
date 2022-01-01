@@ -9,7 +9,7 @@ class Customer(u.User):
         self.__class__.count_id+=1
         self.__customer_id=self.__class__.count_id
         self.__first_name=first_name
-        self.__last_namee=last_name
+        self.__last_name=last_name
         self.__date_joined=date.today().strftime("%d/%m/%Y")
         self.__address= address
         

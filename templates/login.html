@@ -1,19 +1,14 @@
-{% extends "Homepage.html" %}
+{% extends "index.html" %}
 {% block title %}Login Page{% endblock %}
-
 {% block content %}
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="{{ url_for('static', filename='styles/reset.min.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/homepage.css') }}"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 	  	<!-- Font-->
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/opensans-font.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/material-design-iconic-font/css/material-design-iconic-font.css') }}">
 	<!-- Main Style Css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
 <body>
+
 	 <!-- Header Start -->
     <header class="site-header">
       <div class="site-header__top">
@@ -42,7 +37,7 @@
 				
               <ul class="nav__wrapper">
 				  <a href="#" class="brand"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" height="55" width="55" style="margin-right: 20px"></a>
-                <li class="nav__item"><a href="#">Home</a></li>
+                <li class="nav__item"><a href="/">Home</a></li>
                 <li class="nav__item"><a href="#">About</a></li>
                 <li class="nav__item"><a href="#">Services</a></li>
                 <li class="nav__item"><a href="#">Hire us</a></li>
@@ -146,9 +141,11 @@
 			</div>
 		</div>
 	</div>
+  {% endblock %}
+  {% block scripts %}
 	<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/jquery.steps.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
- <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+ {% endblock %}
 </body> 
-{% endblock %}
+
