@@ -16,7 +16,7 @@ def seller():
 def staff():
     return render_template('staff.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     create_user_form = CreateUserForm(request.form)
     if request.method == 'POST' and create_user_form.validate():
@@ -36,7 +36,7 @@ def login():
         return redirect(url_for('home', id=id))
     return render_template('login.html', form=create_user_form)
 
-@app.route('/signup')
+@app.route('/signup',  methods=['GET', 'POST'])
 def signup():
     create_customer_form = CreateCustomerForm(request.form)
     if request.method == 'POST' and create_customer_form.validate():
