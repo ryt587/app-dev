@@ -1,25 +1,13 @@
-{% extends "Homepage.html" %}
-{% block title %}Library Loan System - Create Customer Account{% endblock %}
+{% extends "index.html" %}
+{% block title %}Sign Up Page{% endblock %}
 
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="UTF-8">
-	  <title>Registration</title>
-	      <meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="styles/reset.min.css" />
-    <link rel="stylesheet" href="styles/style.css" />
-    <link rel="stylesheet" href="styles/homepage.css" />
-	  	<!-- Font-->
-	<link rel="stylesheet" type="text/css" href="css/opensans-font.css">
-	<link rel="stylesheet" type="text/css" href="fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-	<!-- Main Style Css -->
-    <link rel="stylesheet" href="css/style.css"/>
-   </head>
+  	<!-- Font-->
+	  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/opensans-font.css') }}">
+	  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/material-design-iconic-font/css/material-design-iconic-font.css') }}">
+	  <!-- Main Style Css -->
+	  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
 <body>
 	 <!-- Header Start -->
     <header class="site-header">
@@ -35,7 +23,7 @@
             
           </div>
           <div class="site-header__end top">
-            <a href="#">Login</a>
+            <a href="/login">Login</a>
           </div>
         </div>
       </div>
@@ -48,8 +36,8 @@
               </button>
 				
               <ul class="nav__wrapper">
-				  <a href="#" class="brand"><img src="images/logo.png" alt="logo" height="55" width="55" style="margin-right: 20px"></a>
-                <li class="nav__item"><a href="#">Home</a></li>
+				  <a href="#" class="brand"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" height="55" width="55" style="margin-right: 20px"></a>
+                <li class="nav__item"><a href="/">Home</a></li>
                 <li class="nav__item"><a href="#">About</a></li>
                 <li class="nav__item"><a href="#">Services</a></li>
                 <li class="nav__item"><a href="#">Hire us</a></li>
@@ -59,7 +47,7 @@
           </div>
 
           <div class="site-header__end bottom">
-            <div class="search">
+            <!-- <div class="search">
               <button class="search__toggle" aria-label="Open search">
                 Search
               </button>
@@ -92,8 +80,8 @@
                   />
                 </g>
               </svg>
-            </a>
-            <a href="#">
+            </a> -->
+            <a href="#"> 
             <!-- important later don't delete   <svg
                 version="1.1"
                 viewBox="0 0 100 100"
@@ -132,13 +120,15 @@
 									<div class="form-holder">
 										<fieldset>
 											<legend>First Name</legend>
-											<input type="text" class="form-control" id="first-name" name="first-name" placeholder="First Name" required>
+											<!-- >input type="text" class="form-control" id="first-name" name="first-name" placeholder="First Name" required> -->
+											{{ render_field(form.first_name, class="form-control") }}
 										</fieldset>
 									</div>
 									<div class="form-holder">
 										<fieldset>
 											<legend>Last Name</legend>
-											<input type="text" class="form-control" id="last-name" name="last-name" placeholder="Last Name" required>
+											<!-- <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Last Name" required> -->
+											{{ render_field(form.last_name, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
@@ -146,22 +136,33 @@
 									<div class="form-holder form-holder-2">
 										<fieldset>
 											<legend>Your Email</legend>
-											<input type="text" name="your_email" id="your_email" class="form-control" pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required>
+											<!-- <input type="text" name="your_email" id="your_email" class="form-control" pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required> -->
+											{{ render_field(form.email, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="form-holder form-holder-2">
 										<fieldset>
-											<legend>Phone Number</legend>
-											<input type="text" class="form-control" id="phone" name="phone" placeholder="+1 888-999-7777" required>
+											<legend>Password</legend>
+											<!-- <input type="text" class="form-control" id="phone" name="phone" placeholder="+1 888-999-7777" required> -->
+											{{ render_field(form.password, class="form-control") }}
+										</fieldset>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-holder form-holder-2">
+										<fieldset>
+											<legend>Confirm Password</legend>
+											<!-- <input type="text" class="form-control" id="phone" name="phone" placeholder="+1 888-999-7777" required> -->
+											{{ render_field(form.confirm, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
 								<div class="form-row form-row-date">
 									<div class="form-holder form-holder-2">
 										<label class="special-label">Birth Date:</label>
-										<select name="month" id="month">
+										<!-- <select name="month" id="month">
 											<option value="MM" disabled selected>MM</option>
 											<option value="16">16</option>
 											<option value="17">17</option>
@@ -182,7 +183,8 @@
 											<option value="2015">2015</option>
 											<option value="2014">2014</option>
 											<option value="2013">2013</option>
-										</select>
+										</select> -->
+										{{ render_field(form.birthdate, class="form-control datepicker") }}
 									</div>
 								</div>
 							</div>
@@ -201,24 +203,9 @@
 								<div class="form-row">
 								<div class="form-holder form-holder-2">
 										<fieldset>
-											<legend>Address line 1</legend>
-											<input type="text" class="form-control" id="address" name="address" placeholder="enter your address here" required>
-										</fieldset>
-									</div>
-								</div>
-								<div class="form-row">
-								<div class="form-holder form-holder-2">
-										<fieldset>
-											<legend>Address line 2</legend>
-											<input type="text" class="form-control" id="address2" name="address2" placeholder="enter your second address line here">
-										</fieldset>
-									</div>
-								</div>
-								<div class="form-row">
-								<div class="form-holder form-holder-2">
-										<fieldset>
-											<legend>Country</legend>
-											<input type="text" class="form-control" id="country" name="country" placeholder="enter your country here">
+											<legend>Address line</legend>
+											<!-- <input type="text" class="form-control" id="address" name="address" placeholder="enter your address here" required> -->
+											{{ render_field(form.address, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
@@ -226,13 +213,15 @@
 								<div class="form-holder">
 										<fieldset>
 											<legend>Postal Code</legend>
-											<input type="text" class="form-control" id="postal" name="postal" placeholder="enter your postal code here" required>
+											<!-- <input type="text" class="form-control" id="postal" name="postal" placeholder="enter your postal code here" required> -->
+											{{ render_field(form.postal, class="form-control") }}
 										</fieldset>
 									</div>
 									<div class="form-holder">
 										<fieldset>
 											<legend>City</legend>
-											<input type="text" class="form-control" id="city" name="city" placeholder="enter your city here" >
+											<!-- <input type="text" class="form-control" id="city" name="city" placeholder="enter your city here" > -->
+											{{ render_field(form.city, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
@@ -244,10 +233,10 @@
 			</div>
 		</div>
 	</div>
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/jquery.steps.js"></script>
-	<script src="js/main.js"></script>
- <script src="js/homepage.js"></script>
+	{% block scripts %}
+	<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/jquery.steps.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+	{% endblock scripts %}
 </body>
-</html>
 {% endblock %}

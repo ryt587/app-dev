@@ -18,7 +18,47 @@ def staff():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    create_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and create_user_form.validate():
+        users_dict = {}
+        db = shelve.open('user.db', 'c')
+
+        try:
+            users_dict = db['Users']
+        except:
+            print("Error in retrieving Users from user.db.")
+
+        for key, value in users_dict.items():
+            if value.get_email()==create_user_form.email.data:
+                id=key
+        db.close()
+        
+        return redirect(url_for('home', id=id))
+    return render_template('login.html', form=create_user_form)
+
+@app.route('/signup')
+def signup():
+    create_customer_form = CreateCustomerForm(request.form)
+    if request.method == 'POST' and create_customer_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'c')
+
+        try:
+            customers_dict = db['Customers']
+        except:
+            print("Error in retrieving Customers from customer.db.")
+
+        customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
+                                     create_customer_form.password.data, create_customer_form.email.data, 
+                                     create_customer_form.birthdate.data,
+                                     create_customer_form.address.data, create_customer_form.postal.data, create_customer_form.city.data)
+        customers_dict[customer.get_customer_id()] = customer
+        db['Customers'] = customers_dict
+
+        db.close()
+
+        return redirect(url_for('login'))
+    return render_template('Resgistration.html', form=create_customer_form)
 
 @app.route('/contactUs')
 def contact_us():

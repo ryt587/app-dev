@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% block title %}Login Page{% endblock %}
 {% block content %}
+{% from "includes/_formHelper.html" import render_field %}
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 	  	<!-- Font-->
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/opensans-font.css') }}">
@@ -47,7 +48,7 @@
           </div>
 
           <div class="site-header__end bottom">
-            <div class="search">
+            <!--<div class="search">
               <button class="search__toggle" aria-label="Open search">
                 Search
               </button>
@@ -80,7 +81,7 @@
                   />
                 </g>
               </svg>
-            </a>
+            </a> -->
             <a href="#">
             <!-- important later don't delete   <svg
                 version="1.1"
@@ -121,7 +122,8 @@
 									<div class="form-holder form-holder-2">
 										<fieldset>
 											<legend>Your Email</legend>
-											<input type="text" name="your_email" id="your_email" class="form-control" pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required>
+											<!--<input type="text" name="your_email" id="your_email" class="form-control" pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required> -->
+                      {{ render_field(form.email, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
@@ -130,7 +132,8 @@
 									<div class="form-holder form-holder-2">
 										<fieldset>
 											<legend>Password</legend>
-											<input type="password" class="form-control" id="password" name="password" placeholder="enter password here" required>
+											<!-- <input type="password" class="form-control" id="password" name="password" placeholder="enter password here" required> -->
+                      {{ render_field(form.password, class="form-control") }}
 										</fieldset>
 									</div>
 								</div>
