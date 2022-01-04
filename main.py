@@ -29,11 +29,12 @@ def login():
             print("Error in retrieving Users from user.db.")
 
         for key, value in users_dict.items():
-            if value.get_email()==create_user_form.email.data:
+            if value.get_email()==create_user_form.email.data and value.get_password()==create_user_form.email.data:
                 id=key
+                oo=value
         db.close()
         
-        return redirect(url_for('home', id=id))
+        return redirect(url_for('home', id=id, oo=oo))
     return render_template('login.html', form=create_user_form)
 
 @app.route('/signup',  methods=['GET', 'POST'])
