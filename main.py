@@ -232,5 +232,15 @@ def delete_customer(id):
 
     return redirect(url_for('retrieve_customers'))
 
+@app.route('/apply')
+def sellerapply():
+    return render_template('sellerapplication.html')
+
+@app.route('/accountdetails')
+def accountdetails():
+    return render_template('accountdetails.html')
+
+
+
 if __name__ == '__main__':
     app.run()
