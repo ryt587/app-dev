@@ -7,7 +7,6 @@ class CreateUserForm(Form):
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
-    confirm = PasswordField('Repeat Password')
     
 class CreateCustomerForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()])
@@ -17,5 +16,8 @@ class CreateCustomerForm(Form):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
+    birthdate = DateField('Birthdate', format='%Y-%m-%d')
+    postal = StringField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
+    city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
-    address = TextAreaField('Mailing Address', [validators.length(max=200), validators.DataRequired()])
+    address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()])

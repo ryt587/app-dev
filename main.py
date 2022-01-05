@@ -1,6 +1,8 @@
 from flask import Flask, render_template,  request, redirect, url_for
 from Forms import CreateUserForm, CreateCustomerForm
 import shelve, User, Customer
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 
@@ -16,9 +18,50 @@ def seller():
 def staff():
     return render_template('staff.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    create_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and create_user_form.validate():
+        users_dict = {}
+        db = shelve.open('user.db', 'c')
+
+        try:
+            users_dict = db['Users']
+        except:
+            print("Error in retrieving Users from user.db.")
+
+        for key, value in users_dict.items():
+            if value.get_email()==create_user_form.email.data and value.get_password()==create_user_form.email.data:
+                id=key
+                oo=value
+        db.close()
+        
+        return redirect(url_for('home', id=id, oo=oo))
+    return render_template('login.html', form=create_user_form)
+
+@app.route('/signup',  methods=['GET', 'POST'])
+def signup():
+    create_customer_form = CreateCustomerForm(request.form)
+    if request.method == 'POST' and create_customer_form.validate():
+        customers_dict = {}
+        db = shelve.open('customer.db', 'c')
+
+        try:
+            customers_dict = db['Customers']
+        except:
+            print("Error in retrieving Customers from customer.db.")
+
+        customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
+                                     create_customer_form.password.data, create_customer_form.email.data, 
+                                     create_customer_form.birthdate.data,
+                                     create_customer_form.address.data, create_customer_form.postal.data, create_customer_form.city.data)
+        customers_dict[customer.get_customer_id()] = customer
+        db['Customers'] = customers_dict
+
+        db.close()
+
+        return redirect(url_for('login'))
+    return render_template('Resgistration.html', form=create_customer_form)
 
 @app.route('/contactUs')
 def contact_us():

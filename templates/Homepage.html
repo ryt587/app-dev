@@ -1,5 +1,5 @@
 {% extends "index.html" %}
-{% block title %}Login Page{% endblock %}
+{% block title %}Homepage Page{% endblock %}
 {% block content %}
 <style type="text/css">
   .gallery{
@@ -74,6 +74,7 @@ h3 {
 
 </style>
   <body>
+
     <!-- Header Start -->
     <header class="site-header">
       <div class="site-header__top">
@@ -163,7 +164,7 @@ h3 {
       </div>
     </header>
     <!-- Header End -->
-    <div class="container w-75">
+<div class="container w-75">
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -206,7 +207,7 @@ h3 {
 <img src="{{url_for('static', filename='images/phones.jpg')}}" alt="phones">
 <h3>Phones</h3>
 </div>
-{% endblock %}
 </div>
 	  </section>  
   </body>
+{% endblock %}
