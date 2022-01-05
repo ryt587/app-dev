@@ -1,6 +1,8 @@
 from flask import Flask, render_template,  request, redirect, url_for
 from Forms import CreateUserForm, CreateCustomerForm
 import shelve, User, Customer
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 
