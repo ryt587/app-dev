@@ -12,7 +12,7 @@ $medium: 940px;
 }
 
 .site-header__top {
-  background-color: #def7ff;
+  background-color: #D81E5B;
 
   ul {
     display: flex;
@@ -29,7 +29,7 @@ $medium: 940px;
 
 .site-header__bottom {
   position: relative;
-  background-color: #c7f2ff;
+  background-color: #D81E5B;
 
   .site-header__end {
     @media (max-width: $medium - 1) {
@@ -41,6 +41,7 @@ $medium: 940px;
 .site-header__wrapper {
   display: flex;
   justify-content: space-between;
+  z-index: 9999;
 }
 
 .site-header__wrapper {
@@ -48,6 +49,7 @@ $medium: 940px;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+  z-index: 9999;
 
   @media (min-width: $medium) {
     padding-top: 0.5rem;
@@ -96,6 +98,7 @@ $medium: 940px;
 .nav__wrapper {
   @media (min-width: $medium) {
     display: flex;
+    z-index: 9999;
   }
 
   @media (max-width: $medium - 1) {
@@ -103,8 +106,8 @@ $medium: 940px;
     top: 100%;
     right: 0;
     left: 0;
-    z-index: -1;
-    background-color: #d9f0f7;
+    z-index: 9999;
+    background-color: #D81E5B;
     visibility: hidden;
     opacity: 0;
     transform: translateY(-100%);
@@ -114,6 +117,7 @@ $medium: 940px;
       visibility: visible;
       opacity: 1;
       transform: translateY(0);
+      z-index: 9999;
     }
   }
 }
@@ -147,6 +151,7 @@ $medium: 940px;
   }
 
   &.active {
+  z-index: 9999;
     a {
       border-left-color: #222;
 
@@ -177,7 +182,7 @@ $medium: 940px;
   font-size: 0;
   width: 34px;
   height: 34px;
-  background: url("../img/header-3/search.svg") center/22px no-repeat;
+  background: url("https://www.cssscript.com/demo/header-navbar-templates/img/header-3/search.svg") center/22px no-repeat;
   border: 0;
 
   @media (max-width: $medium - 1) {
@@ -187,7 +192,8 @@ $medium: 940px;
   }
 
   &.active {
-    background: url("../img/header-5/close.svg") center/22px no-repeat;
+  z-index: 9999;
+    background: url("https://www.cssscript.com/demo/header-navbar-templates/img/header-5/close.svg") center/22px no-repeat;
   }
 }
 

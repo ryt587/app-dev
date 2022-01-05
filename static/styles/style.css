@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+body{
+  background-color: #FDF0D5;
+}
 .wrapper {
   max-width: 1140px;
   padding-left: 1rem;

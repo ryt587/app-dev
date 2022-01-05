@@ -71,6 +71,7 @@
 h3 {
     font-size: 100%
 }
+
 </style>
   <body>
     <!-- Header Start -->
@@ -162,7 +163,7 @@ h3 {
       </div>
     </header>
     <!-- Header End -->
-<div class="container-fluid">
+    <div class="container w-75">
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -190,20 +191,19 @@ h3 {
   </a>
 </div>
 </div>
-
 	  
 <section> 
 <div class="gallery" id="frenchtoast">
 <div class="content">
-<img src="{{url_for('static', filename='images/tengaeggs.png')}}" alt="frenchtoast">
+<img src="{{url_for('static', filename='images/tengaeggs.png')}}" alt="eggs">
 <h3>Tenga Eggs</h3>
 </div>
 <div class="content">
-<img src="{{url_for('static', filename='images/sports.jpg')}}" alt="tapiocadrink">
+<img src="{{url_for('static', filename='images/sports.jpg')}}" alt="sports">
 <h3>Sports</h3>
 </div>
 <div class="content">
-<img src="{{url_for('static', filename='images/phones.jpg')}}" alt="eggudebenedict">
+<img src="{{url_for('static', filename='images/phones.jpg')}}" alt="phones">
 <h3>Phones</h3>
 </div>
 {% endblock %}
