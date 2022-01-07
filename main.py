@@ -1,4 +1,4 @@
-from flask import Flask, render_template,  request, redirect, url_for
+from flask import Flask, render_template,  request, redirect, url_for, flash
 from Forms import CreateUserForm, CreateCustomerForm
 import shelve, User, Customer
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,13 +10,17 @@ app = Flask(__name__)
 def home():
     return render_template('Homepage.html')
 
+@app.route('/homepage')
+def homepage():
+    return render_template('Homepageid.html', user=current_user)
+
 @app.route('/seller')
 def seller():
-    return render_template('seller.html')
+    return render_template('seller.html', user=current_user)
 
 @app.route('/staff')
 def staff():
-    return render_template('staff.html')
+    return render_template('staff.html', user=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -32,15 +36,24 @@ def login():
 
         for key, value in users_dict.items():
             if value.get_email()==create_user_form.email.data and value.get_password()==create_user_form.email.data:
-                id=key
-                oo=value
+                login_user(value)
+                return redirect(url_for('homepage'))
+            elif value.get_email()!=create_user_form.email.data:
+                flash('Email does not exist.')
+            else:
+                flash('Incorrect password, try again.')
         db.close()
         
-        return redirect(url_for('home', id=id, oo=oo))
     return render_template('login.html', form=create_user_form)
 
-@app.route('/signup',  methods=['GET', 'POST'])
-def signup():
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+@app.route('/register',  methods=['GET', 'POST'])
+def register():
     create_customer_form = CreateCustomerForm(request.form)
     if request.method == 'POST' and create_customer_form.validate():
         customers_dict = {}

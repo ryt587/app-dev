@@ -1,13 +1,11 @@
 import User as u
 from datetime import date
 
+
 class Customer(u.User):
-    count_id=0
     
     def __init__(self, first_name, last_name, password, email, birthdate, address, postal, city):
         super().__init__(email, password)
-        self.__class__.count_id+=1
-        self.__customer_id=self.__class__.count_id
         self.__first_name=first_name
         self.__last_name=last_name
         self.__birthdate=birthdate
