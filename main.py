@@ -253,6 +253,9 @@ def sellerapply():
 def accountdetails():
     return render_template('accountdetails.html')
 
+@app.route('/termsandconditions')
+def termsandconditions():
+    return render_template('termsandconditions.html')
 
 
 if __name__ == '__main__':
