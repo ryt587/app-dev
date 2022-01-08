@@ -4,8 +4,7 @@ from wtforms.fields import EmailField, DateField
 class CreateUserForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     password = PasswordField('New Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
+        validators.DataRequired()
     ])
     
 class CreateCustomerForm(Form):
@@ -21,3 +20,13 @@ class CreateCustomerForm(Form):
     city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
     email = EmailField('Email', [validators.Email(), validators.DataRequired()])
     address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()])
+    
+class CreateSellerForm(Form):
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('New Password', [
+        validators.DataRequired()
+    ])
+    address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()])
+    address2 = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()])
+    city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
+    postal = StringField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])

@@ -1,10 +1,23 @@
 from flask import Flask, render_template,  request, redirect, url_for, flash
 from Forms import CreateUserForm, CreateCustomerForm
 import shelve, User, Customer
+import imghdr
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_PATH'] = 'uploads'
+
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0) 
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
 
 @app.route('/')
 def home():
@@ -16,7 +29,8 @@ def homepage():
 
 @app.route('/seller')
 def seller():
-    return render_template('seller.html', user=current_user)
+    files = os.listdir(app.config['UPLOAD_PATH'])
+    return render_template('seller.html', user=current_user, files=files)
 
 @app.route('/staff')
 def staff():
@@ -80,50 +94,37 @@ def register():
 def contact_us():
     return render_template('contactUs.html')
 
-@app.route('/createUser', methods=['GET', 'POST'])
-def create_user():
-    create_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and create_user_form.validate():
-        users_dict = {}
-        db = shelve.open('user.db', 'c')
+'''
+@app.route('/sellerapplication',  methods=['GET', 'POST'])
+def sellerapplication():
+    create_seller_form = CreateSellerForm(request.form)
+    if request.method == 'POST' and create_seller_form.validate():
+        applications_dict = {}
+        db = shelve.open('application.db', 'c')
 
         try:
-            users_dict = db['Users']
+            customers_dict = db['Applications']
         except:
-            print("Error in retrieving Users from user.db.")
+            print("Error in retrieving Customers from Application.db.")
 
-        user = User.User(create_user_form.first_name.data, create_user_form.last_name.data, create_user_form.password.data)
-        users_dict[user.get_user_id()] = user
-        db['Users'] = users_dict
+        application = Customer.Customer(create_seller_form.first_name.data, create_seller_form.last_name.data,
+                                     create_seller_form.password.data, create_seller_form.email.data, 
+                                     create_seller_form.birthdate.data,
+                                     create_seller_form.address.data, create_seller_form.postal.data, create_seller_form.city.data)
+        customers_dict[customer.get_customer_id()] = application
+        db['Applications'] = applications_dict
 
         db.close()
         
-        return redirect(url_for('retrieve_users'))
-    return render_template('createUser.html', form=create_user_form)
-
-@app.route('/createCustomer', methods=['GET', 'POST'])
-def create_customer():
-    create_customer_form = CreateCustomerForm(request.form)
-    if request.method == 'POST' and create_customer_form.validate():
-        customers_dict = {}
-        db = shelve.open('customer.db', 'c')
-
-        try:
-            customers_dict = db['Customers']
-        except:
-            print("Error in retrieving Customers from customer.db.")
-
-        customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
-                                     create_customer_form.password.data, create_customer_form.email.data,
-                                     create_customer_form.date_joined.data,
-                                     create_customer_form.address.data, )
-        customers_dict[customer.get_customer_id()] = customer
-        db['Customers'] = customers_dict
-
-        db.close()
-
+        uploaded_file = request.files['file']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+        flash('Your application have been submitted. \nAn email will be sent you on the approval status of your application.')
         return redirect(url_for('home'))
-    return render_template('createCustomer.html', form=create_customer_form)
+    return render_template('sellerapplication.html', form=create_seller_form)
+'''
 
 @app.route('/retrieveUsers')
 def retrieve_users():

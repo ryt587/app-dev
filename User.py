@@ -3,13 +3,15 @@ import shelve
 
 class User:
     id=0
+    '''
     with shelve.open('user.db','c') as db:
         try:
             users_dict = db['Users']
+            while id in users_dict:
+                id=uuid4()
         except:
-            print("Error in retrieving Users from user.db.")
-    while id in users_dict:
-        id=uuid4()
+            print("Error in retrieving Users from user.db.") 
+    '''
         
     def __init__(self, email, password):
         self.__user_id=self.__class__.id
