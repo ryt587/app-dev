@@ -6,8 +6,10 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import login_user, login_required, logout_user, current_user
+from uuid import uuid4
 
 app = Flask(__name__)
+app.secret_key = uuid4().hex
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
 
@@ -25,7 +27,16 @@ def home():
 
 @app.route('/homepage')
 def homepage():
-    return render_template('Homepageid.html', user=current_user)
+    customers_dict = {}
+    db = shelve.open('user.db', 'r')
+    customers_dict = db['Users']
+    db.close()
+
+    customers_list = []
+    for key in customers_dict:
+        customer = customers_dict.get(key)
+        customers_list.append(customer)
+    return render_template('Homepageid.html', user=current_user, customers_list=customers_list)
 
 @app.route('/seller')
 def seller():
@@ -38,6 +49,7 @@ def staff():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     create_user_form = CreateUserForm(request.form)
     if request.method == 'POST' and create_user_form.validate():
         users_dict = {}
@@ -49,16 +61,15 @@ def login():
             print("Error in retrieving Users from user.db.")
 
         for key, value in users_dict.items():
-            if value.get_email()==create_user_form.email.data and value.get_password()==create_user_form.email.data:
-                login_user(value)
+            if value.get_email()==create_user_form.email.data and value.get_password()==create_user_form.password.data:
+                #login_user(value)
                 return redirect(url_for('homepage'))
             elif value.get_email()!=create_user_form.email.data:
-                flash('Email does not exist.')
+                error='Email does not exist.'
             else:
-                flash('Incorrect password, try again.')
+                error='Incorrect password, try again.'
         db.close()
-        
-    return render_template('Login.html', form=create_user_form)
+    return render_template('Login.html', form=create_user_form, error=error)
 
 @app.route('/logout')
 @login_required
@@ -68,6 +79,8 @@ def logout():
 
 @app.route('/register',  methods=['GET', 'POST'])
 def register():
+    error = None
+    no_of_error=0
     create_customer_form = CreateCustomerForm(request.form)
     if request.method == 'POST' and create_customer_form.validate():
         customers_dict = {}
@@ -76,19 +89,30 @@ def register():
         try:
             customers_dict = db['Users']
         except:
-            flash("Error in retrieving Customers from user.db.")
+            print("Error in retrieving Customers from user.db.")
 
-        customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
+        for x in customers_dict:
+            if create_customer_form.email.data==customers_dict[x].get_email():
+                no_of_error+=1
+                error='Email been used before'
+                break
+            elif create_customer_form.password.data != create_customer_form.confirm.data:
+                no_of_error+=1
+                error='Password is must be matched'
+                break
+            
+        if no_of_error==0:
+            customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
                                      create_customer_form.password.data, create_customer_form.email.data, 
                                      create_customer_form.birthdate.data,
                                      create_customer_form.address.data, create_customer_form.postal.data, create_customer_form.city.data)
-        customers_dict[customer.get_user_id()] = customer
-        db['Users'] = customers_dict
+            customers_dict[customer.get_user_id()] = customer
+            db['Users'] = customers_dict
 
         db.close()
 
         return redirect(url_for('homepage'))
-    return render_template('Signup.html', form=create_customer_form)
+    return render_template('Signup.html', form=create_customer_form, error=error)
 
 @app.route('/contactUs')
 def contact_us():

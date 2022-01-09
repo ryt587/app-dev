@@ -11,10 +11,12 @@
 </head>
 
 <body>
-
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
      <div class="container" id="container">
         <div class="form-container sign-in-container">
-            <form action="#">
+            <form action="#" method="post">
                 <h1>Create Account</h1>
                 {{ render_field(form.first_name, class="form-control") }}
 			    {{ render_field(form.last_name, class="form-control") }}

@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField
+from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField,IntegerField
 from wtforms.fields import EmailField, DateField
 
 class CreateUserForm(Form):
@@ -16,7 +16,7 @@ class CreateCustomerForm(Form):
     ], render_kw={"placeholder": "Password"})
     confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
     birthdate = DateField('Birthdate', format='%Y-%m-%d')
-    postal = StringField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()], render_kw={"placeholder": "Postal"})
+    postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()], render_kw={"placeholder": "Postal"})
     city = StringField('City', [validators.Length(max=200), validators.DataRequired()], render_kw={"placeholder": "City"})
     email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()], render_kw={"placeholder": "Address"})
@@ -29,4 +29,4 @@ class CreateSellerForm(Form):
     address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()])
     address2 = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()])
     city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
-    postal = StringField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
+    postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
