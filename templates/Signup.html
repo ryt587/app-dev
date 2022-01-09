@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
 <head>
-    <link rel="stylesheet" href="Signup.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Signup.css') }}"/>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>{% block title %}Sign Up{% endblock %}</title>
 </head>
+
 <body>
 
      <div class="container" id="container">
         <div class="form-container sign-in-container">
             <form action="#">
                 <h1>Create Account</h1>
-                <input type="text" placeholder="FirstName"/>
-                <input type="text" placeholder="LastName"/>
-                <input type="date" placeholder="birthdate"/>
-                <input type="email" placeholder="Email"/>
-                <input type="password" placeholder="Password"/>
-                <input type="password" placeholder="Confirm Password"/>
-                <input type="text" placeholder="Address"/>
-                <input type="number" placeholder="Postal"/>
-                <input type="text" placeholder="City"/>
+                {{ render_field(form.first_name, class="form-control") }}
+			    {{ render_field(form.last_name, class="form-control") }}
+                {{ render_field(form.birthdate, class="form-control") }}
+			    {{ render_field(form.password, class="form-control") }}
+                {{ render_field(form.confirm, class="form-control") }}
+                {{ render_field(form.email, class="form-control") }}
+                {{ render_field(form.address, class="form-control") }}
+                {{ render_field(form.postal, class="form-control") }}
+                {{ render_field(form.city, class="form-control") }}
                 <div class="form-group">
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" id="gridCheck">
@@ -30,7 +33,7 @@
                       </label>
                     </div>
                   </div>
-                <button>Sign Up</button>
+                  <input type="submit" value="Sign Up" class="btn btn-primary"/>
             </form>
         </div>
         <div class="overlay-container">
@@ -38,7 +41,7 @@
                 <div class="overlay-panel overlay-right">
                     <h1>Welcome Back!</h1>
                     <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn" onclick="location.href='login.html';">Sign In</button>
+                    <a class="ghost" id="signIn" href="/login"><button>Sign In</button></a>
                 </div>
             </div>
         </div>
@@ -46,4 +49,5 @@
     
     
 </body>
+{% endblock %}
 </html>

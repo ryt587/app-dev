@@ -13,10 +13,7 @@ class Customer(u.User):
         self.__address= address
         self.__postal= postal
         self.__city= city
-        
-    def get_customer_id(self):
-        return self.__customer_id
-
+    
     def get_first_name(self):
         return self.__first_name
     
@@ -37,9 +34,6 @@ class Customer(u.User):
     
     def get_city(self):
         return self.__city
-    
-    def set_customer_id(self, customer_id):
-        self.__customer_id = customer_id
         
     def set_first_name(self, first_name):
         self.__first_name = first_name

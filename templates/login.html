@@ -1,66 +1,36 @@
-{% extends "index.html" %}
-{% block title %}Login Page{% endblock %}
-{% block content %}
-{% from "includes/_formHelper.html" import render_field %}
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-	  	<!-- Font-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/opensans-font.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/material-design-iconic-font/css/material-design-iconic-font.css') }}">
-	<!-- Main Style Css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+<!DOCTYPE html>
+<html lang="en">
+	{% block content %}
+	{% from "includes/_formHelper.html" import render_field %}
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/Login.css') }}"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Login{% endblock %}</title>
+</head>
 <body>
+
   
-	
-	<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/jquery.steps.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-	 
-
-	<!-- registration start -->
-	<div class="page-content">
-		<div class="form-v1-content">
-			<div class="wizard-form">
-		        <form class="form-register" action="#" method="post">
-		        	<div id="form-total">
-		        		<!-- SECTION 1 -->
-			            <h2>
-			            	<p class="step-icon"><span>01</span></p>
-			            	<span class="step-text">Peronal Infomation</span>
-			            </h2>
-			            <section>
-			                <div class="inner">
-			                	<div class="wizard-header">
-									<h3 class="heading">Login</h3>
-									<p>Please enter your infomation and proceed.</p>
-								</div>
-								
-								<div class="form-row">
-									<div class="form-holder form-holder-2">
-										<fieldset>
-											<legend>Your Email</legend>
-											<!--<input type="text" name="your_email" id="your_email" class="form-control" pattern="[^@]+@[^@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required> -->
-                      {{ render_field(form.email, class="form-control") }}
-										</fieldset>
-									</div>
-								</div>
-								
-								<div class="form-row">
-									<div class="form-holder form-holder-2">
-										<fieldset>
-											<legend>Password</legend>
-											<!-- <input type="password" class="form-control" id="password" name="password" placeholder="enter password here" required> -->
-                      {{ render_field(form.password, class="form-control") }}
-										</fieldset>
-									</div>
-								</div>
-							</div>
-			            </section>
-					</div>
-		        </form>
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form action="#">
+			<h1>Sign in</h1>
+			{{ render_field(form.email, class="form-control") }}
+			{{ render_field(form.password, class="form-control") }}
+			<input type="submit" value="Sign In" class="btn btn-primary"/>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start a journey with us</p>
+				<a class="ghost" id="signUp" href="/register"><button>Sign Up</button></a>
 			</div>
 		</div>
 	</div>
-  {% endblock %}
-</body> 
-
+</div>
+</body>
+{% endblock %}
+</html>
