@@ -95,9 +95,9 @@ input {
 			0 10px 10px rgba(0,0,0,0.22);
 	position: relative;
 	overflow: hidden;
-	width: 768px;
+	width: 960px;
 	max-width: 100%;
-	min-height: 480px;
+	min-height: 600px;
 }
 
 .form-container {
@@ -119,7 +119,7 @@ input {
 
 .sign-up-container {
 	left: 0;
-	width: 50%;
+	width: 70%;
 	opacity: 0;
 	z-index: 1;
 }
