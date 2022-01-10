@@ -4,7 +4,7 @@ from datetime import date
 
 class Customer(u.User):
     
-    def __init__(self, first_name, last_name, password, email, birthdate, address, postal, city):
+    def __init__(self, first_name, last_name, birthdate, address, postal, city, email, password):
         super().__init__(email, password)
         self.__first_name=first_name
         self.__last_name=last_name
