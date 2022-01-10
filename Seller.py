@@ -2,7 +2,7 @@ import User as u
 
 class Seller(u.User):
   
-  def __innit__(self, address, city, postal_code, email, password)
+  def __init__(self, address, city, postal_code, email, password)
       super().__innit__(email, password)
       self.__address = address
       self.postal_code = postal_code
