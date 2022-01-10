@@ -1,21 +1,46 @@
-{% extends "base.html"
-{% block title %}Library Loan System - Update User{% endblock %}
-
+<!DOCTYPE html>
+<html lang="en">
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Signup.css') }}"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sign Up{% endblock %}</title>
+</head>
 
-<h1 class="display-4">Update User</h1>
-
-<form method="POST" action="">
-  <div class="form-group">
-    {{ render_field(form.first_name, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.last_name, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.gender, class="form-control") }}
-  </div>
-  <input type="submit" value="Submit" class="btn btn-primary"/>
-</form>
+<body>
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+     <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form action="#" method="post">
+                <h1>Create Account</h1>
+                {{ render_field(form.first_name, class="form-control") }}
+			    {{ render_field(form.last_name, class="form-control") }}
+                {{ render_field(form.birthdate, class="form-control") }}
+			    {{ render_field(form.password, class="form-control") }}
+                {{ render_field(form.confirm, class="form-control") }}
+                {{ render_field(form.email, class="form-control") }}
+                {{ render_field(form.address, class="form-control") }}
+                {{ render_field(form.postal, class="form-control") }}
+                {{ render_field(form.city, class="form-control") }}
+                <div class="form-group">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="gridCheck" required>
+                      <label class="form-check-label" for="gridCheck">
+                        Accept <a href="/termsandconditions">Terms and conditions</a>
+                      </label>
+                    </div>
+                  </div>
+                  <input type="submit" value="Sign Up" class="btn btn-primary"/>
+            </form>
+        </div>
+    </div>
+    
+    
+</body>
 {% endblock %}
+</html>

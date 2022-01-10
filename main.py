@@ -41,7 +41,7 @@ def login():
     create_user_form = CreateUserForm(request.form)
     if request.method == 'POST' and create_user_form.validate():
         users_dict = {}
-        db = shelve.open('user.db', 'c')
+        db = shelve.open('user.db', 'r')
 
         try:
             users_dict = db['Users']
@@ -143,6 +143,22 @@ def accountdetails():
 @app.route('/termsandconditions')
 def termsandconditions():
     return render_template('termsandconditions.html')
+
+@app.route('/deleteUser', methods=['GET', 'POST'])
+def delete_user():
+    global user
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(user.get_user_id())
+
+    db['Users'] = users_dict
+    db.close()
+    
+    user=0
+    
+    return redirect(url_for('home'))
 
 @app.errorhandler(404)
 def page_not_found(e):
