@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField,IntegerField
+from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField, IntegerField
 from wtforms.fields import EmailField, DateField
 
 class CreateUserForm(Form):

@@ -8,6 +8,17 @@ from werkzeug.utils import secure_filename
 from flask_login import login_user, login_required, logout_user, current_user
 from uuid import uuid4
 
+@property
+def password(self):
+    raise AttributeError('Password not in readable format')
+
+@password.setter
+def password(self, password):
+    self.password_hash = generate_password_hash(password)
+
+def verify_password(self, password):
+    return check_password_hash(self.password_hash, password)
+
 app = Flask(__name__)
 app.secret_key = uuid4().hex
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
