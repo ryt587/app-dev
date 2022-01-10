@@ -7,27 +7,31 @@
 <tbody>
     <tr>
       <th scope="col" style="border-top: none;">Name:</th>
-      <td style="border-top: none;"><!--put Jinjia here--></td>
+      <td style="border-top: none;">{{ user.get_first_name() }} {{ user.get_last_name() }}</td>
     </tr>
     <tr>
       <th scope="row" style="border-top: none;">Email:</th>
-      <td style="border-top: none;"><!--put Jinjia here--></td>
+      <td style="border-top: none;">{{ user.get_email() }}</td>
     </tr>
 	<tr>
-      <th scope="row" style="border-top: none;">Birthdate</th>
-      <td style="border-top: none;"><!--put Jinjia here--></td>
+      <th scope="row" style="border-top: none;">Birthdate:</th>
+      <td style="border-top: none;">{{ user.get_birthdate() }}</td>
+    </tr>
+    <tr>
+      <th scope="row" style="border-top: none;">Date Joined:</th>
+      <td style="border-top: none;">{{ user.get_date_joined() }}</td>
     </tr>
 	<tr>
       <th scope="row" style="border-top: none;">Address:</th>
-      <td style="border-top: none;"><!--put Jinjia here--></td>
+      <td style="border-top: none;">{{ user.get_address() }}</td>
     </tr>
 	<tr>
       <th scope="row" style="border-top: none;">Postal code:</th>
-      <td style="border-top: none;"><!--put Jinjia here--></td>
+      <td style="border-top: none;">{{ user.get_postal() }}</td>
     </tr>
     <tr>
       <th scope="row" style="border-top: none;">City:</th>
-      <td style="border-top: none;"><!--put Jinjia here--></td>
+      <td style="border-top: none;">{{ user.get_city() }}</td>
     </tr>
   </tbody>
 </table>

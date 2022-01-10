@@ -9,7 +9,7 @@ class Customer(u.User):
         self.__first_name=first_name
         self.__last_name=last_name
         self.__birthdate=birthdate
-        self.__date_joined=date.today().strftime("%d/%m/%Y")
+        self.__date_joined=date.today().strftime("%Y-%m-%d")
         self.__address= address
         self.__postal= postal
         self.__city= city

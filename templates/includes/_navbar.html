@@ -11,9 +11,14 @@
         
       </div>
       <div class="site-header__end top">
+        {% if user==0 %}
         <a href="/login">Login</a>
         <a href="/register">Register</a> <!--Temp until a links are made inside login page-->
         <a href="/apply">Apply</a>
+        {% else %}
+        <a href="/logout">Logout</a>
+        <a href="/accountdetails">Details</a>
+        {% endif %}
       </div>
     </div>
   </div>

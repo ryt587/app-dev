@@ -2,12 +2,11 @@ import User as u
 
 class Seller(u.User):
   
-  def __init__(self, address, city, postal_code, email, password)
+  def __init__(self, email, password, address, city, postal_code):
       super().__init__(email, password)
       self.__address = address
+      self.__city = city
       self.postal_code = postal_code
-      self.__email = email
-      self.__password = password
       
   def get_address(self):
       return self.__address
@@ -16,7 +15,7 @@ class Seller(u.User):
       return self.__city
   
   def get_postal_code(self):
-      return self.__postal
+      return self.__postal_code
   
   
   def set_address(self, address):

@@ -12,7 +12,7 @@ class CreateCustomerForm(Form):
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Last Name"})
     password = PasswordField('New Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
+        validators.EqualTo('confirm', message='Passwords must be matched')
     ], render_kw={"placeholder": "Password"})
     confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
     birthdate = DateField('Birthdate', format='%Y-%m-%d')

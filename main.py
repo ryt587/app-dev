@@ -5,24 +5,14 @@ import imghdr
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from flask_login import login_user, login_required, logout_user, current_user
 from uuid import uuid4
 
-@property
-def password(self):
-    raise AttributeError('Password not in readable format')
-
-@password.setter
-def password(self, password):
-    self.password_hash = generate_password_hash(password)
-
-def verify_password(self, password):
-    return check_password_hash(self.password_hash, password)
-
 app = Flask(__name__)
-app.secret_key = uuid4().hex
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
+
+global user
+user=0
 
 def validate_image(stream):
     header = stream.read(512)
@@ -34,29 +24,16 @@ def validate_image(stream):
 
 @app.route('/')
 def home():
-    return render_template('Homepage.html')
-
-@app.route('/homepage')
-def homepage():
-    customers_dict = {}
-    db = shelve.open('user.db', 'r')
-    customers_dict = db['Users']
-    db.close()
-
-    customers_list = []
-    for key in customers_dict:
-        customer = customers_dict.get(key)
-        customers_list.append(customer)
-    return render_template('Homepageid.html', user=current_user, customers_list=customers_list)
+    return render_template('Homepage.html', user=user)
 
 @app.route('/seller')
 def seller():
     files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('seller.html', user=current_user, files=files)
+    return render_template('seller.html', files=files)
 
 @app.route('/staff')
 def staff():
-    return render_template('staff.html', user=current_user)
+    return render_template('staff.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -72,9 +49,10 @@ def login():
             print("Error in retrieving Users from user.db.")
 
         for key, value in users_dict.items():
-            if value.get_email()==create_user_form.email.data and value.get_password()==create_user_form.password.data:
-                #login_user(value)
-                return redirect(url_for('homepage'))
+            if value.get_email()==create_user_form.email.data and check_password_hash(value.get_password(), create_user_form.password.data):
+                global user
+                user=value
+                return redirect(url_for('home'))
             elif value.get_email()!=create_user_form.email.data:
                 error='Email does not exist.'
             else:
@@ -83,10 +61,10 @@ def login():
     return render_template('Login.html', form=create_user_form, error=error)
 
 @app.route('/logout')
-@login_required
 def logout():
-    logout_user()
-    return redirect(url_for('login'))
+    global user
+    user=0
+    return redirect(url_for('home'))
 
 @app.route('/register',  methods=['GET', 'POST'])
 def register():
@@ -101,7 +79,7 @@ def register():
             customers_dict = db['Users']
         except:
             print("Error in retrieving Customers from user.db.")
-
+        
         for x in customers_dict:
             if create_customer_form.email.data==customers_dict[x].get_email():
                 no_of_error+=1
@@ -109,20 +87,21 @@ def register():
                 break
             elif create_customer_form.password.data != create_customer_form.confirm.data:
                 no_of_error+=1
-                error='Password is must be matched'
+                error='Password must be matched'
                 break
             
         if no_of_error==0:
-            customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data,
-                                     create_customer_form.password.data, create_customer_form.email.data, 
+            customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data, generate_password_hash(create_customer_form.password.data, method='sha256')
+                                     , create_customer_form.email.data, 
                                      create_customer_form.birthdate.data,
                                      create_customer_form.address.data, create_customer_form.postal.data, create_customer_form.city.data)
             customers_dict[customer.get_user_id()] = customer
             db['Users'] = customers_dict
+            db.close()
+            global user
+            user=customer
+            return redirect(url_for('home'))
 
-        db.close()
-
-        return redirect(url_for('homepage'))
     return render_template('Signup.html', form=create_customer_form, error=error)
 
 @app.route('/contactUs')
@@ -157,17 +136,17 @@ def sellerapplication():
         return redirect(url_for('home'))
     return render_template('sellerapplication.html', form=create_seller_form)
 
-@app.route('/apply')
-def sellerapply():
-    return render_template('sellerapplication.html')
-
 @app.route('/accountdetails')
 def accountdetails():
-    return render_template('accountdetails.html', user=current_user)
+    return render_template('accountdetails.html', user=user)
 
 @app.route('/termsandconditions')
 def termsandconditions():
     return render_template('termsandconditions.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404error.html'), 404
 
 
 if __name__ == '__main__':
