@@ -160,6 +160,46 @@ def delete_user():
     
     return redirect(url_for('home'))
 
+@app.route('/updateUser', methods=['GET', 'POST'])
+def update_customer():
+    update_customer_form = CreateCustomerForm(request.form)
+    global user
+    customer=user
+    if request.method == 'POST' and update_customer_form.validate():
+        customers_dict = {}
+        db = shelve.open('user.db', 'w')
+        customers_dict = db['Users']
+
+        customer.set_first_name(update_customer_form.first_name.data)
+        customer.set_last_name(update_customer_form.last_name.data)
+        customer.set_password(update_customer_form.password.data)
+        customer.set_email(update_customer_form.email.data)
+        customer.set_birthdate(update_customer_form.birthdate.data)
+        customer.set_address(update_customer_form.address.data)
+        customer.set_postal(update_customer_form.postal.data)
+        customer.set_city(update_customer_form.city.data)
+
+        db['Customers'] = customers_dict
+        db.close()
+
+        return redirect(url_for('accountdetails'))
+    else:
+        customers_dict = {}
+        db = shelve.open('user.db', 'r')
+        customers_dict = db['Users']
+        db.close()
+
+        update_customer_form.first_name.data = customer.get_first_name()
+        update_customer_form.last_name.data = customer.get_last_name()
+        update_customer_form.password.data = customer.get_password()
+        update_customer_form.email.data=customer.get_email()
+        update_customer_form.birthdate.data=customer.get_birthdate()
+        update_customer_form.address.data=customer.get_address()
+        update_customer_form.postal.data = customer.get_postal()
+        update_customer_form.city.data = customer.get_city()
+
+        return render_template('updateUser.html', form=update_customer_form)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404error.html'), 404
