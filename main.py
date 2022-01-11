@@ -1,5 +1,5 @@
 from flask import Flask, render_template,  request, redirect, url_for, flash
-from Forms import CreateUserForm, CreateCustomerForm, CreateSellerForm
+from Forms import CreateUserForm, CreateCustomerForm, CreateSellerForm, UpdateCustomerForm
 import shelve, Customer, Apply
 import imghdr
 import os
@@ -163,7 +163,7 @@ def delete_user():
 
 @app.route('/updateUser', methods=['GET', 'POST'])
 def update_customer():
-    update_customer_form = CreateCustomerForm(request.form)
+    update_customer_form = UpdateCustomerForm(request.form)
     global user
     customer=user
     if request.method == 'POST' and update_customer_form.validate():
@@ -173,15 +173,13 @@ def update_customer():
 
         user.set_first_name(update_customer_form.first_name.data)
         user.set_last_name(update_customer_form.last_name.data)
-        user.set_password(update_customer_form.password.data)
-        user.set_email(update_customer_form.email.data)
-        user.set_birthdate(update_customer_form.birthdate.data)
         user.set_address(update_customer_form.address.data)
         user.set_postal(update_customer_form.postal.data)
         user.set_city(update_customer_form.city.data)
 
         customers_dict[user.get_user_id()]=user
         db['Users'] = customers_dict
+        
         db.close()
 
         return redirect(url_for('accountdetails'))
@@ -193,9 +191,6 @@ def update_customer():
 
         update_customer_form.first_name.data = customer.get_first_name()
         update_customer_form.last_name.data = customer.get_last_name()
-        update_customer_form.password.data = customer.get_password()
-        update_customer_form.email.data=customer.get_email()
-        update_customer_form.birthdate.data=customer.get_birthdate()
         update_customer_form.address.data=customer.get_address()
         update_customer_form.postal.data = customer.get_postal()
         update_customer_form.city.data = customer.get_city()
