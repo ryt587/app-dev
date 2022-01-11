@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 from uuid import uuid4
 
 app = Flask(__name__)
+app.config['SECRET_KEY']=uuid4().hex
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
 
@@ -170,16 +171,17 @@ def update_customer():
         db = shelve.open('user.db', 'w')
         customers_dict = db['Users']
 
-        customer.set_first_name(update_customer_form.first_name.data)
-        customer.set_last_name(update_customer_form.last_name.data)
-        customer.set_password(update_customer_form.password.data)
-        customer.set_email(update_customer_form.email.data)
-        customer.set_birthdate(update_customer_form.birthdate.data)
-        customer.set_address(update_customer_form.address.data)
-        customer.set_postal(update_customer_form.postal.data)
-        customer.set_city(update_customer_form.city.data)
+        user.set_first_name(update_customer_form.first_name.data)
+        user.set_last_name(update_customer_form.last_name.data)
+        user.set_password(update_customer_form.password.data)
+        user.set_email(update_customer_form.email.data)
+        user.set_birthdate(update_customer_form.birthdate.data)
+        user.set_address(update_customer_form.address.data)
+        user.set_postal(update_customer_form.postal.data)
+        user.set_city(update_customer_form.city.data)
 
-        db['Customers'] = customers_dict
+        customers_dict[user.get_user_id()]=user
+        db['Users'] = customers_dict
         db.close()
 
         return redirect(url_for('accountdetails'))
