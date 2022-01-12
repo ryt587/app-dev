@@ -213,6 +213,5 @@ def page_not_found(e):
 def viewapply():
     return render_template('viewapplication.html', form_list=form_list)
 
-
 if __name__ == '__main__':
     app.run()
