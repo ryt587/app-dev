@@ -8,7 +8,7 @@ from uuid import uuid4
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
-app.config['UPLOAD_PATH'] = 'static/cert/images/'
+app.config['UPLOAD_PATH'] = 'static/images/cert/'
 app.config["ALLOWED_IMAGE_EXTENSIONS"]=['png', 'jpg', 'jpeg']
 
 global user
@@ -117,25 +117,29 @@ def sellerapplication():
     create_seller_form = CreateSellerForm(request.form)
     error=None
     if request.method == 'POST' and create_seller_form.validate():
+        file = request.files['file']
         applications_dict = {}
-        with shelve.open('application.db', 'c') as db:
+        with shelve.open('user.db', 'c') as db:
 
             try:
                 applications_dict = db['Applications']
             except:
                 print("Error in retrieving Customers from application.db.")
             
-            if not allowed_image(create_seller_form.image.data):
+            if not allowed_image(file.filename):
                 error="Missing image or invalid format of image"
             else:
-                application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
-                                        create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, create_seller_form.image.data)
-                file = request.files[create_seller_form.image.data]
-                filename = secure_filename(create_seller_form.image.data)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                applications_dict[application.get_user_id()] = application
-                db['Applications'] = applications_dict
-                return redirect(url_for('home'))
+                for x in applications_dict:
+                    if create_seller_form.email.data==applications_dict[x].get_email():
+                        error="Email has been used before"
+                        break
+                    else:
+                        application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
+                                                create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)
+                        file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
+                        applications_dict[application.get_user_id()] = application
+                        db['Applications'] = applications_dict
+                        return redirect(url_for('home'))
                 
         
         

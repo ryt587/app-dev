@@ -29,7 +29,6 @@ class CreateSellerForm(Form):
     address2 = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()], render_kw={"placeholder": "Apartment, studio, or floor"})
     city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
     postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
-    image = FileField('Image', [validators.DataRequired()])
      
 class UpdateCustomerForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "First Name"})
