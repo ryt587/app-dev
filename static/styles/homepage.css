@@ -12,8 +12,6 @@
     display: flex; }
   .site-header__top li:not(:last-child) {
     margin-right: 1.5rem; }
-  .site-header__top .site-header__start {
-    display: none; }
 
 .site-header__bottom {
   position: relative;

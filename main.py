@@ -1,7 +1,6 @@
-from flask import Flask, render_template,  request, redirect, url_for, flash
+from flask import Flask, render_template,  request, redirect, url_for
 from Forms import CreateUserForm, CreateCustomerForm, CreateSellerForm, UpdateCustomerForm
 import shelve, Customer, Apply
-import imghdr
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -9,19 +8,24 @@ from uuid import uuid4
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
-app.config['UPLOAD_PATH'] = 'uploads'
+app.config['UPLOAD_PATH'] = 'static/images/'
+app.config["ALLOWED_IMAGE_EXTENSIONS"]=['png', 'jpg', 'jpeg']
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 global user
 user=0
 
-def validate_image(stream):
-    header = stream.read(512)
-    stream.seek(0) 
-    format = imghdr.what(None, header)
-    if not format:
-        return None
-    return '.' + (format if format != 'jpeg' else 'jpg')
+def allowed_image(filename):
+
+    if not ("." in filename):
+        return False
+
+    ext = filename.rsplit(".")[-1]
+
+    if ext.lower() in app.config["ALLOWED_IMAGE_EXTENSIONS"]:
+        return True
+    else:
+        return False
 
 @app.route('/')
 def home():
@@ -112,6 +116,7 @@ def contact_us():
 @app.route('/sellerapplication',  methods=['GET', 'POST'])
 def sellerapplication():
     create_seller_form = CreateSellerForm(request.form)
+    error=None
     if request.method == 'POST' and create_seller_form.validate():
         applications_dict = {}
         db = shelve.open('application.db', 'c')
@@ -119,23 +124,21 @@ def sellerapplication():
         try:
             applications_dict = db['Applications']
         except:
-            print("Error in retrieving Customers from Application.db.")
-
-        application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
-                                     create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.zip.data)
-        applications_dict[application.get_user_id()] = application
-        db['Applications'] = applications_dict
-
+            print("Error in retrieving Customers from application.db.")
+        
+        if not allowed_image(create_seller_form.image.data):
+            error="Missing image or invalid format of image"
+        else:
+            application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
+                                     create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, create_seller_form.image.data)
+            
+            applications_dict[application.get_user_id()] = application
+            db['Applications'] = applications_dict
+            return redirect(url_for('home'))
         db.close()
         
-        uploaded_file = request.files['file']
-        filename = secure_filename(uploaded_file.filename)
-        if filename != '':
-            file_ext = os.path.splitext(filename)[1]
-            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-        flash('Your application have been submitted. \nAn email will be sent you on the approval status of your application.')
-        return redirect(url_for('home'))
-    return render_template('sellerapplication.html', form=create_seller_form)
+        
+    return render_template('sellerapplication.html', form=create_seller_form, error=error, user=user)
 
 @app.route('/accountdetails')
 def accountdetails():
