@@ -8,7 +8,7 @@ from uuid import uuid4
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
-app.config['UPLOAD_PATH'] = 'static/images/'
+app.config['UPLOAD_PATH'] = 'static/cert/images/'
 app.config["ALLOWED_IMAGE_EXTENSIONS"]=['png', 'jpg', 'jpeg']
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
@@ -203,6 +203,10 @@ def update_customer():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404error.html'), 404
+
+@app.route('/viewapply')
+def viewapply():
+    return render_template('viewapplication.html', form_list=form_list)
 
 
 if __name__ == '__main__':
