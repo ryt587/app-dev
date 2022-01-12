@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+body {
+    padding-top: 8rem;
+}
+.sidenav {
+
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(to bottom right, #D81E5B, #EB5E55);
+  padding-top: 8rem;
+}
+
+.wording {
+    padding-top: 5px    ;
+    padding-bottom: 20px;
+}
+.wording a {
+    padding-bottom: 6px;
+}
+
+.sidenav a {
+  padding: 40px 10px 6px 44px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #000000;
+  display: block;
+
+}
+
+.sidenav a:hover {
+  color: black  ;
+  background-color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.main {
+  margin-left: 270px; 
+  font-size: 28px; 
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
