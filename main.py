@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
 app.config['UPLOAD_PATH'] = 'static/cert/images/'
 app.config["ALLOWED_IMAGE_EXTENSIONS"]=['png', 'jpg', 'jpeg']
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 global user
 user=0
@@ -119,23 +118,25 @@ def sellerapplication():
     error=None
     if request.method == 'POST' and create_seller_form.validate():
         applications_dict = {}
-        db = shelve.open('application.db', 'c')
+        with shelve.open('application.db', 'c') as db:
 
-        try:
-            applications_dict = db['Applications']
-        except:
-            print("Error in retrieving Customers from application.db.")
-        
-        if not allowed_image(create_seller_form.image.data):
-            error="Missing image or invalid format of image"
-        else:
-            application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
-                                     create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, create_seller_form.image.data)
+            try:
+                applications_dict = db['Applications']
+            except:
+                print("Error in retrieving Customers from application.db.")
             
-            applications_dict[application.get_user_id()] = application
-            db['Applications'] = applications_dict
-            return redirect(url_for('home'))
-        db.close()
+            if not allowed_image(create_seller_form.image.data):
+                error="Missing image or invalid format of image"
+            else:
+                application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
+                                        create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, create_seller_form.image.data)
+                file = request.files[create_seller_form.image.data]
+                filename = secure_filename(create_seller_form.image.data)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                applications_dict[application.get_user_id()] = application
+                db['Applications'] = applications_dict
+                return redirect(url_for('home'))
+                
         
         
     return render_template('sellerapplication.html', form=create_seller_form, error=error, user=user)
