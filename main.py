@@ -37,7 +37,7 @@ def seller():
 
 @app.route('/staff')
 def staff():
-    return render_template('staff.html')
+    return render_template('staff.html', user=user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -116,33 +116,30 @@ def contact_us():
 def sellerapplication():
     create_seller_form = CreateSellerForm(request.form)
     error=None
+    no_of_error=0
     if request.method == 'POST' and create_seller_form.validate():
         file = request.files['file']
         applications_dict = {}
         with shelve.open('user.db', 'c') as db:
-
             try:
                 applications_dict = db['Applications']
             except:
                 print("Error in retrieving Customers from application.db.")
-            
             if not allowed_image(file.filename):
-                error="Missing image or invalid format of image"
-            else:
-                for x in applications_dict:
-                    if create_seller_form.email.data==applications_dict[x].get_email():
-                        error="Email has been used before"
-                        break
-                    else:
-                        application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
-                                                create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)
-                        file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
-                        applications_dict[application.get_user_id()] = application
-                        db['Applications'] = applications_dict
-                        return redirect(url_for('home'))
-                
-        
-        
+                    error="Missing image or invalid format of image"
+                    no_of_error+=1
+            for x in applications_dict:
+                if file.filename==applications_dict[x].get_email():
+                    error="Email has been used before"
+                    no_of_error+=1
+                    break
+            if no_of_error==0:
+                application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
+                                        create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)
+                file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
+                applications_dict[application.get_user_id()] = application
+                db['Applications'] = applications_dict
+                return redirect(url_for('home'))
     return render_template('sellerapplication.html', form=create_seller_form, error=error, user=user)
 
 @app.route('/accountdetails')
