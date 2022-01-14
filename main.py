@@ -211,5 +211,27 @@ def page_not_found(e):
 def viewapply():
     return render_template('viewapplication.html', form_list=form_list)
 
+@app.route('/createStaff',  methods=['GET', 'POST'])
+def createStaff():
+    create_staff_form = CreateStaffForm(request.form)
+    error=None
+    no_of_error=0
+    if request.method == 'POST' and create_staff_form.validate():
+        file = request.files['file']
+        staff_dict = {}
+        with shelve.open('staff.db', 'c') as db:
+            try:
+                staff_dict = db['staff']
+            except:
+                print("Error in retrieving Customers from staff.db.")
+            if no_of_error==0:
+                staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
+                                        generate_password_hash(create_staff_form.password.data, method='sha256'),
+                                        create_staff_form.staff_role.data, create_staff_form.phone_number.data)
+                staff_dict[staff.get_user_id()] = staff
+                db['staff'] = staff_dict
+                return redirect(url_for('/staff'))
+    return render_template('createStaff.html', form=create_staff_form, error=error, staff=staff)
+
 if __name__ == '__main__':
     app.run()

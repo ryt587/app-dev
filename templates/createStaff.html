@@ -47,14 +47,11 @@
     justify-content: center;
     align-items: center;
 }	
-	.color {
-		background-color: #3A3335;
-	}
 	  </style>
 	    </head>
 <body>
 	<main>
-	<div class="d-flex flex-column flex-shrink-0 p-3 text-white color" style="width: 280px;">
+	<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
       <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
       <span class="fs-4">Staff Page</span>
@@ -62,7 +59,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="#" class="nav-link active" aria-current="page">
+        <a href="#" class="nav-link" aria-current="page">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
           Home
         </a>
@@ -74,8 +71,8 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="/createStaff"></use></svg>
+        <a href="#" class="nav-link active text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
           Create
         </a>
       </li>
@@ -103,9 +100,59 @@
     </div>
   </div>
 	<!--sidebar end-->
-		
-		<div class="container center"><h1>Welcome Name here</h1></div>
-		
+		<div class="container center">
+		  {% if error %}
+			<p class=error><strong>Error:</strong> {{ error }}</p>
+  {% endif %}
+	<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+	  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputfirstname">First Name</label>
+      {{ render_field(form.first_name, class="form-control") }}
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputlastname">Last Name</label>
+      {{ render_field(form.last_name, class="form-control") }}
+    </div>
+  </div>
+
+    <div class="form-group col-md-12">
+      <label for="inputEmail4">Email</label>
+      {{ render_field(form.email, class="form-control") }}
+    </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Password</label>
+      {{ render_field(form.password, class="form-control") }}
+    </div>
+	  <div class="form-group col-md-6">
+      <label for="inputPassword4">Confirm Password</label>
+      {{ render_field(form.confirm, class="form-control") }}
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputRole">Staff Role</label>
+      {{ render_field(form.role, class="form-control") }}
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputPhoneNumber">Phone Number</label>
+      {{ render_field(form.phone, class="form-control") }}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck" required>
+      <label class="form-check-label" for="gridCheck">
+        Accept <a href="/termsandconditions">Terms and conditions</a>
+      </label>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-danger">Apply</button><br>
+</form>
+		</div>
+		</div>
 		
 </main>
 	<!--container for sidebar plus content-->

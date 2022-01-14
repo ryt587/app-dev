@@ -36,3 +36,15 @@ class UpdateCustomerForm(Form):
     postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()], render_kw={"placeholder": "Postal"})
     city = StringField('City', [validators.Length(max=200), validators.DataRequired()], render_kw={"placeholder": "City"})
     address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()], render_kw={"placeholder": "Address"})
+
+
+class CreateStaffForm(Form):
+    first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()],
+                             render_kw={"placeholder": "First Name"})
+    last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "Last Name"})
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
+    password = PasswordField('New Password', [
+        validators.DataRequired()
+    ], render_kw={"placeholder": "Password"})
+    confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
