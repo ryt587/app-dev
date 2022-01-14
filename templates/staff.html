@@ -1,4 +1,4 @@
-{% block title %}Staff Page{% endblock %}
+<title>{% block title %}Staff Page{% endblock %}</title>
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 <!DOCTYPE html>
@@ -92,17 +92,20 @@
     <hr>
     <div class="dropdown">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-        <strong>Name</strong>
+        <strong>{{user.get_first_name().capitalize()}}  {{user.get_last_name().capitalize()}}!</strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-        <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="#">Sign out</a></li>
       </ul>
     </div>
   </div>
-		<div class="container center"><h1>Welcome Name</h1></div>
+	<!--sidebar end-->
+		
+		<div class="container center"><h1>Welcome {{user.get_first_name().capitalize()}}  {{user.get_last_name().capitalize()}}!</h1></div>
+		
+		
 </main>
-	
+	<!--container for sidebar plus content-->
 	
 	
 	<script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
