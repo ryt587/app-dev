@@ -1,7 +1,58 @@
-{% extends "staff.html" %}
-<title>{% block title %}Staff Page{% endblock %}</title>
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Staff Page{% endblock %}</title>
+	  	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	  <link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.css" rel="stylesheet">
+	  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
+	  <style>
+	  @font-face {
+    font-family: 'Circular';
+    font-weight: 400;
+    src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.eot);
+    src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.eot?#iefix) format('embedded-opentype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.woff2) format('woff2'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.woff) format('woff'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.ttf) format('truetype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.svg) format('svg');
+}
+
+@font-face {
+    font-family: 'Circular';
+    font-weight: 700;
+    src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.eot);
+    src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.eot?#iefix) format('embedded-opentype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.woff2) format('woff2'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.woff) format('woff'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.ttf) format('truetype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.svg) format('svg');
+}
+	  </style>
+	  
+<style>
+	  
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+	
+.center{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}	
+	.color {
+		background-color: #3A3335;
+	}
+	  </style>
+	    </head>
 <body>
 	<main>
 	<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
@@ -24,7 +75,7 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link active">
+        <a href="#" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
           Create
         </a>
@@ -59,39 +110,40 @@
 	  <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputfirstname">First Name</label>
-      <input id="inputelastname" placeholder="First Name" required>
+      <input class="form-control" id="inputelastname" placeholder="First Name" required>
     </div>
     <div class="form-group col-md-6">
       <label for="inputlastname">Last Name</label>
-      <input id="inputlastname" placeholder="Last Name" required>
+      <input class="form-control" id="inputlastname" placeholder="Last Name" required>
     </div>
   </div>
-
+<div class="form-row">
     <div class="form-group col-md-12">
       <label for="inputEmail4">Email</label>
-      <input id="inputEmail4" placeholder="123@mail.com" required>
+      <input class="form-control" id="inputEmail4" placeholder="123@mail.com" required>
     </div>
+	</div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputPassword4">Password</label>
-      <input id="inputpassword" placeholder="password" required>
+      <input class="form-control" id="inputpassword" placeholder="password" required>
     </div>
 	  <div class="form-group col-md-6">
       <label for="confirm">Confirm Password</label>
-      <input id="confirm" placeholder="confirm password" required>
+      <input class="form-control" id="confirm" placeholder="confirm password" required>
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputRole">Staff Role</label>
-      <select>
+      <select class="form-control">
 		<option>Admin</option>
 		  <option>Delivery</option>
 		</select>
     </div>
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-6">
       <label for="inputPhoneNumber">Phone Number</label>
-      <input id="inputePhoneNumber" placeholder="12345678" required>
+      <input class="form-control" id="inputPhoneNumber" placeholder="12345678" required>
     </div>
   </div>
   <button type="submit" class="btn btn-danger">Create</button><br>

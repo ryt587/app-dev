@@ -242,10 +242,7 @@ def createStaff():
                 db['staff'] = staff_dict
                 return redirect(url_for('/staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error, staff=staff)
-    
-@app.route('/createStaff')
-def createStaff():
-    return render_template('createStaff.html', form=create_staff_form, error=error)
+
 
 if __name__ == '__main__':
     app.run()
