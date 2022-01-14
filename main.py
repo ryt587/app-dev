@@ -128,11 +128,12 @@ def sellerapplication():
             if not allowed_image(file.filename):
                     error="Missing image or invalid format of image"
                     no_of_error+=1
-            for x in applications_dict:
-                if file.filename==applications_dict[x].get_email():
-                    error="Email has been used before"
-                    no_of_error+=1
-                    break
+            elif applications_dict!={}:
+                for x in applications_dict:
+                    if file.filename==applications_dict[x].get_email():
+                        error="Email has been used before"
+                        no_of_error+=1
+                        break
             if no_of_error==0:
                 application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
                                         create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)

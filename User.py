@@ -1,26 +1,26 @@
-from uuid import uuid4
 import shelve
 
 
-class User:
-    id=uuid4().hex
-    
-    try:
-        db = shelve.open('user.db', 'r')
+class User: 
+        
+    def __init__(self, email, password):
+        db = shelve.open('user.db', 'c')
+        users_dict={}
         try:
-            users_dict = db['Users']
-            while id in users_dict:
-                id=uuid4().hex
+            if 'Users' in db:
+                users_dict=db['Users']
+            else:
+                db['Users']=users_dict
+            if users_dict=={}:
+                id=1
+            else:
+                id=1
+                while id in users_dict:
+                    id+=1
         except:
             print("Error in retrieving Users from user.db.")
         db.close()
-    except:
-        print("Error in retrieving Users from user.db.") 
-    
-    
-            
-    def __init__(self, email, password):
-        self.__user_id=User.id
+        self.__user_id=id
         self.__email=email
         self.__password=password
     
