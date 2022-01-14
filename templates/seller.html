@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/SLPmain.css') }}"/>
+</head>
+<body>
+  {% block navbar %}
+    {% include 'includes/_sidebar_seller.html' %}
+  {% endblock %}
+
+<div class="main">
+  <h2>Sidebar</h2>
+  <p>Инсайты.</p>
+</div>
+   
+</body>
+</html> 
