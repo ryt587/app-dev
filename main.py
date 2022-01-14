@@ -243,6 +243,9 @@ def createStaff():
                 return redirect(url_for('/staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error, staff=staff)
 
+@app.route('/viewapps')
+def viewapps():
+    return render_template('viewapplication.html')
 
 if __name__ == '__main__':
     app.run()
