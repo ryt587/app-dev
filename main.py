@@ -1,6 +1,6 @@
 from flask import Flask, render_template,  request, redirect, url_for
-from Forms import CreateUserForm, CreateCustomerForm, CreateSellerForm, UpdateCustomerForm
-import shelve, Customer, Apply
+import Forms as f
+import shelve, Customer, Apply, Staff, Seller
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -42,7 +42,7 @@ def staff():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    create_user_form = CreateUserForm(request.form)
+    create_user_form = f.CreateUserForm(request.form)
     if request.method == 'POST' and create_user_form.validate():
         users_dict = {}
         db = shelve.open('user.db', 'r')
@@ -74,7 +74,7 @@ def logout():
 def register():
     error = None
     no_of_error=0
-    create_customer_form = CreateCustomerForm(request.form)
+    create_customer_form = f.CreateCustomerForm(request.form)
     if request.method == 'POST' and create_customer_form.validate():
         customers_dict = {}
         db = shelve.open('user.db', 'c')
@@ -114,7 +114,7 @@ def contact_us():
 
 @app.route('/sellerapplication',  methods=['GET', 'POST'])
 def sellerapplication():
-    create_seller_form = CreateSellerForm(request.form)
+    create_seller_form = f.CreateSellerForm(request.form)
     error=None
     no_of_error=0
     if request.method == 'POST' and create_seller_form.validate():
@@ -169,7 +169,7 @@ def delete_user():
 
 @app.route('/updateUser', methods=['GET', 'POST'])
 def update_customer():
-    update_customer_form = UpdateCustomerForm(request.form)
+    update_customer_form = f.UpdateCustomerForm(request.form)
     global user
     customer=user
     if request.method == 'POST' and update_customer_form.validate():
@@ -209,16 +209,25 @@ def page_not_found(e):
 
 @app.route('/viewapply')
 def viewapply():
+    db = shelve.open('user.db', 'c')
+    form_list=[]
+    try:
+        application_dict=db['Applications']
+        if application_dict!={}:
+            for x in application_dict:
+                form_list.append(application_dict[x])
+    except:
+        print("Error in retrieving Users from user.db.")
+    db.close()
     return render_template('viewapplication.html', form_list=form_list)
 
-"""
+
 @app.route('/createStaff',  methods=['GET', 'POST'])
 def createStaff():
-    create_staff_form = CreateStaffForm(request.form)
+    create_staff_form = f.CreateStaffForm(request.form)
     error=None
     no_of_error=0
     if request.method == 'POST' and create_staff_form.validate():
-        file = request.files['file']
         staff_dict = {}
         with shelve.open('staff.db', 'c') as db:
             try:
@@ -226,17 +235,17 @@ def createStaff():
             except:
                 print("Error in retrieving Customers from staff.db.")
             if no_of_error==0:
-                staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
+                user = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
                                         generate_password_hash(create_staff_form.password.data, method='sha256'),
                                         create_staff_form.staff_role.data, create_staff_form.phone_number.data)
                 staff_dict[staff.get_user_id()] = staff
                 db['staff'] = staff_dict
                 return redirect(url_for('/staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error, staff=staff)
-"""
+    
 @app.route('/createStaff')
 def createStaff():
-    return render_template('createStaff.html')
+    return render_template('createStaff.html', form=create_staff_form, error=error)
 
 if __name__ == '__main__':
     app.run()
