@@ -211,6 +211,7 @@ def page_not_found(e):
 def viewapply():
     return render_template('viewapplication.html', form_list=form_list)
 
+"""
 @app.route('/createStaff',  methods=['GET', 'POST'])
 def createStaff():
     create_staff_form = CreateStaffForm(request.form)
@@ -232,6 +233,10 @@ def createStaff():
                 db['staff'] = staff_dict
                 return redirect(url_for('/staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error, staff=staff)
+"""
+@app.route('/createStaff')
+def createStaff():
+    return render_template('createStaff.html')
 
 if __name__ == '__main__':
     app.run()

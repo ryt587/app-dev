@@ -60,7 +60,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="#" class="nav-link" aria-current="page">
+        <a href="#" class="nav-link text-white" aria-current="page">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
           Home
         </a>
@@ -72,7 +72,7 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link active text-white">
+        <a href="#" class="nav-link active">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
           Create
         </a>
@@ -102,44 +102,44 @@
   </div>
 	<!--sidebar end-->
 		<div class="container center">
-		  {% if error %}
-			<p class=error><strong>Error:</strong> {{ error }}</p>
-  {% endif %}
 	<div class="container pt-3 my-3 bg-white border">
 <form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
 	  <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputfirstname">First Name</label>
-      {{ render_field(form.first_name, class="form-control") }}
+      <input id="inputelastname" placeholder="First Name" required>
     </div>
     <div class="form-group col-md-6">
       <label for="inputlastname">Last Name</label>
-      {{ render_field(form.last_name, class="form-control") }}
+      <input id="inputlastname" placeholder="Last Name" required>
     </div>
   </div>
 
     <div class="form-group col-md-12">
       <label for="inputEmail4">Email</label>
-      {{ render_field(form.email, class="form-control") }}
+      <input id="inputEmail4" placeholder="123@mail.com" required>
     </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputPassword4">Password</label>
-      {{ render_field(form.password, class="form-control") }}
+      <input id="inputpassword" placeholder="password" required>
     </div>
 	  <div class="form-group col-md-6">
       <label for="confirm">Confirm Password</label>
-      {{ render_field(form.confirm, class="form-control") }}
+      <input id="confirm" placeholder="confirm password" required>
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputRole">Staff Role</label>
-      {{ render_field(form.role, class="form-control") }}
+      <select>
+		<option>Admin</option>
+		  <option>Delivery</option>
+		</select>
     </div>
     <div class="form-group col-md-2">
       <label for="inputPhoneNumber">Phone Number</label>
-      {{ render_field(form.phone, class="form-control") }}
+      <input id="inputePhoneNumber" placeholder="12345678" required>
     </div>
   </div>
   <button type="submit" class="btn btn-danger">Create</button><br>
