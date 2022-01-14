@@ -1,23 +1,25 @@
-from uuid import uuid4
 import shelve
 
 class Product():
-   id=uuid4().hex
-    
-   try:
-      db = shelve.open('user.db', 'r')
-      try:
-         users_dict = db['Users']
-         while id in users_dict:
-            id=uuid4().hex
-      except:
-         print("Error in retrieving Users from user.db.")
-      db.close()
-   except:
-      print("Error in retrieving Users from user.db.") 
-      
+       
    def __init__(self, product_stock, product_image):
-      self.__product_id = Product.id
+      db = shelve.open('product.db', 'c')
+      users_dict={}
+      try:
+         if 'Products' in db:
+               users_dict=db['Products']
+         else:
+               db['Products']=users_dict
+         if users_dict=={}:
+               id=1
+         else:
+               id=1
+               while id in users_dict:
+                  id+=1
+      except:
+         print("Error in retrieving Products from product.db.")
+      db.close()
+      self.__product_id = id
       self.__product_stock = product_stock
       self.__product_image = product_image
    
