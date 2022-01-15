@@ -56,12 +56,7 @@ def login():
             if value.get_email()==create_user_form.email.data and check_password_hash(value.get_password(), create_user_form.password.data):
                 global user
                 user=value
-                if isinstance(value, Customer):
-                    return redirect(url_for('home'))
-                elif isinstance(value, Seller):
-                    return redirect(url_for('seller'))
-                elif isinstance(value, Staff):
-                    return redirect(url_for('staff'))
+                return redirect(url_for('home'))
             elif value.get_email()!=create_user_form.email.data:
                 error='Email does not exist.'
             else:
