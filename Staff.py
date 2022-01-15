@@ -3,14 +3,14 @@ import shelve
 
 class Staff(u.User):
     
-    def __init__(self, name, email, password, staff_role, phone_number):
+    def __init__(self, name, last_name, email, password, staff_role, phone_number):
         db = shelve.open('user.db', 'c')
         users_dict={}
         try:
-            if 'Staffs' in db:
-                users_dict=db['Staffs']
+            if 'Users' in db:
+                users_dict=db['Users']
             else:
-                db['Staffs']=users_dict
+                db['Users']=users_dict
             if users_dict=={}:
                 id=1
             else:
@@ -22,12 +22,16 @@ class Staff(u.User):
         db.close()
         super().__init__(name, email, password)
         self.__staff_id = 'St'+str(id)
+        self.__last_name = last_name
         self.__staff_role = staff_role
         self.__phone_number = phone_number
     
     def get_staff_id(self):
         return self.__staff_id
     
+    def get_last_name(self):
+        return self.__last_name
+
     def get_phone_number(self):
         return self.__phone_number
     
@@ -36,6 +40,9 @@ class Staff(u.User):
     
     def set_staff_id(self,staff_id):
         self.__staff_id = staff_id
+    
+    def set_staff_id(self,last_name):
+        self.__last_name = last_name
     
     def set_phone_number(self, phone_number):
         self.__phone_number = phone_number

@@ -264,5 +264,18 @@ def reject_seller(id):
     
     return redirect(url_for('viewapply'))
 
+@app.route('/retrievestaff')
+def retrieve_customers():
+    customers_dict = {}
+    db = shelve.open('user.db', 'r')
+    customers_dict = db['Users']
+    db.close()
+
+    customers_list = []
+    for key in customers_dict:
+        customer = customers_dict.get(key)
+        customers_list.append(customer)
+    return render_template('retrievestaff.html', users_list=customers_list)
+
 if __name__ == '__main__':
     app.run()
