@@ -1,0 +1,49 @@
+{% extends "staff.html" %}
+{% block title %}Account Details Page{% endblock %}
+{% block content %}
+<body>
+<div class="container pt-3 my-3 bg-white border">
+<table class="table table-borderless">
+<tbody>
+    <tr>
+      <th scope="col" style="border-top: none;">Name:</th>
+      <td style="border-top: none;">{{ user.get_name() }}</td>
+    </tr>
+    <tr>
+      <th scope="row" style="border-top: none;">Email:</th>
+      <td style="border-top: none;">{{ user.get_email() }}</td>
+    </tr>
+	<tr>
+      <th scope="row" style="border-top: none;">Address:</th>
+      <td style="border-top: none;">{{ user.get_address() }}</td>
+    </tr>
+    <tr>
+      <th scope="row" style="border-top: none;">Place:</th>
+      <td style="border-top: none;">{{ user.get_address2() }}</td>
+    </tr>
+	<tr>
+      <th scope="row" style="border-top: none;">City:</th>
+      <td style="border-top: none;">{{ user.get_city() }}</td>
+    </tr>
+	<tr>
+      <th scope="row" style="border-top: none;">Postal code:</th>
+      <td style="border-top: none;">{{ user.get_postal() }}</td>
+    </tr>
+    <tr>
+      <th scope="row" style="border-top: none;">Image of certification:</th>
+      <td style="border-top: none;"><img src="{{url_for('static', filename='images/cert/{{ user.__image() }}')}}" alt="Cert"></td>
+    </tr>
+  </tbody>
+</table>
+<!-- try add these inside -->
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
+  <a href="/approve/{{ user.get_apply_id() }}">Approve</a>
+</button>
+<!-- delete button -->
+<form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{user.get_user_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+  <a href="/reject/{{ user.get_apply_id() }}">Reject</a>
+</button>     
+</form>
+</body>
+{% endblock %}

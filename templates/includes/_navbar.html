@@ -4,7 +4,7 @@
       <div class="site-header__start">
         <ul class="">
           {% if user!=0 %}
-          <p>Welcome {{user.get_first_name().capitalize()}}  {{user.get_last_name().capitalize()}}!</p>
+          <p>Welcome {{user.get_name().capitalize()}}  {{user.get_last_name().capitalize()}}!</p>
           {% endif %}
         </ul>
       </div>

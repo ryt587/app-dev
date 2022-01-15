@@ -32,8 +32,7 @@ def home():
 
 @app.route('/seller')
 def seller():
-    files = os.listdir(app.config['UPLOAD_PATH'])
-    return render_template('seller.html', files=files)
+    return render_template('seller.html', user=user)
 
 @app.route('/staff')
 def staff():
@@ -135,10 +134,10 @@ def sellerapplication():
                         no_of_error+=1
                         break
             if no_of_error==0:
-                application = Apply.Apply(create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
+                application = Apply.Apply(create_seller_form.name.data, create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
                                         create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
-                applications_dict[application.get_user_id()] = application
+                applications_dict[application.get_apply_id()] = application
                 db['Applications'] = applications_dict
                 return redirect(url_for('home'))
     return render_template('sellerapplication.html', form=create_seller_form, error=error, user=user)
@@ -207,21 +206,6 @@ def update_customer():
 def page_not_found(e):
     return render_template('404error.html'), 404
 
-@app.route('/viewapply')
-def viewapply():
-    db = shelve.open('user.db', 'c')
-    form_list=[]
-    try:
-        application_dict=db['Applications']
-        if application_dict!={}:
-            for x in application_dict:
-                form_list.append(application_dict[x])
-    except:
-        print("Error in retrieving Users from user.db.")
-    db.close()
-    return render_template('viewapplication.html', form_list=form_list)
-
-
 @app.route('/createStaff',  methods=['GET', 'POST'])
 def createStaff():
     create_staff_form = f.CreateStaffForm(request.form)
@@ -229,23 +213,42 @@ def createStaff():
     no_of_error=0
     if request.method == 'POST' and create_staff_form.validate():
         staff_dict = {}
-        with shelve.open('staff.db', 'c') as db:
+        with shelve.open('user.db', 'c') as db:
             try:
-                staff_dict = db['staff']
+                staff_dict = db['Staffs']
             except:
                 print("Error in retrieving Customers from staff.db.")
             if no_of_error==0:
-                user = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
+                staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
                                         generate_password_hash(create_staff_form.password.data, method='sha256'),
-                                        create_staff_form.staff_role.data, create_staff_form.phone_number.data)
-                staff_dict[staff.get_user_id()] = staff
-                db['staff'] = staff_dict
+                                        create_staff_form.role.data, create_staff_form.phone.data)
+                staff_dict[staff.get_staff_id()] = staff
+                db['Staffs'] = staff_dict
                 return redirect(url_for('/staff'))
-    return render_template('createStaff.html', form=create_staff_form, error=error, staff=staff)
+    return render_template('createStaff.html', form=create_staff_form, error=error)
 
-@app.route('/viewapps')
-def viewapps():
-    return render_template('viewapplication.html')
+@app.route('/viewapply')
+def viewapply():
+    with shelve.open('user.db', 'c') as db:
+        try:
+            applications_dict = db['Applications']
+        except:
+            print("Error in retrieving Customers from application.db.")
+        applications_list=[]
+        if applications_dict!={}:
+            for x in applications_dict:
+                applications_list.append(applications_dict[x])
+    return render_template('viewapplication.html', applications_list=applications_list)
+
+@app.route('/retrieve/<string:id>')
+def retrieve(id):
+    with shelve.open('user.db', 'c') as db:
+        try:
+            applications_dict = db['Applications']
+        except:
+            print("Error in retrieving Customers from application.db.")
+        application=applications_dict[id]
+    return render_template('retrieveapplication.html', user=application)
 
 if __name__ == '__main__':
     app.run()

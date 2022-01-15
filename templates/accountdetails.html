@@ -5,13 +5,9 @@
 <div class="container pt-3 my-3 bg-white border">
 <table class="table table-borderless">
 <tbody>
-  <tr>
-    <th scope="col" style="border-top: none;">Id:</th>
-    <td style="border-top: none;">{{ user.get_user_id() }}</td>
-  </tr>
     <tr>
       <th scope="col" style="border-top: none;">Name:</th>
-      <td style="border-top: none;">{{ user.get_first_name() }} {{ user.get_last_name() }}</td>
+      <td style="border-top: none;">{{ user.get_name() }} {{ user.get_last_name() }}</td>
     </tr>
     <tr>
       <th scope="row" style="border-top: none;">Email:</th>

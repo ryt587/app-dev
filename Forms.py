@@ -21,6 +21,7 @@ class CreateCustomerForm(Form):
     address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()], render_kw={"placeholder": "Address"})
     
 class CreateSellerForm(Form):
+    name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Store Name"})
     email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
     password = PasswordField('New Password', [
         validators.DataRequired()
