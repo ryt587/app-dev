@@ -225,7 +225,7 @@ def createStaff():
                                         create_staff_form.role.data, create_staff_form.phone.data)
                 staff_dict[staff.get_staff_id()] = staff
                 db['Users'] = staff_dict
-                return redirect(url_for('/staff'))
+                return redirect(url_for('staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error)
 
 @app.route('/viewapply')
@@ -276,6 +276,56 @@ def retrieve_customers():
         customer = customers_dict.get(key)
         customers_list.append(customer)
     return render_template('retrievestaff.html', users_list=customers_list)
+
+@app.route('/updatestaff/<id>', methods=['GET', 'POST'])
+def update_staff(id):
+    update_staff_form = f.UpdatestaffForm(request.form)
+    if request.method == 'POST' and update_staff_form.validate():
+        staff_dict = {}
+        db = shelve.open('user.db', 'w')
+        staff_dict = db['Users']
+
+        user = staff_dict[id]
+        user.set_name(update_staff_form.first_name.data)
+        user.set_last_name(update_staff_form.last_name.data)
+        user.set_role(update_staff_form.role.data)
+        user.set_phone(update_staff_form.phone.data)
+
+        staff_dict[user.get_user_id()]=user
+        db['Users'] = staff_dict
+        
+        db.close()
+
+        return redirect(url_for('accountdetails'))
+    else:
+        staff_dict = {}
+        db = shelve.open('user.db', 'r')
+        staff_dict = db['Users']
+        db.close()
+        user = staff_dict[id]
+        update_staff_form.first_name.data = staff.get_name()
+        update_staff_form.last_name.data = staff.get_last_name()
+        update_staff_form.role.data = staff.get_role()
+        update_staff_form.phone.data = staff.get_phone()
+
+        return render_template('updatestaff.html', form=update_staff_form)
+
+@app.route('/deletestaff', methods=['GET', 'POST'])
+def delete_staff():
+    global user
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(user.get_user_id())
+
+    db['Users'] = users_dict
+    db.close()
+    
+    user=0
+    
+    return redirect(url_for('home'))
+    
 
 if __name__ == '__main__':
     app.run()
