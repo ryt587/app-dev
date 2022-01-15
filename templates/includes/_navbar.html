@@ -14,7 +14,7 @@
       <div class="site-header__end top">
         {% if user==0 %}
         <a href="/login">Login</a>
-        <a href="/register">Register</a> <!--Temp until a links are made inside login page-->
+        <a href="/register">Register</a>
         <a href="/sellerapplication">Apply</a>
         <a href="/staff">staff</a> <!-- temp just to look at the page -->
         {% else %}
@@ -47,13 +47,13 @@
           <button class="search__toggle" aria-label="Open search">
             Search
           </button>
-          <form class="search__form" action="">
+          <form class="search__form" action="POST">
             <label class="sr-only" for="search">Search</label>
             <input
               type="search"
               name=""
               id="search"
-              placeholder="What's on your mind?"
+              placeholder="Search"
             />
           </form>
         </div>

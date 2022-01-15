@@ -55,7 +55,12 @@ def login():
             if value.get_email()==create_user_form.email.data and check_password_hash(value.get_password(), create_user_form.password.data):
                 global user
                 user=value
-                return redirect(url_for('home'))
+                if isinstance(value, Customer):
+                    return redirect(url_for('home'))
+                elif isinstance(value, Seller):
+                    return redirect(url_for('seller'))
+                elif isinstance(value, Staff):
+                    return redirect(url_for('staff'))
             elif value.get_email()!=create_user_form.email.data:
                 error='Email does not exist.'
             else:
@@ -215,7 +220,7 @@ def createStaff():
         staff_dict = {}
         with shelve.open('user.db', 'c') as db:
             try:
-                staff_dict = db['Staffs']
+                staff_dict = db['Users']
             except:
                 print("Error in retrieving Customers from staff.db.")
             if no_of_error==0:
@@ -223,7 +228,7 @@ def createStaff():
                                         generate_password_hash(create_staff_form.password.data, method='sha256'),
                                         create_staff_form.role.data, create_staff_form.phone.data)
                 staff_dict[staff.get_staff_id()] = staff
-                db['Staffs'] = staff_dict
+                db['Users'] = staff_dict
                 return redirect(url_for('/staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error)
 
