@@ -2,6 +2,7 @@ from flask import Flask, render_template,  request, redirect, url_for
 import Forms as f
 import shelve, Customer, Apply, Staff, Seller
 import os
+import phonenumbers
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from uuid import uuid4
@@ -245,7 +246,7 @@ def viewapply():
                 applications_list.append(applications_dict[x])
     return render_template('viewapplication.html', applications_list=applications_list)
 
-@app.route('/retrieve/<string:id>')
+@app.route('/retrieve/<id>')
 def retrieve(id):
     with shelve.open('user.db', 'c') as db:
         try:
@@ -254,6 +255,19 @@ def retrieve(id):
             print("Error in retrieving Customers from application.db.")
         application=applications_dict[id]
     return render_template('retrieveapplication.html', user=application)
+
+@app.route('/reject/<id>', methods=['GET', 'POST'])
+def reject_seller(id):
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+    
+    return redirect(url_for('viewapply'))
 
 if __name__ == '__main__':
     app.run()
