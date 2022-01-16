@@ -127,7 +127,10 @@ def sellerapplication():
         applications_dict = {}
         with shelve.open('user.db', 'c') as db:
             try:
-                applications_dict = db['Applications']
+                if 'Applications' in db:
+                    applications_dict = db['Applications']
+                else:
+                    db['Applications'] = applications_dict
             except:
                 print("Error in retrieving Customers from application.db.")
             if not allowed_image(file.filename):
@@ -245,6 +248,7 @@ def createStaff():
 
 @app.route('/viewapply')
 def viewapply():
+    applications_dict={}
     with shelve.open('user.db', 'c') as db:
         try:
             applications_dict = db['Applications']
@@ -256,7 +260,7 @@ def viewapply():
                 applications_list.append(applications_dict[x])
     return render_template('viewapplication.html', applications_list=applications_list)
 
-@app.route('/retrieve/<id>')
+@app.route('/retrieveapply/<int:id>', methods=['GET', 'POST'])
 def retrieve(id):
     with shelve.open('user.db', 'c') as db:
         try:
@@ -288,8 +292,9 @@ def retrieve_customers():
 
     customers_list = []
     for key in customers_dict:
-        customer = customers_dict.get(key)
-        customers_list.append(customer)
+        if key[:2]=='St':
+            customer = customers_dict.get(key)
+            customers_list.append(customer)
     return render_template('retrievestaff.html', users_list=customers_list)
 
 @app.route('/updatestaff/<id>', methods=['GET', 'POST'])

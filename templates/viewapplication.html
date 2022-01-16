@@ -3,25 +3,20 @@
 {% from "includes/_formHelper.html" import render_field %}
 <body>
 	<!--sidebar end-->
-  {% if application_list==[] %}
-    <div class="container center"><h1>Welcome Name here</h1></div>
+  {% if applications_list==[] %}
+    <div class="container center"><h1>No applications/h1></div>
   {% else %}
 		<div class="container center">
-	<div class="container pt-3 my-3 bg-white border">
-<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
-  {% for x in application_list %}
-	  <div class="form-row justify-content-center">
+		<div class="container pt-3 my-3 bg-white border">
+		<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+  		{% for x in applications_list %}
+	  		<div class="form-row justify-content-center">
 		  <button class="col-md-8 form-control redcolor"><a href="/retrieveapply/{{ x.get_apply_id() }}">{{ x.get_email() }}, {{ x.get_name() }}</a></button>
-    </div>
-    {% endfor %}
-</form>
+    		</div>
+    	{% endfor %}
 		</div>
 		</div>
   {% endif %}
 	<!--container for sidebar plus content-->
-	
-	
-	<script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-	<script src="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.js"></script>
 </body>
 {% endblock %}
