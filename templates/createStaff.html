@@ -1,6 +1,9 @@
 {% extends "staff.html" %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+{% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
 		<div class="container center">
 	<div class="container pt-3 my-3 bg-white border">
 <form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">

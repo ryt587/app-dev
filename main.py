@@ -224,6 +224,16 @@ def createStaff():
                 staff_dict = db['Users']
             except:
                 print("Error in retrieving Customers from staff.db.")
+            
+            for x in staff_dict:
+                if create_staff_form.email.data==staff_dict[x].get_email():
+                    no_of_error+=1
+                    error='Email been used before'
+                    break
+                elif create_staff_form.password.data != create_staff_form.confirm.data:
+                    no_of_error+=1
+                    error='Password must be matched'
+                    break
             if no_of_error==0:
                 staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
                                         generate_password_hash(create_staff_form.password.data, method='sha256'),
