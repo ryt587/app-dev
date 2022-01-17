@@ -1,3 +1,4 @@
+from email.mime import application
 from flask import Flask, render_template,  request, redirect, url_for
 import Forms as f
 import shelve, Customer, Apply, Staff, Seller, Products
@@ -241,7 +242,7 @@ def viewapply():
         if applications_dict!={}:
             for x in applications_dict:
                 applications_list.append(applications_dict[x])
-    return render_template('viewapplication.html', applications_list=applications_list)
+    return render_template('viewapplication.html', applications_list=applications_list, user=user)
 
 
 @app.route('/retrieveapply/<int:id>', methods=['GET', 'POST'])
@@ -252,23 +253,22 @@ def retrieve(id):
         except:
             print("Error in retrieving Customers from application.db.")
         application=applications_dict[id]
-    return render_template('retrieveapplication.html', user=application)
+    return render_template('retrieveapplication.html', application=application, user=user)
 
 
-@app.route('/reject/<id>', methods=['GET', 'POST'])
+@app.route('/reject/<int:id>', methods=['GET', 'POST'])
 def reject_seller(id):
     users_dict = {}
     db = shelve.open('user.db', 'w')
-    users_dict = db['Users']
-
+    users_dict = db['Applications']
+    applications=users_dict[id]
+    os.remove(app.config['UPLOAD_PATH']+str(applications.get_image()))
     users_dict.pop(id)
 
-    db['Users'] = users_dict
+    db['Applications'] = users_dict
     db.close()
 
     return redirect(url_for('viewapply'))
-
-
 
 @app.route('/createStaff',  methods=['GET', 'POST'])
 def createStaff():
@@ -282,8 +282,6 @@ def createStaff():
                 staff_dict = db['Users']
             except:
                 print("Error in retrieving Customers from staff.db.")
-
-            error= validate_phone(create_staff_form.phone.data)
             if error!=None:
                 no_of_error+=1
 
@@ -303,7 +301,7 @@ def createStaff():
                 staff_dict[staff.get_staff_id()] = staff
                 db['Users'] = staff_dict
                 return redirect(url_for('staff'))
-    return render_template('createStaff.html', form=create_staff_form, error=error)
+    return render_template('createStaff.html', form=create_staff_form, error=error, user=user)
 
 
 @app.route('/retrievestaff')
@@ -315,10 +313,10 @@ def retrieve_staff():
 
     customers_list = []
     for key in customers_dict:
-        if key[:2]=='St':
+        if str(key)[:2]=='St':
             customer = customers_dict.get(key)
             customers_list.append(customer)
-    return render_template('retrievestaff.html', users_list=customers_list)
+    return render_template('retrievestaff.html', users_list=customers_list, user=user)
 
 
 @app.route('/updatestaff/<id>', methods=['GET', 'POST'])
@@ -372,11 +370,6 @@ def delete_staff(id):
 def accountdetailstaff():
     return render_template('accountdetailstaff.html', user=user)
 
-if __name__ == '__main__':
-    app.run()
-
-
-
 @app.route('/createProduct',  methods=['GET', 'POST'])
 def CreateProduct():
     create_product_form = f.CreateProductForm(request.form)
@@ -403,7 +396,7 @@ def CreateProduct():
                 Product = Products.Product(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data,
                                         create_product_form.image.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
-                product_dict[product.get_product_id()] = Product
+                product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('home'))
     return render_template('createproduct.html', form=create_product_form, error=error, user=user)
@@ -416,17 +409,17 @@ def retrieve_product():
     product_dict = db['Users']
     db.close()
 
-    customers_list = []
-    for key in products_dict:
+    product_list = []
+    for key in product_dict:
         if key[:2]=='St':
             product = product_dict.get(key)
-            product_list.append(customer)
+            product_list.append(product)
     return render_template('retrieveproduct.html', users_list=product_list)
 
 
 @app.route('/updateproduct/<id>', methods=['GET', 'POST'])
 def update_product(id):
-    update_product_form = f.Updateproductform(request.form)
+    update_product_form = f.UpdateProductform(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
         db = shelve.open('user.db', 'w')
@@ -460,9 +453,9 @@ def delete_product(id):
     db = shelve.open('product.db', 'w')
     products_dict = db['Products']
 
-    Products_dict.pop(id)
+    products_dict.pop(id)
 
-    db['products'] = Products_dict
+    db['products'] = products_dict
     db.close()
 
 
@@ -479,3 +472,27 @@ def productlist():
             product = product_dict.get(key)
             product_list.append(product)
     return render_template('productlist.html', product_list=product_list)
+
+@app.route('/approve/<int:id>')
+def approve(id):
+    application_dict = {}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            application_dict = db['Applications']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        application=application_dict[id]
+        application_dict.pop(id)
+        db['Applications'] = application_dict
+    with shelve.open('user.db', 'c') as db:
+        try:
+            seller_dict = db['Users']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        seller = Seller.Seller(application.get_name(), application.get_email(), generate_password_hash(application.get_password()), application.get_address(), application.get_city(), application.get_postal())
+        seller_dict[seller.get_seller_id()] = seller
+        db['Users'] = seller_dict
+        return redirect(url_for('viewapply'))
+
+if __name__ == '__main__':
+    app.run()

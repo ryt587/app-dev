@@ -49,7 +49,7 @@ class CreateStaffForm(Form):
         validators.DataRequired()
     ], render_kw={"placeholder": "Password"})
     confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
-    role = SelectField('Staff Role', render_kw={"placeholder": "Admin"},choices=[('', 'Select'), ('A', 'Admin'), ('D', 'Delivery')], default='')
+    role = SelectField('Staff Role', render_kw={"placeholder": "Admin"},choices=[('A', 'Admin'), ('D', 'Delivery')], default='')
     phone = IntegerField('Phone Number', render_kw={"placeholder": "12345678"})
 
 class UpdatestaffForm(Form):
