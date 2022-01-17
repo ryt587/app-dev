@@ -12,16 +12,16 @@ class Staff(u.User):
             else:
                 db['Users']=users_dict
             if users_dict=={}:
-                id=1
+                id='St1'
             else:
-                id=1
+                id='St1'
                 while id in users_dict:
-                    id+=1
+                    id=id[:2]+str(int(id[2:])+1)
         except:
             print("Error in retrieving Users from user.db.")
         db.close()
         super().__init__(name, email, password)
-        self.__staff_id = 'St'+str(id)
+        self.__staff_id = id
         self.__last_name = last_name
         self.__staff_role = staff_role
         self.__phone_number = phone_number

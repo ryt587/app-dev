@@ -14,14 +14,14 @@ class Seller(u.User):
             if users_dict=={}:
                 id=1
             else:
-                id=1
+                id='Se1'
                 while id in users_dict:
-                    id+=1
+                    id=id[:2]+str(int(id[2:])+1)
         except:
             print("Error in retrieving Users from user.db.")
         db.close()
         super().__init__(name, email, password)
-        self.__seller_id= 'Se'+str(id)
+        self.__seller_id= id
         self.__address = address
         self.__city = city
         self.postal_code = postal_code
