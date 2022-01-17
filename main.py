@@ -282,8 +282,6 @@ def createStaff():
                 staff_dict = db['Users']
             except:
                 print("Error in retrieving Customers from staff.db.")
-
-            error= validate_phone(create_staff_form.phone.data)
             if error!=None:
                 no_of_error+=1
 
@@ -403,7 +401,7 @@ def CreateProduct():
                 Product = Products.Product(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data,
                                         create_product_form.image.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
-                product_dict[product.get_product_id()] = Product
+                product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('home'))
     return render_template('createproduct.html', form=create_product_form, error=error, user=user)
@@ -416,17 +414,17 @@ def retrieve_product():
     product_dict = db['Users']
     db.close()
 
-    customers_list = []
-    for key in products_dict:
+    product_list = []
+    for key in product_dict:
         if key[:2]=='St':
             product = product_dict.get(key)
-            product_list.append(customer)
+            product_list.append(product)
     return render_template('retrieveproduct.html', users_list=product_list)
 
 
 @app.route('/updateproduct/<id>', methods=['GET', 'POST'])
 def update_product(id):
-    update_product_form = f.Updateproductform(request.form)
+    update_product_form = f.UpdateProductform(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
         db = shelve.open('user.db', 'w')
