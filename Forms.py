@@ -49,7 +49,7 @@ class CreateStaffForm(Form):
         validators.DataRequired()
     ], render_kw={"placeholder": "Password"})
     confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
-    role = SelectField('Staff Role', render_kw={"placeholder": "Admin"},choices=[('', 'Select'), ('A', 'Admin'), ('D', 'Delivery')], default='')
+    role = SelectField('Staff Role', render_kw={"placeholder": "Admin"},choices=[('A', 'Admin'), ('D', 'Delivery')], default='')
     phone = IntegerField('Phone Number', render_kw={"placeholder": "12345678"})
 
 class UpdatestaffForm(Form):
@@ -71,7 +71,7 @@ class UpdateProductsForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Name"})
     Product_category = SelectField('Product Category', render_kw={"placeholder": "Electronics"}, choices=[('', 'Select'), ('A', 'Electronics'), ('B', 'Clothing')], default='')
-    Electronics =
-    Clothing =
+    ''' Electronics =
+    Clothing ='''
     Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
     

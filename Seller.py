@@ -8,9 +8,9 @@ class Seller(u.User):
         users_dict={}
         try:
             if 'Sellers' in db:
-                users_dict=db['Sellers']
+                users_dict=db['Users']
             else:
-                db['Sellers']=users_dict
+                db['Users']=users_dict
             if users_dict=={}:
                 id=1
             else:
