@@ -2,7 +2,7 @@ import shelve
 
 class Product():
 
-   def __init__(self, product_stock, product_image):
+   def __init__(self, product_stock, product_image, product_category,):
       db = shelve.open('product.db', 'c')
       users_dict={}
       try:

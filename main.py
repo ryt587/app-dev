@@ -26,18 +26,22 @@ def allowed_image(filename):
         return True
     else:
         return False
-    
+
+
 @app.route('/')
 def home():
     return render_template('Homepage.html', user=user)
+
 
 @app.route('/seller')
 def seller():
     return render_template('seller.html', user=user)
 
+
 @app.route('/staff')
 def staff():
     return render_template('staff.html', user=user)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -69,11 +73,13 @@ def login():
         db.close()
     return render_template('Login.html', form=create_user_form, error=error)
 
+
 @app.route('/logout')
 def logout():
     global user
     user=0
     return redirect(url_for('home'))
+
 
 @app.route('/register',  methods=['GET', 'POST'])
 def register():
@@ -113,9 +119,11 @@ def register():
 
     return render_template('Signup.html', form=create_customer_form, error=error)
 
+
 @app.route('/contactUs')
 def contact_us():
     return render_template('contactUs.html')
+
 
 @app.route('/sellerapplication',  methods=['GET', 'POST'])
 def sellerapplication():
@@ -151,13 +159,16 @@ def sellerapplication():
                 return redirect(url_for('home'))
     return render_template('sellerapplication.html', form=create_seller_form, error=error, user=user)
 
+
 @app.route('/accountdetails')
 def accountdetails():
     return render_template('accountdetails.html', user=user)
 
+
 @app.route('/termsandconditions')
 def termsandconditions():
     return render_template('termsandconditions.html')
+
 
 @app.route('/deleteUser', methods=['GET', 'POST'])
 def delete_user():
@@ -174,6 +185,7 @@ def delete_user():
     user=0
 
     return redirect(url_for('home'))
+
 
 @app.route('/updateUser', methods=['GET', 'POST'])
 def update_customer():
@@ -211,9 +223,52 @@ def update_customer():
 
         return render_template('updateUser.html', form=update_customer_form)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404error.html'), 404
+
+
+@app.route('/viewapply')
+def viewapply():
+    applications_dict={}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            applications_dict = db['Applications']
+        except:
+            print("Error in retrieving Customers from application.db.")
+        applications_list=[]
+        if applications_dict!={}:
+            for x in applications_dict:
+                applications_list.append(applications_dict[x])
+    return render_template('viewapplication.html', applications_list=applications_list)
+
+
+@app.route('/retrieveapply/<int:id>', methods=['GET', 'POST'])
+def retrieve(id):
+    with shelve.open('user.db', 'c') as db:
+        try:
+            applications_dict = db['Applications']
+        except:
+            print("Error in retrieving Customers from application.db.")
+        application=applications_dict[id]
+    return render_template('retrieveapplication.html', user=application)
+
+
+@app.route('/reject/<id>', methods=['GET', 'POST'])
+def reject_seller(id):
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+
+    users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+
+    return redirect(url_for('viewapply'))
+
+
 
 @app.route('/createStaff',  methods=['GET', 'POST'])
 def createStaff():
@@ -250,42 +305,6 @@ def createStaff():
                 return redirect(url_for('staff'))
     return render_template('createStaff.html', form=create_staff_form, error=error)
 
-@app.route('/viewapply')
-def viewapply():
-    applications_dict={}
-    with shelve.open('user.db', 'c') as db:
-        try:
-            applications_dict = db['Applications']
-        except:
-            print("Error in retrieving Customers from application.db.")
-        applications_list=[]
-        if applications_dict!={}:
-            for x in applications_dict:
-                applications_list.append(applications_dict[x])
-    return render_template('viewapplication.html', applications_list=applications_list)
-
-@app.route('/retrieveapply/<int:id>', methods=['GET', 'POST'])
-def retrieve(id):
-    with shelve.open('user.db', 'c') as db:
-        try:
-            applications_dict = db['Applications']
-        except:
-            print("Error in retrieving Customers from application.db.")
-        application=applications_dict[id]
-    return render_template('retrieveapplication.html', user=application)
-
-@app.route('/reject/<id>', methods=['GET', 'POST'])
-def reject_seller(id):
-    users_dict = {}
-    db = shelve.open('user.db', 'w')
-    users_dict = db['Users']
-
-    users_dict.pop(id)
-
-    db['Users'] = users_dict
-    db.close()
-
-    return redirect(url_for('viewapply'))
 
 @app.route('/retrievestaff')
 def retrieve_staff():
@@ -300,6 +319,7 @@ def retrieve_staff():
             customer = customers_dict.get(key)
             customers_list.append(customer)
     return render_template('retrievestaff.html', users_list=customers_list)
+
 
 @app.route('/updatestaff/<id>', methods=['GET', 'POST'])
 def update_staff(id):
@@ -334,6 +354,7 @@ def update_staff(id):
 
         return render_template('updatestaff.html', form=update_staff_form)
 
+
 @app.route('/deletestaff/<id>', methods=['GET', 'POST'])
 def delete_staff(id):
     users_dict = {}
@@ -355,17 +376,6 @@ if __name__ == '__main__':
     app.run()
 
 
-
-'''@app.route('/deleteproduct/<id>', methods=['GET', 'POST'])
-def delete_product(id):
-    product_dict = {}
-    db = shelve.open('product.db', 'w')
-    products_dict = db['Products']
-
-    Products_dict.pop(id)
-
-    db['products'] = Products_dict
-    db.close()'''
 
 @app.route('/createProduct',  methods=['GET', 'POST'])
 def CreateProduct():
@@ -393,10 +403,67 @@ def CreateProduct():
                 Product = Products.Product(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data,
                                         create_product_form.image.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
-                product_dict[Product.get_product_id()] = Product
+                product_dict[product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('home'))
     return render_template('createproduct.html', form=create_product_form, error=error, user=user)
+
+
+@app.route('/retrieveproduct')
+def retrieve_product():
+    product_dict = {}
+    db = shelve.open('user.db', 'r')
+    product_dict = db['Users']
+    db.close()
+
+    customers_list = []
+    for key in products_dict:
+        if key[:2]=='St':
+            product = product_dict.get(key)
+            product_list.append(customer)
+    return render_template('retrieveproduct.html', users_list=product_list)
+
+
+@app.route('/updateproduct/<id>', methods=['GET', 'POST'])
+def update_product(id):
+    update_product_form = f.Updateproductform(request.form)
+    if request.method == 'POST' and update_product_form.validate():
+        product_dict = {}
+        db = shelve.open('user.db', 'w')
+        product_dict = db['Users']
+
+        product = product_dict[id]
+        product.set_product_stock(update_staff_form.product_stock.data)
+        product.set_product_category(update_staff_form.last_name.data)
+
+        staff_dict[user.get_staff_id()] = user
+        db['Users'] = staff_dict
+
+        db.close()
+
+        return redirect(url_for('retrievestaff'))
+    else:
+        staff_dict = {}
+        db = shelve.open('user.db', 'r')
+        staff_dict = db['Users']
+        db.close()
+        product= product_dict[id]
+        update_product_form.first_name.data = product.get_product_stock
+        update_product_form.last_name.data = product.get_product_category
+
+        return render_template('updatestaff.html', form=update_staff_form)
+
+
+@app.route('/deleteproduct/<id>', methods=['GET', 'POST'])
+def delete_product(id):
+    product_dict = {}
+    db = shelve.open('product.db', 'w')
+    products_dict = db['Products']
+
+    Products_dict.pop(id)
+
+    db['products'] = Products_dict
+    db.close()
 
 
 @app.route('/productlist')
