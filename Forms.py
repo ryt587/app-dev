@@ -50,7 +50,8 @@ class CreateStaffForm(Form):
     ], render_kw={"placeholder": "Password"})
     confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
     role = SelectField('Staff Role', render_kw={"placeholder": "Admin"},choices=[('', 'Select'), ('A', 'Admin'), ('D', 'Delivery')], default='')
-    phone = IntegerField('Phone Number', render_kw={"placeholder": "12345678"})
+    phone = StringField('Phone Number', [validators.DataRequired()])
+
 
 class UpdatestaffForm(Form):
     first_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -58,4 +59,4 @@ class UpdatestaffForm(Form):
     last_name = StringField('Last Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "Last Name"})
     role = SelectField('Staff Role', render_kw={"placeholder": "Admin"}, choices=[('', 'Select'), ('A', 'Admin'), ('D', 'Delivery')], default='')
-    phone = IntegerField('Phone Number', render_kw={"placeholder": "12345678"})
+    phone = StringField('Phone Number', [validators.DataRequired()])

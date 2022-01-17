@@ -1,6 +1,10 @@
 {% extends "staff.html" %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<link
+     rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+   />
 {% if error %}
         <p class=error><strong>Error:</strong> {{ error }}
       {% endif %}
@@ -41,31 +45,22 @@
     </div>
     <div class="form-group col-md-6">
       <label for="inputPhoneNumber">Phone Number</label>
-      {{ render_field(form.phone, class="form-control", id="phone") }}
+      {{ render_field(form.phone, class="form-control") }}
     </div>
   </div>
   <button type="submit" class="btn btn-danger">Create</button><br>
 </form>
 		</div>
 		</div>
-    {% block scripts %}
-    <script>
-        var wtf_phone_field = document.getElementById('phone');
-        wtf_phone_field.style.position = 'absolute';
-        wtf_phone_field.style.top = '-9999px';
-        wtf_phone_field.style.left = '-9999px';
-        wtf_phone_field.parentElement.insertAdjacentHTML('beforeend', '<div><input type="tel" id="_phone"></div>');
-        var fancy_phone_field = document.getElementById('_phone');
-        var fancy_phone_iti = window.intlTelInput(fancy_phone_field, {
-            separateDialCode: true,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js",
-        });
-        fancy_phone_iti.setNumber(wtf_phone_field.value);
-        fancy_phone_field.addEventListener('blur', function() {
-            wtf_phone_field.value = fancy_phone_iti.getNumber();
-        });
-    </script>
-    {% endblock %}
-	
-	
+
+    {% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script>
+  const phoneInputField = document.querySelector("#phone");
+  const phoneInput = window.intlTelInput(phoneInputField, {
+    utilsScript:
+      "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  });
+</script>
+{% endblock %}
 {% endblock %}
