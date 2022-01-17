@@ -26,7 +26,7 @@ def allowed_image(filename):
         return True
     else:
         return False
-    
+
 def validate_phone(phone):
     try:
         p = phonenumbers.parse(phone.data)
@@ -97,7 +97,7 @@ def register():
             customers_dict = db['Users']
         except:
             print("Error in retrieving Customers from user.db.")
-        
+
         for x in customers_dict:
             if create_customer_form.email.data==customers_dict[x].get_email():
                 no_of_error+=1
@@ -107,10 +107,10 @@ def register():
                 no_of_error+=1
                 error='Password must be matched'
                 break
-            
+
         if no_of_error==0:
             customer = Customer.Customer(create_customer_form.first_name.data, create_customer_form.last_name.data, generate_password_hash(create_customer_form.password.data, method='sha256')
-                                     , create_customer_form.email.data, 
+                                     , create_customer_form.email.data,
                                      create_customer_form.birthdate.data,
                                      create_customer_form.address.data, create_customer_form.postal.data, create_customer_form.city.data)
             customers_dict[customer.get_user_id()] = customer
@@ -179,9 +179,9 @@ def delete_user():
 
     db['Users'] = users_dict
     db.close()
-    
+
     user=0
-    
+
     return redirect(url_for('home'))
 
 @app.route('/updateUser', methods=['GET', 'POST'])
@@ -202,7 +202,7 @@ def update_customer():
 
         customers_dict[user.get_user_id()]=user
         db['Users'] = customers_dict
-        
+
         db.close()
 
         return redirect(url_for('accountdetails'))
@@ -236,11 +236,11 @@ def createStaff():
                 staff_dict = db['Users']
             except:
                 print("Error in retrieving Customers from staff.db.")
-            
+
             error= validate_phone(create_staff_form.phone.data)
             if error!=None:
                 no_of_error+=1
-            
+
             for x in staff_dict:
                 if create_staff_form.email.data==staff_dict[x].get_email():
                     no_of_error+=1
@@ -293,7 +293,7 @@ def reject_seller(id):
 
     db['Users'] = users_dict
     db.close()
-    
+
     return redirect(url_for('viewapply'))
 
 @app.route('/retrievestaff')
@@ -326,7 +326,7 @@ def update_staff(id):
 
         staff_dict[user.get_staff_id()]=user
         db['Users'] = staff_dict
-        
+
         db.close()
 
         return redirect(url_for('retrievestaff'))
@@ -353,12 +353,50 @@ def delete_staff(id):
 
     db['Users'] = users_dict
     db.close()
-    
+
     return redirect(url_for('retrieve_staff'))
 
 @app.route('/accountdetailstaff')
 def accountdetailstaff():
     return render_template('accountdetailstaff.html', user=user)
-    
+
 if __name__ == '__main__':
     app.run()
+
+@app.route('/createProduct',  methods=['GET', 'POST'])
+def CreateProduct():
+    create_product_form = f.CreateProductForm(request.form)
+    error=None
+    no_of_error=0
+    if request.method == 'POST' and create_staff_form.validate():
+        Product_dict = {}
+        with shelve.open('user.db', 'c') as db:
+            try:
+                Products_dict = db['Users']
+            except:
+                print("Error in retrieving Customers from Product.db.")
+
+            #error = validate_phone(create_staff_form.phone.data)
+        #    if error != None:
+            #    no_of_error += 1
+
+            if no_of_error==0:
+                staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
+                                        generate_password_hash(create_staff_form.password.data, method='sha256'),
+                                        create_staff_form.role.data, create_staff_form.phone.data)
+                staff_dict[staff.get_staff_id()] = staff
+                db['Users'] = staff_dict
+                return redirect(url_for('staff'))
+    return render_template('createStaff.html', form=create_staff_form, error=error)
+
+
+@app.route('/deleteproduct/<id>', methods=['GET', 'POST'])
+def delete_product(id):
+    product_dict = {}
+    db = shelve.open('product.db', 'w')
+    products_dict = db['Products']
+
+    Products_dict.pop(id)
+
+    db['products'] = Products_dict
+    db.close()
