@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "staff.html" %}
 {% block title %}Account Details Page{% endblock %}
 {% block content %}
 <body>
@@ -25,16 +25,16 @@
 </table>
 <!-- try add these inside -->
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
-  <a href="/updateUser">Update</a>
+  <a href="/updatestaff/{{user.get_staff_id()}}">Update</a>
 </button>
 <!-- delete button -->
-<form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{user.get_user_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
-  <a href="/deleteUser">Delete</a>
+<form action="{{url_for('delete_staff', id=user.get_staff_id())}}" method="POST">
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{user.get_staff_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+  <a href="/deletestaff/{{user.get_staff_id()}}">Delete</a>
 </button>
 
 <!-- The Modal -->
-<div class="modal" id="myModal_{{user.get_user_id()}}">
+<div class="modal" id="myModal_{{user.get_staff_id()}}">
   <div class="modal-dialog">
     <div class="modal-content">
 

@@ -26,6 +26,15 @@ def allowed_image(filename):
         return True
     else:
         return False
+    
+def validate_phone(phone):
+    try:
+        p = phonenumbers.parse(phone.data)
+        if not phonenumbers.is_valid_number(p):
+            error='Invalid phone number'
+    except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
+        error='Invalid phone number'
+    return error
 
 @app.route('/')
 def home():
@@ -228,6 +237,10 @@ def createStaff():
             except:
                 print("Error in retrieving Customers from staff.db.")
             
+            error= validate_phone(create_staff_form.phone.data)
+            if error!=None:
+                no_of_error+=1
+            
             for x in staff_dict:
                 if create_staff_form.email.data==staff_dict[x].get_email():
                     no_of_error+=1
@@ -342,7 +355,10 @@ def delete_staff(id):
     db.close()
     
     return redirect(url_for('retrieve_staff'))
-    
 
+@app.route('/accountdetailstaff')
+def accountdetailstaff():
+    return render_template('accountdetailstaff.html', user=user)
+    
 if __name__ == '__main__':
     app.run()
