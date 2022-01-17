@@ -1,0 +1,39 @@
+{% extends "staff.html" %} #change to what
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<link
+     rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+   />
+{% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+		<div class="container center">
+	<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+	  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputproductname">Product Name</label>
+        {{ render_field(form.product_name, class="form-control") }}
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputRole">Staff Role</label>
+      {{ render_field(form.product_category, class="form-control") }}
+		</select>
+    </div>
+  <button type="submit" class="btn btn-danger">Create</button><br>
+</form>
+		</div>
+		</div>
+
+    {% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script>
+  const phoneInputField = document.querySelector("#phone");
+  const phoneInput = window.intlTelInput(phoneInputField, {
+    utilsScript:
+      "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  });
+</script>
+{% endblock %}
+{% endblock %}

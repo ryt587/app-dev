@@ -434,9 +434,9 @@ def update_product(id):
 
         product = product_dict[id]
         product.set_product_stock(update_staff_form.product_stock.data)
-        product.set_product_category(update_staff_form.last_name.data)
+        product.set_product_category(update_staff_form.product_category.data)
 
-        staff_dict[user.get_staff_id()] = user
+        staff_dict[user.get_product_id()] = user
         db['Users'] = staff_dict
 
         db.close()

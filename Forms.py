@@ -64,14 +64,41 @@ class CreateProductsForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Name"})
     Product_category = SelectField('Product Category', render_kw={"placeholder": "Electronics"}, choices=[('', 'Select'), ('A', 'Electronics'), ('B', 'Clothing')], default='')
-''' Electronics =
-    Clothing ='''
+    Electronics_gpu = StringField('Gpu', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "gtx 3060"})
+    Electronics_cpu = StringField('Cpu', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "intel i7"})
+    Electronics_storage = StringField('Storage', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "1tb"})
+    Electronics_memory = StringField('Memory', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "16gb"})
+    Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "17 inches"})
+
+    Clothing_size = StringField('Clothing_size', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "large"})
+    Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "red"})
+    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+
 
 class UpdateProductsForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Name"})
     Product_category = SelectField('Product Category', render_kw={"placeholder": "Electronics"}, choices=[('', 'Select'), ('A', 'Electronics'), ('B', 'Clothing')], default='')
-    Electronics =
-    Clothing =
+    Electronics_gpu = StringField('Gpu', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "gtx 3060"})
+    Electronics_cpu = StringField('Cpu', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "intel i7"})
+    Electronics_storage = StringField('Storage', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "1tb"})
+    Electronics_memory = StringField('Memory', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "16gb"})
+    Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "17 inches"})
+
+    Clothing_size = StringField('Clothing_size', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "large"})
+    Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
+                            render_kw={"placeholder": "red"})
     Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
-    

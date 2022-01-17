@@ -1,0 +1,61 @@
+{% extends "staff.html" %} #change to what
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<link
+     rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+   />
+{% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+		<div class="container center">
+	<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+<div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputgpu">Gpu</label>
+      {{ render_field(form.Electronics_gpu, class="form-control") }}
+    </div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputcpu">Cpu</label>
+      {{ render_field(form.Electronics_cpu, class="form-control") }}
+  </div>
+  	<div>
+    <div class="form-group col-md-12">
+      <label for="inputstorage">Storage</label>
+      {{ render_field(form.Electronics_storage, class="form-control") }}
+    </div>
+  </div>
+    <div class="form-group col-md-12">
+      <label for="inputmemory">Memory</label>
+      {{ render_field(form.Electronics_memory, class="form-control") }}
+    </div>
+    <div class="form-group col-md-12">
+      <label for="inputsize">Size</label>
+      {{ render_field(form.Electronics_size, class="form-control") }}
+    </div>
+  </div>
+  <div>
+  <div class="form-group col-md-12">
+    <label for="inputstock">Stock</label>
+    {{ render_field(form.Product_stock, class="form-control") }}
+  </div>
+</div>
+  <button type="submit" class="btn btn-danger">Create</button><br>
+</form>
+		</div>
+		</div>
+
+    {% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script>
+  const phoneInputField = document.querySelector("#phone");
+  const phoneInput = window.intlTelInput(phoneInputField, {
+    utilsScript:
+      "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  });
+</script>
+{% endblock %}
+{% endblock %}
