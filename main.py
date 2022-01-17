@@ -284,7 +284,7 @@ def reject_seller(id):
     return redirect(url_for('viewapply'))
 
 @app.route('/retrievestaff')
-def retrieve_customers():
+def retrieve_staff():
     customers_dict = {}
     db = shelve.open('user.db', 'r')
     customers_dict = db['Users']
@@ -308,25 +308,25 @@ def update_staff(id):
         user = staff_dict[id]
         user.set_name(update_staff_form.first_name.data)
         user.set_last_name(update_staff_form.last_name.data)
-        user.set_role(update_staff_form.role.data)
-        user.set_phone(update_staff_form.phone.data)
+        user.set_staff_role(update_staff_form.role.data)
+        user.set_phone_number(update_staff_form.phone.data)
 
-        staff_dict[user.get_user_id()]=user
+        staff_dict[user.get_staff_id()]=user
         db['Users'] = staff_dict
         
         db.close()
 
-        return redirect(url_for('accountdetails'))
+        return redirect(url_for('retrievestaff'))
     else:
         staff_dict = {}
         db = shelve.open('user.db', 'r')
         staff_dict = db['Users']
         db.close()
-        user = staff_dict[id]
+        staff = staff_dict[id]
         update_staff_form.first_name.data = staff.get_name()
         update_staff_form.last_name.data = staff.get_last_name()
-        update_staff_form.role.data = staff.get_role()
-        update_staff_form.phone.data = staff.get_phone()
+        update_staff_form.role.data = staff.get_staff_role()
+        update_staff_form.phone.data = staff.get_phone_number()
 
         return render_template('updatestaff.html', form=update_staff_form)
 

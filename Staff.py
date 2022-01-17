@@ -41,7 +41,7 @@ class Staff(u.User):
     def set_staff_id(self,staff_id):
         self.__staff_id = staff_id
     
-    def set_staff_id(self,last_name):
+    def set_last_name(self,last_name):
         self.__last_name = last_name
     
     def set_phone_number(self, phone_number):

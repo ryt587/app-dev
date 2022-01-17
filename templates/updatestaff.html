@@ -14,12 +14,13 @@
       {{ render_field(form.last_name, class="form-control") }}
     </div>
   </div>
-    <div class="form-group col-md-6">
-      <label for="inputRole">Staff Role</label>
-      <select class="form-control">
-		<option>Admin</option>
-		  <option>Delivery</option>
-		</select>
+</div>
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label for="inputRole">Staff Role</label>
+    {{ render_field(form.role, class="form-control") }}
+  </select>
+  </div>
     </div>
     <div class="form-group col-md-6">
       <label for="inputPhoneNumber">Phone Number</label>
@@ -30,6 +31,7 @@
 </form>
 		</div>
 		</div>
+  
 	
 	
 	

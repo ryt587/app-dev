@@ -39,7 +39,7 @@
     </tr>
     <tr>
       <th scope="row" style="border-top: none;">Image of certification:</th>
-      <td style="border-top: none;"><img src="{{url_for('static', filename='images/cert/'+user.get_image())}}" alt="Cert"></td>
+      <td style="border-top: none;"><img src="{{url_for('static', filename='images/cert/'+user.get_image())}}" alt="{{user.get_image()}}"></td>
     </tr>
   </tbody>
 </table>
