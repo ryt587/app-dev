@@ -342,7 +342,10 @@ def delete_staff(id):
     db.close()
     
     return redirect(url_for('retrieve_staff'))
-    
 
+@app.route('/accountdetailstaff')
+def accountdetailstaff():
+    return render_template('accountdetailstaff.html', user=user)
+    
 if __name__ == '__main__':
     app.run()
