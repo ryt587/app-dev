@@ -1,6 +1,6 @@
 from flask import Flask, render_template,  request, redirect, url_for
 import Forms as f
-import shelve, Customer, Apply, Staff, Seller
+import shelve, Customer, Apply, Staff, Seller, Products
 import os
 import phonenumbers
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -354,34 +354,9 @@ def accountdetailstaff():
 if __name__ == '__main__':
     app.run()
 
-@app.route('/createProduct',  methods=['GET', 'POST'])
-def CreateProduct():
-    create_product_form = f.CreateProductForm(request.form)
-    error=None
-    no_of_error=0
-    if request.method == 'POST' and create_staff_form.validate():
-        Product_dict = {}
-        with shelve.open('user.db', 'c') as db:
-            try:
-                Products_dict = db['Users']
-            except:
-                print("Error in retrieving Customers from Product.db.")
-
-            #error = validate_phone(create_staff_form.phone.data)
-        #    if error != None:
-            #    no_of_error += 1
-
-            if no_of_error==0:
-                staff = Staff.Staff(create_staff_form.first_name.data, create_staff_form.last_name.data, create_staff_form.email.data,
-                                        generate_password_hash(create_staff_form.password.data, method='sha256'),
-                                        create_staff_form.role.data, create_staff_form.phone.data)
-                staff_dict[staff.get_staff_id()] = staff
-                db['Users'] = staff_dict
-                return redirect(url_for('staff'))
-    return render_template('createStaff.html', form=create_staff_form, error=error)
 
 
-@app.route('/deleteproduct/<id>', methods=['GET', 'POST'])
+'''@app.route('/deleteproduct/<id>', methods=['GET', 'POST'])
 def delete_product(id):
     product_dict = {}
     db = shelve.open('product.db', 'w')
@@ -390,4 +365,50 @@ def delete_product(id):
     Products_dict.pop(id)
 
     db['products'] = Products_dict
+    db.close()'''
+
+@app.route('/createProduct',  methods=['GET', 'POST'])
+def CreateProduct():
+    create_product_form = f.CreateProductForm(request.form)
+    error=None
+    no_of_error=0
+    if request.method == 'POST' and create_product_form.validate():
+        file = request.files['file']
+        product_dict = {}
+        with shelve.open('Products.db', 'c') as db:
+            try:
+                product_dict = db['Products']
+            except:
+                print("Error in retrieving Customers from Product.db.")
+            if not allowed_image(file.filename):
+                    error="Missing image or invalid format of image"
+                    no_of_error+=1
+            elif product_dict!={}:
+                for x in product_dict:
+                    if file.filename==product_dict[x].get_id():
+                        error="Email has been used before"
+                        no_of_error+=1
+                        break
+            if no_of_error==0:
+                Product = Products.Product(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data,
+                                        create_product_form.image.data, file.filename)
+                file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
+                product_dict[Product.get_product_id()] = Product
+                db['Products'] = product_dict
+                return redirect(url_for('home'))
+    return render_template('createproduct.html', form=create_product_form, error=error, user=user)
+
+
+@app.route('/productlist')
+def productlist():
+    product_dict = {}
+    db = shelve.open('Products.db', 'r')
+    product_dict = db['Products']
     db.close()
+
+    product_list = []
+    for key in product_dict:
+        if key[:2]=='St':
+            product = product_dict.get(key)
+            product_list.append(product)
+    return render_template('productlist.html', product_list=product_list)

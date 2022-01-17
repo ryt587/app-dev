@@ -65,10 +65,12 @@ class CreateProductsForm(Form):
                              render_kw={"placeholder": "Product Name"})
     Product_category = StringField('Product Category', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Category"})
+    product_stock = IntegerField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
+                             render_kw={"placeholder": "9000"})
+                        
 
 class UpdateProductsForm(Form):
     Product_name = StringField('First Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "First Name"})
     Product_category = StringField('Product Category', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Category"})
-]]
