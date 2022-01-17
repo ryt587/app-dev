@@ -6,7 +6,7 @@ class Electronics(p.Products):
         self.__cpu = cpu
         self.__storage = storage
         self.__memory = memory
-        self.__size = __size
+        self.__size = size
 
     def get_gpu(self):
         return self.__gpu

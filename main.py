@@ -26,16 +26,7 @@ def allowed_image(filename):
         return True
     else:
         return False
-
-def validate_phone(phone):
-    try:
-        p = phonenumbers.parse(phone.data)
-        if not phonenumbers.is_valid_number(p):
-            error='Invalid phone number'
-    except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
-        error='Invalid phone number'
-    return error
-
+    
 @app.route('/')
 def home():
     return render_template('Homepage.html', user=user)

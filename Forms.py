@@ -71,3 +71,4 @@ class UpdateProductsForm(Form):
                              render_kw={"placeholder": "First Name"})
     Product_category = StringField('Product Category', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Category"})
+]]
