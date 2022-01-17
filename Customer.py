@@ -14,14 +14,14 @@ class Customer(u.User):
             if users_dict=={}:
                 id=1
             else:
-                id=1
+                id='C1'
                 while id in users_dict:
-                    id+=1
+                    id=id[:1]+str(int(id[2:])+1)
         except:
             print("Error in retrieving Users from user.db.")
         db.close()
         super().__init__(first_name, email, password)
-        self.__user_id='C'+str(id)
+        self.__user_id==id
         self.__last_name=last_name
         self.__birthdate=birthdate
         self.__address= address

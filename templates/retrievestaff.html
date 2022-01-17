@@ -22,7 +22,7 @@
       <td>{{ user.get_phone_number() }}</td>
       <td><a href="/updatestaff/{{user.get_staff_id()}}" class="btn btn-warning">Update</a></td>
       <td>
-        <form action="{{url_for('delete_user', id=user.get_staff_id())}}" method="POST">
+        <form action="{{url_for('delete_staff', id=user.get_staff_id())}}" method="POST">
          
           <!-- Button to Open the Modal -->
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{user.get_staff_id()}}">

@@ -330,21 +330,18 @@ def update_staff(id):
 
         return render_template('updatestaff.html', form=update_staff_form)
 
-@app.route('/deletestaff', methods=['GET', 'POST'])
-def delete_staff():
-    global user
+@app.route('/deletestaff/<id>', methods=['GET', 'POST'])
+def delete_staff(id):
     users_dict = {}
     db = shelve.open('user.db', 'w')
     users_dict = db['Users']
 
-    users_dict.pop(user.get_user_id())
+    users_dict.pop(id)
 
     db['Users'] = users_dict
     db.close()
     
-    user=0
-    
-    return redirect(url_for('home'))
+    return redirect(url_for('retrieve_staff'))
     
 
 if __name__ == '__main__':
