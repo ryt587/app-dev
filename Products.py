@@ -2,7 +2,7 @@ import shelve
 
 class Product():
 
-   def __init__(self, product_stock, product_image, product_category):
+   def __init__(self, name, product_stock, product_image):
       db = shelve.open('product.db', 'c')
       users_dict={}
       try:
@@ -20,9 +20,13 @@ class Product():
          print("Error in retrieving Products from product.db.")
       db.close()
       self.__product_id = id
+      self.__name = name
       self.__product_stock = product_stock
       self.__product_image = product_image
 
+   def get_name(self):
+      return self.__name
+   
    def get_product_id(self):
       return self.__product_id
 
@@ -35,6 +39,9 @@ class Product():
 
    def set_product_id(self, product_id):
       self.__product_id = product_id
+      
+   def set_name(self, name):
+      self.__name = name
 
    def set_product_stock(self, product_stock):
       self.__product_stock = product_stock
