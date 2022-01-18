@@ -434,16 +434,27 @@ def create_clothing():
     return render_template('clothing_products.html', form=create_product_form, error=error, user=user)
 
 
+@app.route('/updateproduct/<int:id>', methods=['GET', 'POST'])
+def update_product(id):
+    product_dict = {}
+    db = shelve.open('user.db', 'w')
+    product_dict = db['Products']
+    product=product_dict[id]
+    if isinstance(product, Electronics.Electronics):
+        return redirect(url_for('update_electronic',id=id))
+    elif isinstance(product, Clothing.Clothing):
+        return redirect(url_for('update_clothing',id=id))
+    
 @app.route('/updateproduct/electronic/<int:id>', methods=['GET', 'POST'])
 def update_electronic(id):
-    update_product_form = f.UpdateProductsForm(request.form)
+    update_product_form = f.UpdateElectronicForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
         db = shelve.open('user.db', 'w')
         product_dict = db['Products']
 
         product = product_dict[id]
-        product.set_name(update_product_form.Electronics_name.data)
+        product.set_name(update_product_form.Product_name.data)
         product.set_product_stock(update_product_form.Product_stock.data)
         product.set_gpu(update_product_form.Electronics_gpu.data)
         product.set_cpu(update_product_form.Electronics_cpu.data)
@@ -451,7 +462,7 @@ def update_electronic(id):
         product.set_memory(update_product_form.Electronics_memory.data)
         product.set_size(update_product_form.Electronics_size.data)
 
-        product_dict[user.get_id()] = user
+        product_dict[product.get_product_id()] = product
         db['Products'] = product_dict
 
         db.close()
@@ -463,32 +474,32 @@ def update_electronic(id):
         product_dict = db['Products']
         db.close()
         product= product_dict[id]
-        update_product_form.Product_name = product.get_name()
-        update_product_form.Product_stock = product.get_product_stock()
-        update_product_form.Electronics_gpu = product.get_gpu()
-        update_product_form.Electronics_cpu = product.get_cpu()
-        update_product_form.Electronics_storage = product.get_storage()
-        update_product_form.Electronics_memory = product.get_memory()
-        update_product_form.Electronics_size = product.get_size()
+        update_product_form.Product_name.data = product.get_name()
+        update_product_form.Product_stock.data = product.get_product_stock()
+        update_product_form.Electronics_gpu.data = product.get_gpu()
+        update_product_form.Electronics_cpu.data = product.get_cpu()
+        update_product_form.Electronics_storage.data = product.get_storage()
+        update_product_form.Electronics_memory.data = product.get_memory()
+        update_product_form.Electronics_size.data = product.get_size()
 
         return render_template('updateelectronic.html', form=update_product_form, user=user)
 
 
 @app.route('/updateproduct/clothing/<int:id>', methods=['GET', 'POST'])
 def update_clothing(id):
-    update_product_form = f.UpdateProductsForm(request.form)
+    update_product_form = f.UpdateClothingForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
         db = shelve.open('user.db', 'w')
         product_dict = db['Products']
 
         product = product_dict[id]
-        product.set_name(update_product_form.Electronics_name.data)
+        product.set_name(update_product_form.Product_name.data)
         product.set_product_stock(update_product_form.Product_stock.data)
         product.set_colour(update_product_form.Clothing_colour.data)
         product.set_size(update_product_form.Clothing_size.data)
 
-        product_dict[user.get_id()] = user
+        product_dict[product.get_product_id()] = product
         db['Products'] = product_dict
 
         db.close()
@@ -500,10 +511,10 @@ def update_clothing(id):
         product_dict = db['Products']
         db.close()
         product= product_dict[id]
-        update_product_form.Product_name = product.get_name()
-        update_product_form.Product_stock = product.get_product_stock()
-        update_product_form.Clothing_colour = product.get_colour()
-        update_product_form.Clothing_size = product.get_size()
+        update_product_form.Product_name.data = product.get_name()
+        update_product_form.Product_stock.data = product.get_product_stock()
+        update_product_form.Clothing_colour.data = product.get_colour()
+        update_product_form.Clothing_size.data = product.get_size()
 
         return render_template('updateclothing.html', form=update_product_form, user=user)
 
@@ -553,7 +564,7 @@ def approve(id):
             seller_dict = db['Users']
         except:
             print("Error in retrieving Customers from staff.db.")
-        seller = Seller.Seller(application.get_name(), application.get_email(), generate_password_hash(application.get_password()), application.get_address(), application.get_city(), application.get_postal())
+        seller = Seller.Seller(application.get_name(), application.get_email(), generate_password_hash(application.get_password()), application.get_address(),application.get_address2(), application.get_city(), application.get_postal())
         seller_dict[seller.get_seller_id()] = seller
         db['Users'] = seller_dict
         return redirect(url_for('viewapply'))
@@ -563,23 +574,23 @@ def accountdetailseller():
     return render_template('accountdetailseller.html', user=user)
 
 @app.route('/updateseller', methods=['GET', 'POST'])
-def update_seller(id):
-    update_seller_form = f.UpdatesellerForm(request.form)
+def update_seller():
+    update_seller_form = f.UpdateSellerForm(request.form)
     global user
     if request.method == 'POST' and update_seller_form.validate():
         seller_dict = {}
         db = shelve.open('user.db', 'w')
         seller_dict = db['Users']
 
-        seller = seller_dict[id]
+        seller = user
         seller.set_name(update_seller_form.name.data)
         seller.set_address(update_seller_form.address.data)
         seller.set_address2(update_seller_form.address2.data)
         seller.set_city(update_seller_form.city.data)
         seller.set_postal_code(update_seller_form.postal.data)
 
-        staff_dict[user.get_seller_id()]=user
-        db['Users'] = staff_dict
+        seller_dict[user.get_seller_id()]=seller
+        db['Users'] = seller_dict
 
         db.close()
 
@@ -589,14 +600,28 @@ def update_seller(id):
         db = shelve.open('user.db', 'r')
         seller_dict = db['Users']
         db.close()
-        seller = seller_dict[id]
+        seller = user
         update_seller_form.name.data = seller.get_name()
         update_seller_form.address.data = seller.get_address()
-        update_seller_form.role.data = staff.get_address2()
-        update_seller_form.city.data = staff.get_city()
-        update_seller_form.postal.data = staff.get_postal_code()
+        update_seller_form.address2.data = seller.get_address2()
+        update_seller_form.city.data = seller.get_city()
+        update_seller_form.postal.data = seller.get_postal_code()
 
         return render_template('updateseller.html', form=update_seller_form, user=user)
+@app.route('/deleteseller', methods=['GET', 'POST'])
+def delete_seller():
+    global user
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
 
+    users_dict.pop(user.get_seller_id())
+
+    db['Users'] = users_dict
+    db.close()
+
+    user=0
+
+    return redirect(url_for('home'))
 if __name__ == '__main__':
     app.run()

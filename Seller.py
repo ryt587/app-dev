@@ -3,7 +3,7 @@ import shelve
 
 class Seller(u.User):
   
-    def __init__(self, name, email, password, address, city, postal_code):
+    def __init__(self, name, email, password, address, address2, city, postal_code):
         db = shelve.open('user.db', 'c')
         users_dict={}
         try:
@@ -23,14 +23,18 @@ class Seller(u.User):
         super().__init__(name, email, password)
         self.__seller_id= id
         self.__address = address
+        self.__address2 = address2
         self.__city = city
-        self.postal_code = postal_code
+        self.__postal_code = postal_code
       
     def get_seller_id(self):
         return self.__seller_id
       
     def get_address(self):
         return self.__address
+    
+    def get_address2(self):
+        return self.__address2
 
     def get_city(self):
         return self.__city
@@ -43,6 +47,9 @@ class Seller(u.User):
 
     def set_address(self, address):
         self.__address = address
+        
+    def set_address2(self, address2):
+        self.__address2 = address2
 
     def set_city(self, city):
         self.__city = city

@@ -23,7 +23,11 @@
       <td>{{ Products.get_product_id() }}</td>
       <td>{{ Products.get_product_stock() }}</td>
       <td><img src="{{url_for('static', filename='images/cert/'+Products.get_product_image())}}" alt="{{Products.get_product_image()}}"></td>
-      <td><a href="/updateproduct/{{Products.get_product_id()}}" class="btn btn-warning">Update</a></td>
+      <td><form action="{{url_for('update_product', id=Products.get_product_id())}}" method="POST">
+        <button type="submit" class="btn btn-danger" >
+          Update
+        </button>
+      </form></td>
       <td>
         <form action="{{url_for('delete_product', id=Products.get_product_id())}}" method="POST">
          

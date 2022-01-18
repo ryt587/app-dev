@@ -108,3 +108,10 @@ class UpdateClothingForm(Form):
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
     Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+    
+class UpdateSellerForm(Form):
+    name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Store Name"})
+    address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()],render_kw={"placeholder": "1234 Main St"})
+    address2 = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()], render_kw={"placeholder": "Apartment, studio, or floor"})
+    city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
+    postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
