@@ -1,0 +1,49 @@
+{% extends "seller.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+		<div class="container center">
+	<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputproductname">Product Name</label>
+        {{ render_field(form.Product_name, class="form-control") }}
+      </div>
+    </div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputgpu">Gpu</label>
+      {{ render_field(form.Electronics_gpu, class="form-control") }}
+    </div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputcpu">Cpu</label>
+      {{ render_field(form.Electronics_cpu, class="form-control") }}
+  </div>
+  	<div>
+    <div class="form-group col-md-12">
+      <label for="inputstorage">Storage</label>
+      {{ render_field(form.Electronics_storage, class="form-control") }}
+    </div>
+  </div>
+    <div class="form-group col-md-12">
+      <label for="inputmemory">Memory</label>
+      {{ render_field(form.Electronics_memory, class="form-control") }}
+    </div>
+    <div class="form-group col-md-12">
+      <label for="inputsize">Size</label>
+      {{ render_field(form.Electronics_size, class="form-control") }}
+    </div>
+  </div>
+  <div>
+  <div class="form-group col-md-12">
+    <label for="inputstock">Stock</label>
+    {{ render_field(form.Product_stock, class="form-control") }}
+  </div>
+</div>
+  <button type="submit" class="btn btn-danger">Create</button><br>
+</form>
+		</div>
+		</div>
+{% endblock %}
