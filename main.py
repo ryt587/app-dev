@@ -558,5 +558,9 @@ def approve(id):
         db['Users'] = seller_dict
         return redirect(url_for('viewapply'))
 
+@app.route('/accountdetailseller')
+def accountdetailseller():
+    return render_template('accountdetailseller.html', user=user)
+
 if __name__ == '__main__':
     app.run()
