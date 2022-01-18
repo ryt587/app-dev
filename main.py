@@ -397,7 +397,7 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Clothing.Clothing(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data, file.filename)
+                Product = Electronics.Electronics(create_product_form.name.data, create_product_form.stock.data, file.filename, create_product_form.gpu.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
@@ -421,7 +421,7 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Electronics.Electronics(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data, file.filename)
+                Product = Clothing.Clothing(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
