@@ -1,0 +1,38 @@
+{% extends "seller.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+		<div class="container center">
+	<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+	  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputname">Store Name</label>
+        {{ render_field(form.name, class="form-control") }}
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputmailingaddress">Mailing address</label>
+      {{ render_field(form.address, class="form-control") }}
+    </div>
+  </div>
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label for="inputmailingaddress2">Mailing address 2</label>
+    {{ render_field(form.address2, class="form-control") }}
+  </select>
+  </div>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+      {{ render_field(form.city, class="form-control") }}
+    </div>
+       <div class="form-group col-md-6">
+      <label for="inputpostal">Postal Code</label>
+      {{ render_field(form.postal, class="form-control") }}
+    </div>
+  <button type="submit" class="btn btn-danger">Update</button><br>
+</form>
+		</div>
+		</div>
+
+{% endblock %}

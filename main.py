@@ -562,5 +562,41 @@ def approve(id):
 def accountdetailseller():
     return render_template('accountdetailseller.html', user=user)
 
+@app.route('/updateseller', methods=['GET', 'POST'])
+def update_seller(id):
+    update_seller_form = f.UpdatesellerForm(request.form)
+    global user
+    if request.method == 'POST' and update_seller_form.validate():
+        seller_dict = {}
+        db = shelve.open('user.db', 'w')
+        seller_dict = db['Users']
+
+        seller = seller_dict[id]
+        seller.set_name(update_seller_form.name.data)
+        seller.set_address(update_seller_form.address.data)
+        seller.set_address2(update_seller_form.address2.data)
+        seller.set_city(update_seller_form.city.data)
+        seller.set_postal_code(update_seller_form.postal.data)
+
+        staff_dict[user.get_seller_id()]=user
+        db['Users'] = staff_dict
+
+        db.close()
+
+        return redirect(url_for('retrieveseller'))
+    else:
+        seller_dict = {}
+        db = shelve.open('user.db', 'r')
+        seller_dict = db['Users']
+        db.close()
+        seller = seller_dict[id]
+        update_seller_form.name.data = seller.get_name()
+        update_seller_form.address.data = seller.get_address()
+        update_seller_form.role.data = staff.get_address2()
+        update_seller_form.city.data = staff.get_city()
+        update_seller_form.postal.data = staff.get_postal_code()
+
+        return render_template('updateseller.html', form=update_seller_form, user=user)
+
 if __name__ == '__main__':
     app.run()
