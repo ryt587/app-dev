@@ -1,4 +1,4 @@
-{% extends "staff.html" %} #change to what
+{% extends "seller.html" %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 {% if error %}
@@ -7,6 +7,12 @@
 		<div class="container center">
 	<div class="container pt-3 my-3 bg-white border">
 <form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputproductname">Product Name</label>
+        {{ render_field(form.Product_name, class="form-control") }}
+      </div>
+    </div>
 <div class="form-row">
     <div class="form-group col-md-12">
       <label for="inputgpu">Size</label>
@@ -24,6 +30,11 @@
       {{ render_field(form.Product_stock, class="form-control") }}
     </div>
   </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Product Image</label><br>
+    <input type='file' name='file' key='file'>
+  </div>
+</div>
   <button type="submit" class="btn btn-danger">Create</button><br>
 </form>
 		</div>
