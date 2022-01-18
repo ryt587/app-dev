@@ -3,17 +3,73 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Seller Page{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/SLPmain.css') }}"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	  <link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<link href="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.css" rel="stylesheet">
+	  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
 </head>
+<style>
+  @font-face {
+  font-family: 'Circular';
+  font-weight: 400;
+  src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.eot);
+  src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.eot?#iefix) format('embedded-opentype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.woff2) format('woff2'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.woff) format('woff'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.ttf) format('truetype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.svg) format('svg');
+}
+
+@font-face {
+  font-family: 'Circular';
+  font-weight: 700;
+  src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.eot);
+  src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.eot?#iefix) format('embedded-opentype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.woff2) format('woff2'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.woff) format('woff'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.ttf) format('truetype'), url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.svg) format('svg');
+}
+  </style>
+  
+<style>
+  
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+  }
+}
+
+.center{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}	
+.color {
+  background-color: #3A3335;
+}
+.redcolor{
+  background-color: #D81E5B;
+}
+  </style>
+    </head>
 <body>
+  <main>
   {% block navbar %}
-    {% include 'includes/_sidebar_seller.html' %}
+    {% include 'includes/_sidebar_seller_demo.html' %}
   {% endblock %}
   {% block content %}
 <div class="main">
   <h2>Sidebar</h2>
   <p>Инсайты.</p>
 </div>
+{% endblock %}
+</main>
+{% block scripts %}
+<script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.js"></script>
 {% endblock %}
    
 </body>

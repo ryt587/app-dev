@@ -2,6 +2,9 @@
 {% block title %}Product List{% endblock %}
 
 {% block content %}
+{% if product_list==[] %}
+<div class="container center"><h1>No products listed</h1></div>
+{%else%}
 <div class="container center">
 
   <table class="table table-striped">
@@ -18,8 +21,8 @@
     {% for Products in product_list %}
     <tr>
       <td>{{ Products.get_name() }}</td>
-      <td>{{ Products.get_category()) }}</td>
-      <td>{{ Products.get_product_id()) }}</td>
+      <td>{{ Products.get_category() }}</td>
+      <td>{{ Products.get_product_id() }}</td>
       <td>{{ Products.get_product_stock() }}</td>
       <td>{{ Products.get_product_image() }}</td>
       <td><a href="/updateproduct/{{user.get_product_id()}}" class="btn btn-warning">Update</a></td>
@@ -64,4 +67,5 @@
 </table>
 </div>
 </div>
+{%endif%}
 {% endblock %}

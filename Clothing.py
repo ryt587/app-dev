@@ -2,7 +2,7 @@ import Products as p
 
 class Clothing(p.Product):
     def __init__(self, name, product_stock, product_image, colour, size):
-        super().__init__(self, name, product_stock, product_image)
+        super().__init__(name, product_stock, product_image)
         self.__colour = colour
         self.__size = size
 

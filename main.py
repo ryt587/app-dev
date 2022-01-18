@@ -323,6 +323,7 @@ def retrieve_staff():
 @app.route('/updatestaff/<id>', methods=['GET', 'POST'])
 def update_staff(id):
     update_staff_form = f.UpdatestaffForm(request.form)
+    global user
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
         db = shelve.open('user.db', 'w')
@@ -351,7 +352,7 @@ def update_staff(id):
         update_staff_form.role.data = staff.get_staff_role()
         update_staff_form.phone.data = staff.get_phone_number()
 
-        return render_template('updatestaff.html', form=update_staff_form)
+        return render_template('updatestaff.html', form=update_staff_form, user=user)
 
 
 @app.route('/deletestaff/<id>', methods=['GET', 'POST'])
@@ -371,14 +372,14 @@ def delete_staff(id):
 def accountdetailstaff():
     return render_template('accountdetailstaff.html', user=user)
 
-@app.route('/createproduct')
+@app.route('/createproduct', methods=['GET', 'POST'])
 def CreateProduct():
-    category=request.form['category']
+    category=request.form.get('category')
     if category=="electronic":
         return redirect(url_for('create_electronic'))
     elif category=="clothing":
         return redirect(url_for('create_clothing'))
-    return render_template('products.html')
+    return render_template('products.html', user=user)
 
 @app.route('/createproduct/electronic',  methods=['GET', 'POST'])
 def create_electronic():
@@ -397,18 +398,18 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Electronics.Electronics(create_product_form.name.data, create_product_form.stock.data, file.filename,
+                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename,
                                                   create_product_form.Electronics_gpu.data, create_product_form.Electronics_cpu.data,
                                                   create_product_form.Electronics_storage.data, create_product_form.Electronics_memory.data,
                                                   create_product_form.Electronics_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
-                return redirect(url_for('productlist'))
-    return render_template('electronic_products.html', form=create_product_form, error=error)
+                return redirect(url_for('seller'))
+    return render_template('electronic_products.html', form=create_product_form, error=error, user=user)
 
 @app.route('/createproduct/clothing',  methods=['GET', 'POST'])
-def create_electronic():
+def create_clothing():
     create_product_form = f.CreateClothingForm(request.form)
     error=None
     no_of_error=0
@@ -424,38 +425,13 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Clothing.Clothing(create_product_form.name.data, create_product_form.stock.data, file.filename,
+                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename,
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
-                return redirect(url_for('productlist'))
-    return render_template('clothing_products.html', form=create_product_form, error=error)
-
-@app.route('/createproduct',  methods=['GET', 'POST'])
-def CreateProduct():
-    create_product_form = f.CreateProductsForm(request.form)
-    error=None
-    no_of_error=0
-    if request.method == 'POST' and create_product_form.validate():
-        file = request.files['file']
-        product_dict = {}
-        with shelve.open('user.db', 'c') as db:
-            try:
-                product_dict = db['Products']
-            except:
-                print("Error in retrieving Customers from Product.db.")
-            if not allowed_image(file.filename):
-                    error="Missing image or invalid format of image"
-                    no_of_error+=1
-            if no_of_error==0:
-                Product = Products.Product(create_product_form.name.data, create_product_form.category.data, create_product_form.stock.data, file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
-                product_dict[Product.get_product_id()] = Product
-                db['Products'] = product_dict
-                return redirect(url_for('productlist'))
-    return render_template('createproduct.html', form=create_product_form, error=error, user=user)
-
+                return redirect(url_for('seller'))
+    return render_template('clothing_products.html', form=create_product_form, error=error, user=user)
 
 @app.route('/updateproduct/<int:id>', methods=['GET', 'POST'])
 def update_product(id):
@@ -488,7 +464,7 @@ def update_product(id):
 
 
 @app.route('/updateproduct/electronic', methods=['GET', 'POST'])
-def update_product(id):
+def update_electronic(id):
     update_product_form = f.UpdateProductsForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
@@ -541,7 +517,7 @@ def productlist():
     for key in product_dict:
         product = product_dict.get(key)
         product_list.append(product)
-    return render_template('productlist.html', product_list=product_list)
+    return render_template('productlist.html', product_list=product_list, user=user)
 
 @app.route('/approve/<int:id>')
 def approve(id):

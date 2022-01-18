@@ -1,11 +1,8 @@
-{% extends "staff.html" %} #change to what
+{% extends "seller.html" %}
 {% block content %}
-{% if error %}
-        <p class=error><strong>Error:</strong> {{ error }}
-      {% endif %}
 		<div class="container center">
 	<div class="container pt-3 my-3 bg-white border">
-<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+<form style="padding-bottom: 10px;" method="post">
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="cateogry">Category</label>
@@ -14,7 +11,8 @@
         <option value="clothing">Clothing</option>
       </select>
     </div>
-  <button type="submit" class="btn btn-danger">Create</button><br>
+  </div>
+  <button type="submit" class="btn btn-danger">Next</button><br>
 </form>
 		</div>
 		</div>

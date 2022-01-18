@@ -3,7 +3,7 @@ import shelve
 class Product():
 
    def __init__(self, name, product_stock, product_image):
-      db = shelve.open('product.db', 'c')
+      db = shelve.open('user.db', 'c')
       users_dict={}
       try:
          if 'Products' in db:
