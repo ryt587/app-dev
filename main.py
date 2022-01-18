@@ -329,11 +329,11 @@ def update_staff(id):
         db = shelve.open('user.db', 'w')
         staff_dict = db['Users']
 
-        user = staff_dict[id]
-        user.set_name(update_staff_form.first_name.data)
-        user.set_last_name(update_staff_form.last_name.data)
-        user.set_staff_role(update_staff_form.role.data)
-        user.set_phone_number(update_staff_form.phone.data)
+        staff = staff_dict[id]
+        staff.set_name(update_staff_form.first_name.data)
+        staff.set_last_name(update_staff_form.last_name.data)
+        staff.set_staff_role(update_staff_form.role.data)
+        staff.set_phone_number(update_staff_form.phone.data)
 
         staff_dict[user.get_staff_id()]=user
         db['Users'] = staff_dict
@@ -398,7 +398,7 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename,
+                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),
                                                   create_product_form.Electronics_gpu.data, create_product_form.Electronics_cpu.data,
                                                   create_product_form.Electronics_storage.data, create_product_form.Electronics_memory.data,
                                                   create_product_form.Electronics_size.data)
@@ -425,7 +425,7 @@ def create_clothing():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename,
+                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 product_dict[Product.get_product_id()] = Product
@@ -433,38 +433,9 @@ def create_clothing():
                 return redirect(url_for('seller'))
     return render_template('clothing_products.html', form=create_product_form, error=error, user=user)
 
-@app.route('/updateproduct/<int:id>', methods=['GET', 'POST'])
-def update_product(id):
-    update_product_form = f.UpdateProductsForm(request.form)
-    if request.method == 'POST' and update_product_form.validate():
-        product_dict = {}
-        db = shelve.open('user.db', 'w')
-        product_dict = db['Products']
-
-        product = product_dict[id]
-        product.set_product_stock(update_product_form.product_stock.data)
-        product.set_product_category(update_product_form.product_category.data)
-
-        product_dict[user.get_id()] = user
-        db['Products'] = product_dict
-
-        db.close()
-
-        return redirect(url_for('productlist'))
-    else:
-        product_dict = {}
-        db = shelve.open('user.db', 'r')
-        product_dict = db['Products']
-        db.close()
-        product= product_dict[id]
-        update_product_form.first_name.data = product.get_product_stock
-        update_product_form.last_name.data = product.get_product_category
-
-        return render_template('updatestaff.html', form=update_product_form)
-
 
 @app.route('/updateproduct/electronic/<int:id>', methods=['GET', 'POST'])
-def update_product(id):
+def update_electronic(id):
     update_product_form = f.UpdateProductsForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
@@ -500,11 +471,11 @@ def update_product(id):
         update_product_form.Electronics_memory = product.get_memory()
         update_product_form.Electronics_size = product.get_size()
 
-        return render_template('updatestaff.html', form=update_product_form, user=user)
+        return render_template('updateelectronic.html', form=update_product_form, user=user)
 
 
 @app.route('/updateproduct/clothing/<int:id>', methods=['GET', 'POST'])
-def update_product(id):
+def update_clothing(id):
     update_product_form = f.UpdateProductsForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
@@ -534,7 +505,7 @@ def update_product(id):
         update_product_form.Clothing_colour = product.get_colour()
         update_product_form.Clothing_size = product.get_size()
 
-        return render_template('updatestaff.html', form=update_product_form, user=user)
+        return render_template('updateclothing.html', form=update_product_form, user=user)
 
 
 @app.route('/deleteproduct/<int:id>', methods=['GET', 'POST'])
@@ -546,8 +517,9 @@ def delete_product(id):
     os.remove(app.config['UPLOAD_FOLDER']+str(product.get_product_image()))
     products_dict.pop(id)
 
-    db['products'] = products_dict
+    db['Products'] = products_dict
     db.close()
+    return redirect(url_for('productlist'))
 
 
 @app.route('/productlist')
@@ -560,7 +532,8 @@ def productlist():
     product_list = []
     for key in product_dict:
         product = product_dict.get(key)
-        product_list.append(product)
+        if product.get_created_product()==user.get_seller_id():
+            product_list.append(product)
     return render_template('productlist.html', product_list=product_list, user=user)
 
 @app.route('/approve/<int:id>')

@@ -1,8 +1,8 @@
 import Products as p
 
 class Electronics(p.Product):
-    def __init__(self, name, product_stock, product_image, gpu, cpu, storage, memory, size):
-        super().__init__(name, product_stock, product_image)
+    def __init__(self, name, product_stock, product_image, created_product, gpu, cpu, storage, memory, size):
+        super().__init__(name, product_stock, product_image, created_product)
         self.__gpu = gpu
         self.__cpu = cpu
         self.__storage = storage

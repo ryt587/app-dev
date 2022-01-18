@@ -1,4 +1,4 @@
-{% extends "staff.html" %}
+{% extends "seller.html" %}
 {% block title %}Product List{% endblock %}
 
 {% block content %}
@@ -11,7 +11,6 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Category</th>
         <th>ID</th>
         <th>Stock</th>
         <th></th>
@@ -21,21 +20,20 @@
     {% for Products in product_list %}
     <tr>
       <td>{{ Products.get_name() }}</td>
-      <td>{{ Products.get_category() }}</td>
       <td>{{ Products.get_product_id() }}</td>
       <td>{{ Products.get_product_stock() }}</td>
-      <td>{{ Products.get_product_image() }}</td>
-      <td><a href="/updateproduct/{{user.get_product_id()}}" class="btn btn-warning">Update</a></td>
+      <td><img src="{{url_for('static', filename='images/cert/'+Products.get_product_image())}}" alt="{{Products.get_product_image()}}"></td>
+      <td><a href="/updateproduct/{{Products.get_product_id()}}" class="btn btn-warning">Update</a></td>
       <td>
-        <form action="{{url_for('delete_product', id=user.get_product_id())}}" method="POST">
+        <form action="{{url_for('delete_product', id=Products.get_product_id())}}" method="POST">
          
           <!-- Button to Open the Modal -->
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{user.get_product_id()}}">
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{Products.get_product_id()}}">
             Delete
           </button>
       
           <!-- The Modal -->
-          <div class="modal" id="myModal_{{user.get_staff_id()}}">
+          <div class="modal" id="myModal_{{Products.get_product_id()}}">
             <div class="modal-dialog">
               <div class="modal-content">
       
@@ -47,7 +45,7 @@
       
                 <!-- Modal body -->
                 <div class="modal-body">
-                  Are you sure you want to delete {{product.get_name()}} {{product.get_last_name()}}?
+                  Are you sure you want to delete {{Products.get_name()}}?
                 </div>
       
                 <!-- Modal footer -->
