@@ -84,10 +84,9 @@ class CreateClothingForm(Form):
                             render_kw={"placeholder": "red"})
     Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
 
-class UpdateProductsForm(Form):
+class UpdateElectronicForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Name"})
-    Product_category = SelectField('Product Category', render_kw={"placeholder": "Electronics"}, choices=[('', 'Select'), ('A', 'Electronics'), ('B', 'Clothing')], default='')
     Electronics_gpu = StringField('Gpu', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "gtx 3060"})
     Electronics_cpu = StringField('Cpu', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -98,7 +97,12 @@ class UpdateProductsForm(Form):
                             render_kw={"placeholder": "16gb"})
     Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "17 inches"})
+    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
 
+
+class UpdateClothingForm(Form):
+    Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
+                             render_kw={"placeholder": "Product Name"})
     Clothing_size = StringField('Clothing_size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "large"})
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
