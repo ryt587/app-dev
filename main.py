@@ -487,7 +487,7 @@ def update_product(id):
         return render_template('updatestaff.html', form=update_product_form)
 
 
-@app.route('/updateproduct/electronic', methods=['GET', 'POST'])
+@app.route('/updateproduct/electronic/<int:id>', methods=['GET', 'POST'])
 def update_product(id):
     update_product_form = f.UpdateProductsForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
@@ -496,8 +496,13 @@ def update_product(id):
         product_dict = db['Products']
 
         product = product_dict[id]
-        product.set_product_stock(update_product_form.product_stock.data)
-        product.set_
+        product.set_name(update_product_form.Electronics_name.data)
+        product.set_product_stock(update_product_form.Product_stock.data)
+        product.set_gpu(update_product_form.Electronics_gpu.data)
+        product.set_cpu(update_product_form.Electronics_cpu.data)
+        product.set_storage(update_product_form.Electronics_storage.data)
+        product.set_memory(update_product_form.Electronics_memory.data)
+        product.set_size(update_product_form.Electronics_size.data)
 
         product_dict[user.get_id()] = user
         db['Products'] = product_dict
@@ -511,10 +516,49 @@ def update_product(id):
         product_dict = db['Products']
         db.close()
         product= product_dict[id]
-        update_product_form.first_name.data = product.get_product_stock
-        update_product_form.last_name.data = product.get_product_category
+        update_product_form.Product_name = product.get_name()
+        update_product_form.Product_stock = product.get_product_stock()
+        update_product_form.Electronics_gpu = product.get_gpu()
+        update_product_form.Electronics_cpu = product.get_cpu()
+        update_product_form.Electronics_storage = product.get_storage()
+        update_product_form.Electronics_memory = product.get_memory()
+        update_product_form.Electronics_size = product.get_size()
 
-        return render_template('updatestaff.html', form=update_product_form)
+        return render_template('updatestaff.html', form=update_product_form, user=user)
+
+
+@app.route('/updateproduct/clothing/<int:id>', methods=['GET', 'POST'])
+def update_product(id):
+    update_product_form = f.UpdateProductsForm(request.form)
+    if request.method == 'POST' and update_product_form.validate():
+        product_dict = {}
+        db = shelve.open('user.db', 'w')
+        product_dict = db['Products']
+
+        product = product_dict[id]
+        product.set_name(update_product_form.Electronics_name.data)
+        product.set_product_stock(update_product_form.Product_stock.data)
+        product.set_colour(update_product_form.Clothing_colour.data)
+        product.set_size(update_product_form.Clothing_size.data)
+
+        product_dict[user.get_id()] = user
+        db['Products'] = product_dict
+
+        db.close()
+
+        return redirect(url_for('productlist'))
+    else:
+        product_dict = {}
+        db = shelve.open('user.db', 'r')
+        product_dict = db['Products']
+        db.close()
+        product= product_dict[id]
+        update_product_form.Product_name = product.get_name()
+        update_product_form.Product_stock = product.get_product_stock()
+        update_product_form.Clothing_colour = product.get_colour()
+        update_product_form.Clothing_size = product.get_size()
+
+        return render_template('updatestaff.html', form=update_product_form, user=user)
 
 
 @app.route('/deleteproduct/<int:id>', methods=['GET', 'POST'])
