@@ -199,7 +199,7 @@ def update_customer():
         db = shelve.open('user.db', 'w')
         customers_dict = db['Users']
 
-        user.set_first_name(update_customer_form.first_name.data)
+        user.set_name(update_customer_form.first_name.data)
         user.set_last_name(update_customer_form.last_name.data)
         user.set_address(update_customer_form.address.data)
         user.set_postal(update_customer_form.postal.data)
@@ -217,7 +217,7 @@ def update_customer():
         customers_dict = db['Users']
         db.close()
 
-        update_customer_form.first_name.data = customer.get_first_name()
+        update_customer_form.first_name.data = customer.get_name()
         update_customer_form.last_name.data = customer.get_last_name()
         update_customer_form.address.data=customer.get_address()
         update_customer_form.postal.data = customer.get_postal()
@@ -340,7 +340,7 @@ def update_staff(id):
 
         db.close()
 
-        return redirect(url_for('retrievestaff'))
+        return redirect(url_for('retrieve_staff'))
     else:
         staff_dict = {}
         db = shelve.open('user.db', 'r')
@@ -594,7 +594,7 @@ def update_seller():
 
         db.close()
 
-        return redirect(url_for('retrieveseller'))
+        return redirect(url_for('accountdetailseller'))
     else:
         seller_dict = {}
         db = shelve.open('user.db', 'r')

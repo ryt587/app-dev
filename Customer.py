@@ -21,7 +21,7 @@ class Customer(u.User):
             print("Error in retrieving Users from user.db.")
         db.close()
         super().__init__(first_name, email, password)
-        self.__user_id==id
+        self.__user_id=id
         self.__last_name=last_name
         self.__birthdate=birthdate
         self.__address= address
