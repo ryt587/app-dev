@@ -3,7 +3,6 @@ from flask import Flask, render_template,  request, redirect, url_for
 import Forms as f
 import shelve, Customer, Apply, Staff, Seller, Products, Electronics, Clothing
 import os
-import phonenumbers
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from uuid import uuid4
@@ -623,5 +622,14 @@ def delete_seller():
     user=0
 
     return redirect(url_for('home'))
+
+@app.route('/reportseller')
+def reportseller():
+    return render_template('reportseller.html', user=user)
+
+@app.route('/reportstaff')
+def reportstaff():
+    return render_template('reportstaff.html', user=user)
+
 if __name__ == '__main__':
     app.run()
