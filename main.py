@@ -1,17 +1,25 @@
-from email.mime import application
-from flask import Flask, render_template,  request, redirect, url_for
+from flask import Flask, render_template,  request, redirect, url_for, Response
 import Forms as f
-import shelve, Customer, Apply, Staff, Seller, Products, Electronics, Clothing
+import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from uuid import uuid4
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from io import BytesIO
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
 app.config['UPLOAD_PATH'] = 'static/images/cert/'
 app.config['UPLOAD_FOLDER'] = 'static/images/product_image/'
 app.config["ALLOWED_IMAGE_EXTENSIONS"]=['png', 'jpg', 'jpeg']
+app.config['MAIL_USERNAME'] = 'chuaandpencer@gmail.com'
+app.config['MAIL_PASSWORD'] = 'nypappdev2022'
+app.config['MAIL_DEFAULT_SENDER'] = 'chuaandpencer@gmail.com'
+
+mail=Mail(app)
 
 global user
 user=0
@@ -262,6 +270,11 @@ def reject_seller(id):
     db = shelve.open('user.db', 'w')
     users_dict = db['Applications']
     applications=users_dict[id]
+    msg = Message("Application rejected",
+                  sender="chuaandspencer@example.com",
+                  recipients=[applications.get_email()])
+    msg.body="Your application to be a seller at Chua And Spencer's have been rejected"
+    mail.send(msg)
     os.remove(app.config['UPLOAD_PATH']+str(applications.get_image()))
     users_dict.pop(id)
 
@@ -555,6 +568,11 @@ def approve(id):
         except:
             print("Error in retrieving Customers from staff.db.")
         application=application_dict[id] 
+        msg = Message("Application approved",
+                  sender="chuaandspencer@example.com",
+                  recipients=[application.get_email()])
+        msg.body="Your application to be a seller at Chua And Spencer's is approved. To log in:\nEmail: {}\nPassword: {}".format(application.get_email(), application.get_password())
+        mail.send(msg)
         os.remove(app.config['UPLOAD_PATH']+str(application.get_image()))
         application_dict.pop(id)
         db['Applications'] = application_dict
@@ -625,11 +643,36 @@ def delete_seller():
 
 @app.route('/reportseller')
 def reportseller():
-    return render_template('reportseller.html', user=user)
+    db = shelve.open('user.db', 'c')
+    productlist=[]
+    users_dict={}
+    if 'Products' in db:
+        users_dict=db['Products']
+    else:
+        db['Products']=users_dict
+    if users_dict!={}:
+        for x in users_dict:
+            if users_dict[x].get_created_product()==user.get_seller_id():
+                productlist.append(users_dict[x])
+    def byimpression(product):
+        return product.get_impression()
+    productlist=sorted(productlist, key= byimpression)
+    db.close()
+    return render_template('reportseller.html', user=user, productlist=productlist)
 
 @app.route('/reportstaff')
 def reportstaff():
-    return render_template('reportstaff.html', user=user)
+     # Generate the figure **without using pyplot**.
+    fig = Figure()
+    ax = fig.subplots()
+    ax.plot([x for x in range(31)],)
+    # Save it to a temporary buffer.
+    output = BytesIO()
+    # Embed the result in the html output.
+    FigureCanvasAgg(fig).print_png(output)
 
 if __name__ == '__main__':
+    import webbrowser
+
+    webbrowser.open("http://127.0.0.1:5000/")
     app.run()
