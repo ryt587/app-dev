@@ -5,6 +5,10 @@
 <div class="container pt-3 my-3 bg-white border">
 <table class="table table-borderless">
 <tbody>
+  <tr>
+    <th scope="col" style="border-top: none;">Name:</th>
+    <td style="border-top: none;">{{ user.get_user_id() }}</td>
+  </tr>
     <tr>
       <th scope="col" style="border-top: none;">Name:</th>
       <td style="border-top: none;">{{ user.get_name() }} {{ user.get_last_name() }}</td>
@@ -40,7 +44,7 @@
 <!-- delete button -->
 <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{user.get_user_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
-  Delete
+  <a href="/deleteUser">Delete</a>
 </button>
 
 <!-- The Modal -->

@@ -16,7 +16,7 @@ class Customer(u.User):
             else:
                 id='C1'
                 while id in users_dict:
-                    id=id[:1]+str(int(id[2:])+1)
+                    id=id[:1]+str(int(id[1:])+1)
         except:
             print("Error in retrieving Users from user.db.")
         db.close()

@@ -12,6 +12,7 @@ import base64
 from io import BytesIO
 from flask_mail import Mail, Message
 import datetime as d
+import itertools
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
@@ -57,9 +58,13 @@ def allowed_image(filename):
     else:
         return False
     
-def get_graph():
-    plt.figure()  # needed to avoid adding curves in plot
-    plt.plot([x for x in range(31)])
+def get_graph(title,x,y):
+    plt.figure() 
+    plt.title(title)
+    plt.plot(x,y)
+    plt.xticks(rotation=70)
+    plt.xlabel("Date")
+    plt.ylabel("Revenue earned")
     # Save it to a temporary buffer.
     output = BytesIO()
     plt.savefig(output, format='png')
@@ -704,17 +709,10 @@ def reportstaff():
     except:
         print("Error in retrieving Users from user.db.")
     db.close()
-    plt.figure() 
-    plt.plot([x.strftime("%Y/%m/%d") for x in earnings_dict],[x for x in earnings_dict.values()])
-    plt.xticks(rotation=70)
-    plt.xlabel("Date")
-    plt.ylabel("Revenue earned")
-    # Save it to a temporary buffer.
-    output = BytesIO()
-    plt.savefig(output, format='png')
-    output.seek(0)
-    # Embed the result in the html output.
-    data=base64.b64encode(output.getvalue())
+    earnings_dict=dict(reversed(list(earnings_dict.items())))
+    earnings_dict=dict(itertools.islice(earnings_dict.items(), 30))
+    earnings_dict=dict(reversed(list(earnings_dict.items())))
+    data=get_graph("Revenue from past 30 days",[x.strftime("%Y/%m/%d") for x in earnings_dict],[x for x in earnings_dict.values()])
     return render_template('reportstaff.html', result=data.decode('utf8'), user=user)
 
 if __name__ == '__main__':
