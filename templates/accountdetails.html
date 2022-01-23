@@ -2,6 +2,7 @@
 {% block title %}Account Details Page{% endblock %}
 {% block content %}
 <body>
+<div class="container center">
 <div class="container pt-3 my-3 bg-white border">
 <table class="table table-borderless">
 <tbody>
@@ -37,10 +38,13 @@
       <th scope="row" style="border-top: none;">City:</th>
       <td style="border-top: none;">{{ user.get_city() }}</td>
     </tr>
-<!-- try add these inside -->
+  </tbody>
+</table>
+<!-- try add these inside --><form action="{{url_for('update_customer', id=user.get_user_id())}}" method="POST">
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
-  <a href="/updateUser">Update</a>
+ Update
 </button>
+  </form>
 <!-- delete button -->
 <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{user.get_user_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
@@ -73,8 +77,10 @@
   </div>
 </div>      
 </form>
+</div>
+</div>
 
-</tbody>
-</table>
+  <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.js"></script>
 </body>
 {% endblock %}
