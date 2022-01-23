@@ -6,10 +6,6 @@
 <div class="container pt-3 my-3 bg-white border">
 <table class="table table-borderless">
 <tbody>
-  <tr>
-    <th scope="col" style="border-top: none;">Name:</th>
-    <td style="border-top: none;">{{ user.get_user_id() }}</td>
-  </tr>
     <tr>
       <th scope="col" style="border-top: none;">Name:</th>
       <td style="border-top: none;">{{ user.get_name() }} {{ user.get_last_name() }}</td>
@@ -40,7 +36,7 @@
     </tr>
   </tbody>
 </table>
-<!-- try add these inside --><form action="{{url_for('update_customer', id=user.get_user_id())}}" method="POST">
+<!-- try add these inside --><form action="{{url_for('update_customer')}}" method="POST">
 <button type="submit" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
  Update
 </button>
@@ -79,8 +75,8 @@
 </form>
 </div>
 </div>
-
+{% block scripts %}
   <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.js"></script>
+  {% endblock %}
 </body>
 {% endblock %}

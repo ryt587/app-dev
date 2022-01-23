@@ -26,7 +26,7 @@ class Seller(u.User):
         self.__address2 = address2
         self.__city = city
         self.__postal_code = postal_code
-        self.__earned = 0
+        self.__earned = {}
       
     def get_seller_id(self):
         return self.__seller_id

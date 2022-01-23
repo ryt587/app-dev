@@ -62,7 +62,7 @@ def get_graph(title,x,y):
     plt.figure() 
     plt.title(title)
     plt.plot(x,y)
-    plt.xticks(rotation=70)
+    plt.xticks(rotation=45)
     plt.xlabel("Date")
     plt.ylabel("Revenue earned")
     # Save it to a temporary buffer.
@@ -216,7 +216,7 @@ def termsandconditions():
     return render_template('termsandconditions.html')
 
 
-@app.route('/deleteUser', methods=['GET', 'POST'])
+@app.route('/deleteUser/', methods=['GET', 'POST'])
 def delete_user():
     global user
     users_dict = {}
@@ -233,7 +233,7 @@ def delete_user():
     return redirect(url_for('home'))
 
 
-@app.route('/updateUser', methods=['GET', 'POST'])
+@app.route('/updateUser/', methods=['GET', 'POST'])
 def update_customer():
     update_customer_form = f.UpdateCustomerForm(request.form)
     global user
