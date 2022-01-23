@@ -12,7 +12,7 @@ class Seller(u.User):
             else:
                 db['Users']=users_dict
             if users_dict=={}:
-                id=1
+                id='Se1'
             else:
                 id='Se1'
                 while id in users_dict:
@@ -26,6 +26,7 @@ class Seller(u.User):
         self.__address2 = address2
         self.__city = city
         self.__postal_code = postal_code
+        self.__earned = 0
       
     def get_seller_id(self):
         return self.__seller_id
@@ -41,6 +42,10 @@ class Seller(u.User):
 
     def get_postal_code(self):
         return self.__postal_code
+    
+    def get_earned(self):
+        return self.__earned
+    
 
     def set_seller_id(self,seller_id):
         self.__seller_id = seller_id
@@ -56,5 +61,8 @@ class Seller(u.User):
         
     def set_postal_code(self, postal_code):
         self.__postal_code = postal_code
+        
+    def set_earned(self, earned):
+        self.__earned = earned
         
 

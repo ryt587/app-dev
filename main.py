@@ -1,14 +1,18 @@
-from flask import Flask, render_template,  request, redirect, url_for, Response
+from flask import Flask, render_template,  request, redirect, url_for, send_file
 import Forms as f
 import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from uuid import uuid4
-from matplotlib.figure import Figure
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import base64
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from io import BytesIO
 from flask_mail import Mail, Message
+import datetime as d
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
@@ -20,6 +24,23 @@ app.config['MAIL_PASSWORD'] = 'nypappdev2022'
 app.config['MAIL_DEFAULT_SENDER'] = 'chuaandpencer@gmail.com'
 
 mail=Mail(app)
+
+db = shelve.open('user.db', 'c')
+earnings_dict={}
+try:
+    if 'Earnings' in db:
+        earnings_dict=db['Earnings']
+    else:
+        db['Earnings']=earnings_dict
+    for x in range(30,-1,-1):
+        if not (d.date.today() - d.timedelta(x) in earnings_dict):
+            earnings_dict[d.date.today() - d.timedelta(x)]=0
+except:
+    print("Error in retrieving Users from user.db.")
+db.close()
+
+
+
 
 global user
 user=0
@@ -35,6 +56,17 @@ def allowed_image(filename):
         return True
     else:
         return False
+    
+def get_graph():
+    plt.figure()  # needed to avoid adding curves in plot
+    plt.plot([x for x in range(31)])
+    # Save it to a temporary buffer.
+    output = BytesIO()
+    plt.savefig(output, format='png')
+    output.seek(0)
+    # Embed the result in the html output.
+    data=base64.b64encode(output.getvalue())
+    return data
 
 
 @app.route('/')
@@ -643,6 +675,7 @@ def delete_seller():
 
 @app.route('/reportseller')
 def reportseller():
+    total_impression=0
     db = shelve.open('user.db', 'c')
     productlist=[]
     users_dict={}
@@ -653,23 +686,35 @@ def reportseller():
     if users_dict!={}:
         for x in users_dict:
             if users_dict[x].get_created_product()==user.get_seller_id():
+                total_impression+=users_dict[x].get_impression()
                 productlist.append(users_dict[x])
     def byimpression(product):
         return product.get_impression()
     productlist=sorted(productlist, key= byimpression)
     db.close()
-    return render_template('reportseller.html', user=user, productlist=productlist)
+    return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression)
 
 @app.route('/reportstaff')
 def reportstaff():
-     # Generate the figure **without using pyplot**.
-    fig = Figure()
-    ax = fig.subplots()
-    ax.plot([x for x in range(31)],)
+    db = shelve.open('user.db', 'c')
+    earnings_dict={}
+    try:
+        if 'Earnings' in db:
+            earnings_dict=db['Earnings']
+    except:
+        print("Error in retrieving Users from user.db.")
+    db.close()
+    plt.figure()  # needed to avoid adding curves in plot
+    plt.plot([x for x in earnings_dict],[x for i, x in earnings_dict.values()])
+    plt.xlabel("Date")
+    plt.ylabel("Revenue earned")
     # Save it to a temporary buffer.
     output = BytesIO()
+    plt.savefig(output, format='png')
+    output.seek(0)
     # Embed the result in the html output.
-    FigureCanvasAgg(fig).print_png(output)
+    data=base64.b64encode(output.getvalue())
+    return render_template('reportstaff.html', result=data.decode('utf8'), user=user)
 
 if __name__ == '__main__':
     import webbrowser

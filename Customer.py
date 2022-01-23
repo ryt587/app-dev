@@ -12,7 +12,7 @@ class Customer(u.User):
             else:
                 db['Users']=users_dict
             if users_dict=={}:
-                id=1
+                id='C1'
             else:
                 id='C1'
                 while id in users_dict:
