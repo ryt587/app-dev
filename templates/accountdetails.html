@@ -33,8 +33,6 @@
       <th scope="row" style="border-top: none;">City:</th>
       <td style="border-top: none;">{{ user.get_city() }}</td>
     </tr>
-  </tbody>
-</table>
 <!-- try add these inside -->
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
   <a href="/updateUser">Update</a>
@@ -42,7 +40,7 @@
 <!-- delete button -->
 <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{user.get_user_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
-  <a href="/deleteUser">Delete</a>
+  Delete
 </button>
 
 <!-- The Modal -->
@@ -71,5 +69,8 @@
   </div>
 </div>      
 </form>
+
+</tbody>
+</table>
 </body>
 {% endblock %}

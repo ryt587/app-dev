@@ -9,7 +9,6 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import base64
-from matplotlib.backends.backend_agg import FigureCanvasAgg
 from io import BytesIO
 from flask_mail import Mail, Message
 import datetime as d
@@ -35,6 +34,7 @@ try:
     for x in range(30,-1,-1):
         if not (d.date.today() - d.timedelta(x) in earnings_dict):
             earnings_dict[d.date.today() - d.timedelta(x)]=0
+    db['Earnings']=earnings_dict
 except:
     print("Error in retrieving Users from user.db.")
 db.close()
@@ -704,8 +704,9 @@ def reportstaff():
     except:
         print("Error in retrieving Users from user.db.")
     db.close()
-    plt.figure()  # needed to avoid adding curves in plot
-    plt.plot([x for x in earnings_dict],[x for i, x in earnings_dict.values()])
+    plt.figure() 
+    plt.plot([x.strftime("%Y/%m/%d") for x in earnings_dict],[x for x in earnings_dict.values()])
+    plt.xticks(rotation=70)
     plt.xlabel("Date")
     plt.ylabel("Revenue earned")
     # Save it to a temporary buffer.
