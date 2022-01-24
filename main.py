@@ -27,7 +27,6 @@ mail=Mail(app)
 
 db = shelve.open('user.db', 'c')
 earnings_dict={}
-sellers_dict={}
 try:
     if 'Earnings' in db:
         earnings_dict=db['Earnings']
@@ -39,16 +38,21 @@ try:
     db['Earnings']=earnings_dict
 except:
     print("Error in retrieving earnings from user.db.")
+db.close()
+db = shelve.open('user.db', 'c')
+sellers_dict={}
 try:
-    if 'Sellers' in db:
-        sellers_dict=db['Sellers']
+    if 'Users' in db:
+        sellers_dict=db['Users']
     else:
-        db['Sellers']=sellers_dict
+        db['Users']=sellers_dict
     for x in sellers_dict:
-        if not (d.date.today() in sellers_dict[x].get_earned()):
-            earned=sellers_dict[x].get_earned()
-            earned[d.date.today()]=0
-            sellers_dict[x].set_earned(earned)
+        if isinstance(x,Seller.Seller):
+            if not (d.date.today() in sellers_dict[x].get_earned()):
+                print(3)
+                earned=sellers_dict[x].get_earned()
+                earned[d.date.today()]=0
+                sellers_dict[x].set_earned(earned)
     db['Sellers']=earnings_dict
 except:
     print("Error in retrieving sellers from user.db.")
@@ -630,7 +634,6 @@ def approve(id):
         os.remove(app.config['UPLOAD_PATH']+str(application.get_image()))
         application_dict.pop(id)
         db['Applications'] = application_dict
-    with shelve.open('user.db', 'c') as db:
         try:
             seller_dict = db['Users']
         except:
