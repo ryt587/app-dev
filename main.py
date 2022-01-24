@@ -27,6 +27,7 @@ mail=Mail(app)
 
 db = shelve.open('user.db', 'c')
 earnings_dict={}
+sellers_dict={}
 try:
     if 'Earnings' in db:
         earnings_dict=db['Earnings']
@@ -36,6 +37,19 @@ try:
         if not (d.date.today() - d.timedelta(x) in earnings_dict):
             earnings_dict[d.date.today() - d.timedelta(x)]=0
     db['Earnings']=earnings_dict
+except:
+    print("Error in retrieving Users from user.db.")
+try:
+    if 'Sellers' in db:
+        sellers_dict=db['Sellers']
+    else:
+        db['Sellers']=sellers_dict
+    for x in sellers_dict:
+        if not (d.date.today() in sellers_dict[x].get_earned()):
+            earned=sellers_dict[x].get_earned()
+            earned[d.date.today()]=0
+            sellers_dict[x].set_earned(earned)
+    db['Sellers']=earnings_dict
 except:
     print("Error in retrieving Users from user.db.")
 db.close()
@@ -58,10 +72,13 @@ def allowed_image(filename):
     else:
         return False
     
-def get_graph(title,x,y):
-    plt.figure() 
+def get_graph(title,earning_dict):
+    earning_dict=dict(reversed(list(earning_dict.items())))
+    earning_dict=dict(itertools.islice(earning_dict.items(), 30))
+    earning_dict=dict(reversed(list(earning_dict.items())))
+    plt.figure(figsize=(10, 6.5))
     plt.title(title)
-    plt.plot(x,y)
+    plt.plot([x.strftime("%Y/%m/%d") for x in earning_dict],[x for x in earning_dict.values()])
     plt.xticks(rotation=45)
     plt.xlabel("Date")
     plt.ylabel("Revenue earned")
@@ -307,11 +324,11 @@ def reject_seller(id):
     db = shelve.open('user.db', 'w')
     users_dict = db['Applications']
     applications=users_dict[id]
-    msg = Message("Application rejected",
+    '''msg = Message("Application rejected",
                   sender="chuaandspencer@example.com",
                   recipients=[applications.get_email()])
     msg.body="Your application to be a seller at Chua And Spencer's have been rejected"
-    mail.send(msg)
+    mail.send(msg)'''
     os.remove(app.config['UPLOAD_PATH']+str(applications.get_image()))
     users_dict.pop(id)
 
@@ -605,11 +622,11 @@ def approve(id):
         except:
             print("Error in retrieving Customers from staff.db.")
         application=application_dict[id] 
-        msg = Message("Application approved",
+        '''msg = Message("Application approved",
                   sender="chuaandspencer@example.com",
                   recipients=[application.get_email()])
         msg.body="Your application to be a seller at Chua And Spencer's is approved. To log in:\nEmail: {}\nPassword: {}".format(application.get_email(), application.get_password())
-        mail.send(msg)
+        mail.send(msg)'''
         os.remove(app.config['UPLOAD_PATH']+str(application.get_image()))
         application_dict.pop(id)
         db['Applications'] = application_dict
@@ -684,6 +701,7 @@ def reportseller():
     db = shelve.open('user.db', 'c')
     productlist=[]
     users_dict={}
+    seller_earnings_dict={}
     if 'Products' in db:
         users_dict=db['Products']
     else:
@@ -695,9 +713,11 @@ def reportseller():
                 productlist.append(users_dict[x])
     def byimpression(product):
         return product.get_impression()
+    seller_earnings_dict=user.get_earned()
+    data=get_graph("Revenue from past 30 days",seller_earnings_dict)
     productlist=sorted(productlist, key= byimpression)
     db.close()
-    return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression)
+    return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression, result=data.decode('utf8'))
 
 @app.route('/reportstaff')
 def reportstaff():
@@ -709,10 +729,7 @@ def reportstaff():
     except:
         print("Error in retrieving Users from user.db.")
     db.close()
-    earnings_dict=dict(reversed(list(earnings_dict.items())))
-    earnings_dict=dict(itertools.islice(earnings_dict.items(), 30))
-    earnings_dict=dict(reversed(list(earnings_dict.items())))
-    data=get_graph("Revenue from past 30 days",[x.strftime("%Y/%m/%d") for x in earnings_dict],[x for x in earnings_dict.values()])
+    data=get_graph("Revenue from past 30 days",earnings_dict)
     return render_template('reportstaff.html', result=data.decode('utf8'), user=user)
 
 if __name__ == '__main__':

@@ -15,36 +15,43 @@
 		<tbody>
 		<tr>
 			<td>123</td>
-			<td>123</td>
+			<td>{{total_impression}}</td>
 			<td>123</td>
 			</tr>
 			</tbody>
 
 	</table>
 	<h2 class="text-center">Most Popular Listings</h2>
-	
+	{% if productlist==[] %}
+	<div><h3>No product listed</h3></div>
+	{% else %}
 <table class="table">
 	<thead>
 	<tr>
-	<td><img src="https://uncrate.com/p/2021/03/satan-nikes.jpg" height="100px" width="150px" alt="image"></td>
-		<td><img src="https://uncrate.com/p/2021/03/satan-nikes.jpg" height="100px" width="150px" alt="image"></td>
-		<td><img src="https://uncrate.com/p/2021/03/satan-nikes.jpg" height="100px" width="150px" alt="image"></td>
-		<td><img src="https://uncrate.com/p/2021/03/satan-nikes.jpg" height="100px" width="150px" alt="image"></td>
-		<td><img src="https://uncrate.com/p/2021/03/satan-nikes.jpg" height="100px" width="150px" alt="image"></td>
+		{% for x in productlist %}
+		{% if loop.index<5 %}
+	<td><img src="{{url_for('static', filename='images/product_image/'+x.get_product_image())}}" height="100px" width="150px" alt="{{x.get_product_image()}}"></td>
+		{% endif %}
+		{% endfor %}
 	</tr>
 		</thead>
 	<tbody>
 		<tr>
-	<td>23 impressions<br> 50&#37; Conversion rate</td>
-	<td>23 impressions<br> 50&#37; Conversion rate</td>
-	<td>23 impressions<br> 50&#37; Conversion rate</td>
-	<td>23 impressions<br> 50&#37; Conversion rate</td>
-	<td>23 impressions<br> 50&#37; Conversion rate</td>
+			{% for x in productlist %}
+		{% if loop.index<5 %}
+		{% if x.get_sold()==0 %}
+	<td>{{x.get_impression()}} impressions<br> {{x.get_impression()/1}}&#37; Conversion rate</td>
+	{% else %}
+	<td>{{x.get_impression()}} impressions<br> {{x.get_impression()/x.get_sold()}}&#37; Conversion rate</td>
+	{% endif %}
+	{% endif %}
+		{% endfor %}
 			</tr>
 		</tbody>
 	</table>
+	{% endif %}
 	
-	<div class="container text-center"><img class="rounded" src="https://miro.medium.com/max/2000/1*bOYvdJ1cZ5qNTwtwTP5luw.png" height="300px" width="400px" alt="graph"></div>
+	<div class="container text-center"><img src="data:image/png;base64,{{ result }}"\></div>
 	</div>
  </div>
 {% endblock %}
