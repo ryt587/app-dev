@@ -38,7 +38,7 @@ try:
             earnings_dict[d.date.today() - d.timedelta(x)]=0
     db['Earnings']=earnings_dict
 except:
-    print("Error in retrieving Users from user.db.")
+    print("Error in retrieving earnings from user.db.")
 try:
     if 'Sellers' in db:
         sellers_dict=db['Sellers']
@@ -51,7 +51,7 @@ try:
             sellers_dict[x].set_earned(earned)
     db['Sellers']=earnings_dict
 except:
-    print("Error in retrieving Users from user.db.")
+    print("Error in retrieving sellers from user.db.")
 db.close()
 
 
@@ -731,6 +731,10 @@ def reportstaff():
     db.close()
     data=get_graph("Revenue from past 30 days",earnings_dict)
     return render_template('reportstaff.html', result=data.decode('utf8'), user=user)
+
+@app.route('/faq')
+def faq():
+    return render_template('faq.html', user=user)
 
 if __name__ == '__main__':
     import webbrowser
