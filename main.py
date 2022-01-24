@@ -730,7 +730,7 @@ def reportstaff():
         print("Error in retrieving Users from user.db.")
     db.close()
     data=get_graph("Revenue from past 30 days",earnings_dict)
-    return render_template('reportstaff.html', result=data.decode('utf8'), user=user)
+    return render_template('reportstaff.html', user=user)
 
 @app.route('/faq')
 def faq():
@@ -739,6 +739,12 @@ def faq():
 @app.route('/waitingapplication')
 def waiting():
     return render_template('waitingapplication.html', user=user)
+
+@app.route('/graphseller')
+def graphseller():
+    seller_earnings_dict=user.get_earned()
+    data=get_graph("Revenue from past 30 days",seller_earnings_dict)
+    return render_template('graphseller.html', user=user, result=data.decode('utf8'))
 
 
 if __name__ == '__main__':
