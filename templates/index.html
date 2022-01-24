@@ -13,8 +13,21 @@
 	      <link rel="stylesheet" href="{{ url_for('static', filename='styles/reset.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/homepage.css') }}"/>
-	  
-	 
+
+      <style>
+          .center{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.color {
+  background-color: #3A3335;
+}
+.redcolor{
+  background-color: #D81E5B;
+
+      </style>
   </head>
   <body>
     {% block navbar %}
