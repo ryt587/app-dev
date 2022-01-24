@@ -219,7 +219,7 @@ def sellerapplication():
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
                 applications_dict[application.get_apply_id()] = application
                 db['Applications'] = applications_dict
-                return redirect(url_for('home'))
+                return redirect(url_for('waiting'))
     return render_template('sellerapplication.html', form=create_seller_form, error=error, user=user)
 
 
@@ -735,6 +735,11 @@ def reportstaff():
 @app.route('/faq')
 def faq():
     return render_template('faq.html', user=user)
+
+@app.route('/waitingapplication')
+def waiting():
+    return render_template('waitingapplication.html', user=user)
+
 
 if __name__ == '__main__':
     import webbrowser
