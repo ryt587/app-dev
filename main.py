@@ -720,7 +720,7 @@ def reportseller():
     data=get_graph("Revenue from past 30 days",seller_earnings_dict)
     productlist=sorted(productlist, key= byimpression)
     db.close()
-    return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression, result=data.decode('utf8'))
+    return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression)
 
 @app.route('/reportstaff')
 def reportstaff():
@@ -733,7 +733,7 @@ def reportstaff():
         print("Error in retrieving Users from user.db.")
     db.close()
     data=get_graph("Revenue from past 30 days",earnings_dict)
-    return render_template('reportstaff.html', user=user)
+    return render_template('reportstaff.html', user=user, result=data.decode('utf8'))
 
 @app.route('/faq')
 def faq():
