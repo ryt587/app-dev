@@ -1,4 +1,4 @@
-from flask import Flask, render_template,  request, redirect, url_for, send_file
+from flask import Flask, render_template,  request, redirect, url_for, send_file #i am gay - ryan gay
 import Forms as f
 import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing
 import os
