@@ -13,15 +13,19 @@ from io import BytesIO
 from flask_mail import Mail, Message
 import datetime as d
 import itertools
+import smtplib
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
 app.config['UPLOAD_PATH'] = 'static/images/cert/'
 app.config['UPLOAD_FOLDER'] = 'static/images/product_image/'
 app.config["ALLOWED_IMAGE_EXTENSIONS"]=['png', 'jpg', 'jpeg']
-app.config['MAIL_USERNAME'] = 'chuaandpencer@gmail.com'
+app.config['MAIL_USE_SSL'] = True
+app.config["MAIL_PORT"] = 465
+app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
+app.config['MAIL_USERNAME'] = 'chuaandspencer@gmail.com'
 app.config['MAIL_PASSWORD'] = 'nypappdev2022'
-app.config['MAIL_DEFAULT_SENDER'] = 'chuaandpencer@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = 'chuaandspencer@gmail.com'
 
 mail=Mail(app)
 
@@ -626,11 +630,11 @@ def approve(id):
         except:
             print("Error in retrieving Customers from staff.db.")
         application=application_dict[id] 
-        '''msg = Message("Application approved",
+        msg = Message("Application approved",
                   sender="chuaandspencer@example.com",
                   recipients=[application.get_email()])
         msg.body="Your application to be a seller at Chua And Spencer's is approved. To log in:\nEmail: {}\nPassword: {}".format(application.get_email(), application.get_password())
-        mail.send(msg)'''
+        mail.send(msg)
         os.remove(app.config['UPLOAD_PATH']+str(application.get_image()))
         application_dict.pop(id)
         db['Applications'] = application_dict
