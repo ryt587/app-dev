@@ -51,19 +51,15 @@ try:
     else:
         db['Users']=sellers_dict
     for x in sellers_dict:
-        if isinstance(x,Seller.Seller):
+        if isinstance(sellers_dict[x],Seller.Seller):
             if not (d.date.today() in sellers_dict[x].get_earned()):
-                print(3)
                 earned=sellers_dict[x].get_earned()
                 earned[d.date.today()]=0
                 sellers_dict[x].set_earned(earned)
-    db['Sellers']=earnings_dict
+    db['Users']=sellers_dict
 except:
     print("Error in retrieving sellers from user.db.")
 db.close()
-
-
-
 
 global user
 user=0
@@ -721,7 +717,6 @@ def reportseller():
     def byimpression(product):
         return product.get_impression()
     seller_earnings_dict=user.get_earned()
-    data=get_graph("Revenue from past 30 days",seller_earnings_dict)
     productlist=sorted(productlist, key= byimpression)
     db.close()
     return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression)
