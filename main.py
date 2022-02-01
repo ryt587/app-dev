@@ -1,4 +1,4 @@
-from flask import Flask, render_template,  request, redirect, url_for, send_file #i am gay - ryan gay
+from flask import Flask, render_template,  request, redirect, url_for, send_file
 import Forms as f
 import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing
 import os
@@ -13,7 +13,6 @@ from io import BytesIO
 from flask_mail import Mail, Message
 import datetime as d
 import itertools
-import smtplib
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
@@ -83,6 +82,7 @@ def get_graph(title,earning_dict):
     plt.figure(figsize=(10, 6.5))
     plt.title(title)
     plt.plot([x.strftime("%Y/%m/%d") for x in earning_dict],[x for x in earning_dict.values()])
+    plt.ylim(ymin=0)
     plt.xticks(rotation=45)
     plt.xlabel("Date")
     plt.ylabel("Revenue earned")
@@ -200,6 +200,7 @@ def sellerapplication():
     if request.method == 'POST' and create_seller_form.validate():
         file = request.files['file']
         applications_dict = {}
+        users_dict ={}
         with shelve.open('user.db', 'c') as db:
             try:
                 if 'Applications' in db:
@@ -208,6 +209,13 @@ def sellerapplication():
                     db['Applications'] = applications_dict
             except:
                 print("Error in retrieving Customers from application.db.")
+            try:
+                if 'Users' in db:
+                    users_dict = db['Users']
+                else:
+                    db['Users'] = users_dict
+            except:
+                print("Error in retrieving Customers from User.db.")
             if not allowed_image(file.filename):
                     error="Missing image or invalid format of image"
                     no_of_error+=1
@@ -217,10 +225,19 @@ def sellerapplication():
                         error="Email has been used before"
                         no_of_error+=1
                         break
+            elif users_dict!={}:
+                for x in users_dict:
+                    if  create_seller_form.email.data==users_dict[x].get_email():
+                        error="Email has been used before"
+                        no_of_error+=1
+                        break
             if no_of_error==0:
                 application = Apply.Apply(create_seller_form.name.data, create_seller_form.email.data, create_seller_form.password.data, create_seller_form.address.data,
                                         create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
+                file_type='.'+file.filename.split('.')[-1]
+                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(application.get_apply_id())+file_type))
+                application.set_image(str(application.get_apply_id())+file_type)
                 applications_dict[application.get_apply_id()] = application
                 db['Applications'] = applications_dict
                 return redirect(url_for('waiting'))
@@ -328,11 +345,11 @@ def reject_seller(id):
     db = shelve.open('user.db', 'w')
     users_dict = db['Applications']
     applications=users_dict[id]
-    '''msg = Message("Application rejected",
+    msg = Message("Application rejected",
                   sender="chuaandspencer@example.com",
                   recipients=[applications.get_email()])
     msg.body="Your application to be a seller at Chua And Spencer's have been rejected"
-    mail.send(msg)'''
+    mail.send(msg)
     os.remove(app.config['UPLOAD_PATH']+str(applications.get_image()))
     users_dict.pop(id)
 
@@ -704,7 +721,6 @@ def reportseller():
     db = shelve.open('user.db', 'c')
     productlist=[]
     users_dict={}
-    seller_earnings_dict={}
     if 'Products' in db:
         users_dict=db['Products']
     else:
@@ -716,7 +732,6 @@ def reportseller():
                 productlist.append(users_dict[x])
     def byimpression(product):
         return product.get_impression()
-    seller_earnings_dict=user.get_earned()
     productlist=sorted(productlist, key= byimpression)
     db.close()
     return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression)
@@ -748,6 +763,39 @@ def graphseller():
     data=get_graph("Revenue from past 30 days",seller_earnings_dict)
     return render_template('graphseller.html', user=user, result=data.decode('utf8'))
 
+
+@app.route('/retrievecustomers')
+def retrieve_customer():
+    customers_dict = {}
+    db = shelve.open('user.db', 'r')
+    customers_dict = db['Users']
+    db.close()
+
+    customers_list = []
+    for key in customers_dict:
+        if str(key)[0]=='C':
+            customer = customers_dict.get(key)
+            customers_list.append(customer)
+    return render_template('retrievecustomers.html', users_list=customers_list, user=user)
+
+@app.route('/banUser/<id>', methods=['GET', 'POST'])
+def ban_user(id):
+    users_dict = {}
+    db = shelve.open('user.db', 'w')
+    users_dict = db['Users']
+
+    
+    msg = Message("Account have been banned",
+                  sender="chuaandspencer@example.com",
+                  recipients=[users_dict[id].get_email()])
+    msg.body="You have been banned from using Chua and Spencer. \nReasons may be:\n1. Toxicity\n2. Hacking into servers\n3. Multiple False Refundings"
+    users_dict.pop(id)
+    mail.send(msg)
+
+    db['Users'] = users_dict
+    db.close()
+
+    return redirect(url_for('retrieve_customer'))
 
 if __name__ == '__main__':
     import webbrowser

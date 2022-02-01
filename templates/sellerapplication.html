@@ -4,7 +4,7 @@
 {% from "includes/_formHelper.html" import render_field %}
 <body>
   {% if error %}
-  <p class=error><strong>Error:</strong> {{ error }}</p>
+  <p class="error" style="background-color: white; color: red; border: solid #3A3335; padding: 5px;"><strong>Error:</strong> {{ error }}</p>
   {% endif %}
 	<div class="container pt-3 my-3 bg-white border">
 <form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">

@@ -9,8 +9,9 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>Email</th>
-        <th>Staff Role</th>
-        <th>Phone Number</th>
+        <th>Date joined</th>
+        <th>Address</th>
+        <th>Postal</th>
     </tr>
 </thead>
 <tbody>
@@ -19,32 +20,31 @@
       <td>{{ staff.get_name() }}</td>
       <td>{{ staff.get_last_name() }}</td>
       <td>{{ staff.get_email() }}</td>
-      <td>{{ staff.get_staff_role() }}</td>
-      <td>{{ staff.get_phone_number() }}</td>
-      {% if staff.get_email()!=user.get_email() %}
-      <td><a href="/updatestaff/{{staff.get_staff_id()}}" class="btn btn-warning">Update</a></td>
+      <td>{{ staff.get_date_joined() }}</td>
+      <td>{{ staff.get_address() }}</td>
+      <td>{{ staff.get_postal() }}</td>
       <td>
-        <form action="{{url_for('delete_staff', id=staff.get_staff_id())}}" method="POST">
+        <form action="{{url_for('ban_user', id=staff.get_user_id())}}" method="POST">
          
           <!-- Button to Open the Modal -->
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{staff.get_staff_id()}}">
-            Delete
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{staff.get_user_id()}}">
+           Ban
           </button>
       
           <!-- The Modal -->
-          <div class="modal" id="myModal_{{staff.get_staff_id()}}">
+          <div class="modal" id="myModal_{{staff.get_user_id()}}">
             <div class="modal-dialog">
               <div class="modal-content">
       
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">Delete Confirmation</h4>
+                  <h4 class="modal-title">Ban Confirmation</h4>
                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
       
                 <!-- Modal body -->
                 <div class="modal-body">
-                  Are you sure you want to delete {{staff.get_name()}} {{staff.get_last_name()}}?
+                  Are you sure you want to ban {{staff.get_name()}} {{staff.get_last_name()}}?
                 </div>
       
                 <!-- Modal footer -->
@@ -58,7 +58,6 @@
           </div>      
         </form>
       </td>
-      {% endif %}
     </tr>
   {% endfor %}
 </tbody>
