@@ -1,3 +1,9 @@
-import itertools
-dict1={1:1,2:2}
-dict1=dict(itertools.islice(dict1.items(), 30))
+import pyotp
+import time
+secret = pyotp.random_base32()
+totp = pyotp.TOTP(secret, interval=425.41)
+otp = totp.now()
+print(otp)
+time.sleep(300)
+print(totp.verify(otp))
+

@@ -7,7 +7,7 @@ class Seller(u.User):
         db = shelve.open('user.db', 'c')
         users_dict={}
         try:
-            if 'Sellers' in db:
+            if 'Users' in db:
                 users_dict=db['Users']
             else:
                 db['Users']=users_dict

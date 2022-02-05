@@ -17,12 +17,9 @@
      <div class="container" id="container">
         <div class="form-container sign-in-container">
             <form action="#" method="post">
-                <h1>Update Account</h1>
-                {{ render_field(form.first_name, class="form-control") }}
-			    {{ render_field(form.last_name, class="form-control") }}
-                {{ render_field(form.address, class="form-control") }}
-                {{ render_field(form.postal, class="form-control") }}
-                {{ render_field(form.city, class="form-control") }}
+                <h1>Forgot Password</h1>
+                <h3>An OTP is sent to ur email</h3>
+                {{ render_field(form.otp, class="form-control") }}
                   <input type="submit" value="Update" class="btn btn-primary"/>
             </form>
         </div>

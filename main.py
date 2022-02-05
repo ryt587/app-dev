@@ -13,6 +13,8 @@ from io import BytesIO
 from flask_mail import Mail, Message
 import datetime as d
 import itertools
+import pyotp
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
@@ -778,6 +780,20 @@ def retrieve_customer():
             customers_list.append(customer)
     return render_template('retrievecustomers.html', users_list=customers_list, user=user)
 
+@app.route('/retrievesellers')
+def retrieve_seller():
+    customers_dict = {}
+    db = shelve.open('user.db', 'r')
+    customers_dict = db['Users']
+    db.close()
+
+    customers_list = []
+    for key in customers_dict:
+        if str(key)[:2]=='Se':
+            customer = customers_dict.get(key)
+            customers_list.append(customer)
+    return render_template('retrievesellers.html', users_list=customers_list, user=user)
+
 @app.route('/banUser/<id>', methods=['GET', 'POST'])
 def ban_user(id):
     users_dict = {}
@@ -788,7 +804,7 @@ def ban_user(id):
     msg = Message("Account have been banned",
                   sender="chuaandspencer@example.com",
                   recipients=[users_dict[id].get_email()])
-    msg.body="You have been banned from using Chua and Spencer. \nReasons may be:\n1. Toxicity\n2. Hacking into servers\n3. Multiple False Refundings"
+    msg.body="You have been banned from using Chua and Spencer. "
     users_dict.pop(id)
     mail.send(msg)
 
@@ -796,6 +812,78 @@ def ban_user(id):
     db.close()
 
     return redirect(url_for('retrieve_customer'))
+
+@app.route('/forgetps/<id>', methods=['GET', 'POST'])
+def forgetps(id):
+    error=None 
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    db.close()
+    secret = pyotp.random_base32()
+    totp = pyotp.TOTP(secret, interval=425.41)
+    msg = Message("OTP to change password",
+                  sender="chuaandspencer@example.com",
+                  recipients=[users_dict[id].get_email()])
+    msg.body="Your OTP to change password is:\n{}\nYou have 5 minutes to enter the otp, or it will be invalid".format(totp.now())
+    mail.send(msg)
+    forgot_ps_form = f.ForgotPsForm(request.form)
+    if request.method == 'POST' and forgot_ps_form.validate():
+        if totp.now()!=forgot_ps_form.otp.data:
+            error="Invalid OTP"
+        else:
+            return redirect(url_for('changeps'), id=id)
+    return render_template('forgotps.html',  user=user, error=error, form=forgot_ps_form)
+
+@app.route('/changeps/<id>', methods=['GET', 'POST'])
+def changeps(id):
+    error=None
+    change_ps_form = f.ChangePsForm(request.form)
+    db = shelve.open('user.db', 'c')
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    if request.method == 'POST' and change_ps_form.validate():
+        if change_ps_form.password.data!=change_ps_form.confirm.data:
+            error="Password must be matched"
+        else:
+            users_dict[id].set_password(change_ps_form.password.data)
+            db['Users']=users_dict
+            db.close()
+            return redirect(url_for('login'))
+    return render_template('changeps.html',  user=user, error=error, form=change_ps_form)
+
+@app.route('/forgotpsemail', methods=['GET', 'POST'])
+def forgotpsemail():
+    error=None
+    forgot_ps_email_form = f.ForgotPsEmailForm(request.form)
+    db = shelve.open('user.db', 'c')
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    db.close()
+    if request.method == 'POST' and forgot_ps_email_form.validate():
+        for x in users_dict:
+            if users_dict[x].get_email()==forgot_ps_email_form.email.data:
+                return redirect(url_for('forgotps'))
+            else:
+                error="Email does not exist"
+    return render_template('forgotpsemail.html',  user=user, error=error, form=forgot_ps_email_form)
 
 if __name__ == '__main__':
     import webbrowser

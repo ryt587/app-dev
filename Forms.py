@@ -115,3 +115,15 @@ class UpdateSellerForm(Form):
     address2 = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()], render_kw={"placeholder": "Apartment, studio, or floor"})
     city = StringField('City', [validators.Length(max=200), validators.DataRequired()])
     postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
+    
+class ForgotPsForm(Form):
+    otp = IntegerField('OTP', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()], render_kw={"placeholder": "OTP"})
+    
+class ChangePsForm(Form):
+    password = PasswordField('New Password', [
+        validators.DataRequired()
+    ], render_kw={"placeholder": "Password"})
+    confirm = PasswordField('Repeat Password', render_kw={"placeholder": "Confirm Password"})
+    
+class ForgotPsEmailForm(Form):
+    email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})

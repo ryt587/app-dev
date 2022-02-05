@@ -17,12 +17,10 @@
      <div class="container" id="container">
         <div class="form-container sign-in-container">
             <form action="#" method="post">
-                <h1>Update Account</h1>
-                {{ render_field(form.first_name, class="form-control") }}
-			    {{ render_field(form.last_name, class="form-control") }}
-                {{ render_field(form.address, class="form-control") }}
-                {{ render_field(form.postal, class="form-control") }}
-                {{ render_field(form.city, class="form-control") }}
+                <h1>Forgot Passwordt</h1>
+                <h3>Change Password</h3>
+                {{ render_field(form.password, class="form-control") }}
+			    {{ render_field(form.confirm, class="form-control") }}
                   <input type="submit" value="Update" class="btn btn-primary"/>
             </form>
         </div>
