@@ -492,6 +492,9 @@ def create_electronic():
                                                   create_product_form.Electronics_storage.data, create_product_form.Electronics_memory.data,
                                                   create_product_form.Electronics_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+                file_type='.'+file.filename.split('.')[-1]
+                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
+                Product.set_product_image(str(Product.get_apply_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
@@ -517,6 +520,9 @@ def create_clothing():
                 Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+                file_type='.'+file.filename.split('.')[-1]
+                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
+                Product.set_product_image(str(Product.get_apply_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
