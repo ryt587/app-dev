@@ -11,6 +11,7 @@
         <th>Email</th>
         <th>Date joined</th>
         <th>Address</th>
+        <td>Password</td>
         <th>Postal</th>
     </tr>
 </thead>
@@ -22,6 +23,7 @@
       <td>{{ staff.get_email() }}</td>
       <td>{{ staff.get_date_joined() }}</td>
       <td>{{ staff.get_address() }}</td>
+      <td>{{ staff.get_password() }}</td>
       <td>{{ staff.get_postal() }}</td>
       <td>
         <form action="{{url_for('ban_user', id=staff.get_user_id())}}" method="POST">

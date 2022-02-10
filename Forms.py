@@ -117,7 +117,7 @@ class UpdateSellerForm(Form):
     postal = IntegerField('Postal Code', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()])
     
 class ForgotPsForm(Form):
-    otp = IntegerField('OTP', [validators.NumberRange(min=100000, max=999999), validators.DataRequired()], render_kw={"placeholder": "OTP"})
+    otp = StringField('OTP', [validators.DataRequired()], render_kw={"placeholder": "OTP"})
     
 class ChangePsForm(Form):
     password = PasswordField('New Password', [

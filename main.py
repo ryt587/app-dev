@@ -817,6 +817,7 @@ def ban_user(id):
 def forgetps(id):
     error=None 
     users_dict={}
+    db = shelve.open('user.db', 'c')
     try:
         if 'Users' in db:
             users_dict=db['Users']
@@ -834,10 +835,10 @@ def forgetps(id):
     mail.send(msg)
     forgot_ps_form = f.ForgotPsForm(request.form)
     if request.method == 'POST' and forgot_ps_form.validate():
-        if totp.now()!=forgot_ps_form.otp.data:
+        if totp.verify(forgot_ps_form.otp.data):
             error="Invalid OTP"
         else:
-            return redirect(url_for('changeps'), id=id)
+            return redirect(url_for('changeps', id=id))
     return render_template('forgotps.html',  user=user, error=error, form=forgot_ps_form)
 
 @app.route('/changeps/<id>', methods=['GET', 'POST'])
@@ -857,7 +858,7 @@ def changeps(id):
         if change_ps_form.password.data!=change_ps_form.confirm.data:
             error="Password must be matched"
         else:
-            users_dict[id].set_password(change_ps_form.password.data)
+            users_dict[id].set_password(generate_password_hash(change_ps_form.password.data))
             db['Users']=users_dict
             db.close()
             return redirect(url_for('login'))
@@ -880,7 +881,7 @@ def forgotpsemail():
     if request.method == 'POST' and forgot_ps_email_form.validate():
         for x in users_dict:
             if users_dict[x].get_email()==forgot_ps_email_form.email.data:
-                return redirect(url_for('forgotps'))
+                return redirect(url_for('forgetps', id=x))
             else:
                 error="Email does not exist"
     return render_template('forgotpsemail.html',  user=user, error=error, form=forgot_ps_email_form)
