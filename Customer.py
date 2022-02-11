@@ -27,6 +27,9 @@ class Customer(u.User):
         self.__address= address
         self.__postal= postal
         self.__city= city
+        self.__wishlist=[]
+        self.__cart=[]
+        self.__transaction=[]
     
     def get_user_id(self):
         return self.__user_id
@@ -46,6 +49,15 @@ class Customer(u.User):
     def get_city(self):
         return self.__city
     
+    def get_wishlist(self):
+        return self.__wishlist
+    
+    def get_cart(self):
+        return self.__cart
+    
+    def get_transaction(self):
+        return self.__transaction
+    
     def set_user_id(self, user_id):
         self.__user_id = user_id
         
@@ -63,3 +75,12 @@ class Customer(u.User):
         
     def set_city(self, city):
         self.__city = city
+    
+    def set_wishlist(self, wishlist):
+        self.__wishlist = wishlist
+        
+    def set_cart(self,cart):
+        self.__cart = cart
+        
+    def set_transaction(self, transaction):
+        self.__transaction = transaction

@@ -1,6 +1,6 @@
-from flask import Flask, render_template,  request, redirect, url_for, send_file
+from flask import Flask, render_template,  request, redirect, url_for, abort
 import Forms as f
-import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing
+import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -14,7 +14,6 @@ from flask_mail import Mail, Message
 import datetime as d
 import itertools
 import pyotp
-import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
@@ -891,6 +890,168 @@ def forgotpsemail():
             else:
                 error="Email does not exist"
     return render_template('forgotpsemail.html',  user=user, error=error, form=forgot_ps_email_form)
+
+@app.route('/productdetail/<id>')
+def productdetail(id):
+    db=shelve.open('user.db', 'c')
+    products_dict={}
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    product=products_dict[id]
+    return render_template("productdetail.html", product=product, user=user)
+
+@app.route('/addwishlist/<id>')
+def addwishlist(id):
+    db=shelve.open('user.db', 'c')
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    user.set_wishlist(user.get_wishlist().append(id))
+    users_dict[user.get_user_id()]=user
+    db['Users']=users_dict
+    db.close()
+    return redirect(url_for('productdetail', id=id))
+
+@app.route('/removewishlist/<id>')
+def removewishlist(id):
+    db=shelve.open('user.db', 'c')
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    user.set_wishlist(user.get_wishlist().remove(id))
+    users_dict[user.get_user_id()]=user
+    db['Users']=users_dict
+    db.close()
+    if 'productdetail' in request.referrer:
+        return redirect(url_for('productdetail', id=id))
+    elif 'wishlist' in request.referrer:
+        return redirect(url_for('wishlist'))
+    else:
+        abort(404)
+
+@app.route('/retrievewishlist')
+def retrievewishlist():
+    products_list=user.get_wishlist()
+    return render_template("retrievewishlist.html", user=user, products_list=products_list)
+
+@app.route('/removecart/<id>')
+def removecart(id):
+    db=shelve.open('user.db', 'c')
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    user.set_cart(user.get_cart().remove(id))
+    users_dict[user.get_user_id()]=user
+    db['Users']=users_dict
+    db.close()
+    if 'productdetail' in request.referrer:
+        return redirect(url_for('productdetail', id=id))
+    elif 'wishlist' in request.referrer:
+        return redirect(url_for('wishlist'))
+    else:
+        abort(404)
+
+@app.route('/addcart/<id>')
+def addcart(id):
+    db=shelve.open('user.db', 'c')
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    user.set_cart(user.get_cart().append(id))
+    users_dict[user.get_user_id()]=user
+    db['Users']=users_dict
+    db.close()
+    return redirect(url_for('productdetail', id=id))
+
+@app.route('/retrievecart')
+def retrievecart():
+    products_list=user.get_cart()
+    return render_template("retrievecart.html", user=user, products_list=products_list)
+
+@app.route('/pastorder')
+def pastorder():
+    db=shelve.open('user.db', 'c')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    db.close()
+    transaction_list=user.get_transaction()
+    for i, x in enumerate(transaction_list):
+        transaction_list[i]=transactions_dict[x]
+    return render_template("productdetail.html", user=user, transaction_list=transaction_list)
+
+@app.route('/searchcategory/<category>')
+def searchcategory(category):
+    db=shelve.open('user.db', 'c')
+    products_dict={}
+    product_list=[]
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    if category=='Electronic':
+        for x, value in products_dict.items():
+            if isinstance(value, Electronics.Electronics):
+                product_list.append(value)    
+    elif category=='Clothing':
+        for x, value in products_dict.items():
+            if isinstance(value, Clothing.Clothing):
+                product_list.append(value)  
+    return render_template("search.html", user=user, product_list=product_list)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    db=shelve.open('user.db', 'c')
+    products_dict={}
+    product_list=[]
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    term=request.form['search']
+    for x, value in products_dict.items():
+        if term in value.get_name():
+            product_list.append(value)
+    return render_template("search.html", user=user, product_list=product_list)
 
 if __name__ == '__main__':
     import webbrowser
