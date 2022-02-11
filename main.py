@@ -1053,6 +1053,32 @@ def search():
             product_list.append(value)
     return render_template("search.html", user=user, product_list=product_list)
 
+@app.route('/ordernumber', methods=['GET', 'POST'])
+def ordernumber():
+    error=None
+    order_number_form = f.OrderNumberForm(request.form)
+    if request.method == 'POST' and order_number_form.validate():
+        db = shelve.open('user.db', 'r')
+        transactions_dict={}
+        try:
+            if 'Transactions' in db:
+                transactions_dict=db['Transactions']
+            else:
+                db['Transactions']=transactions_dict
+        except:
+            print("Error in retrieving Transactions from user.db.")
+        if not order_number_form.orderno.data in transactions_dict:
+            error="Order Number does not exist"
+        else:
+            return redirect(url_for('tracking', order=transactions_dict[order_number_form.orderno.data]))
+        db.close()
+    return render_template('ordernumber.html', form=order_number_form, error=error, user=user)
+
+@app.route('/tracking/<order>', methods=['GET', 'POST'])
+def tracking(order):
+    return render_template('tracking.html', user=user, transaction=order)
+    
+
 if __name__ == '__main__':
     import webbrowser
 

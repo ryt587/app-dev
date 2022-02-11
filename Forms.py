@@ -127,3 +127,6 @@ class ChangePsForm(Form):
     
 class ForgotPsEmailForm(Form):
     email = EmailField('Email', [validators.Email(), validators.DataRequired()], render_kw={"placeholder": "Email"})
+    
+class OrderNumberForm(Form):
+    orderno = StringField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
