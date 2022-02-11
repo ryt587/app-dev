@@ -3,20 +3,45 @@
 {% from "includes/_formHelper.html" import render_field %}
 <body>
 	<!--sidebar end-->
-  {% if applications_list==[] %}
-    <div class="container center"><h1>No applications</h1></div>
-  {% else %}
 		<div class="container center">
 		<div class="container pt-3 my-3 bg-white border">
-		<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
-  		{% for x in applications_list %}
-	  		<div class="form-row justify-content-center">
-		  <button class="col-md-8 form-control redcolor"><a href="/retrieveapply/{{ x.get_apply_id() }}">{{ x.get_email() }}, {{ x.get_name() }}</a></button>
-    		</div>
+			<h1>Applications:</h1>	
+				<div class="form-row justify-content-center">
+					<table class="table">
+						<tr>
+						<th scope="col">#</th>
+						<th scope="col">Email</th>
+						<th scope="col">Name</th>
+						<th scope="col">View</th>
+						</tr>
+  		{% for x in range(applications_list|length) %}
+			{%if applications_list[x] != 0%}
+					<tr>
+						<th scope="row">{{x+1}}</th>
+						<td>{{ applications_list[x].get_email() }}</td>
+						<td>{{ applications_list[x].get_name() }}</td>
+						<td>
+		  <a href="/retrieveapply/{{ applications_list[x].get_apply_id() }}"><img height="100px" width="100px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
+						</td>
+				</tr>
+			{%else%}
+			<tr>
+				<th scope="row">
+					{{x+1}}
+				</th>
+					<td>
+					</td>
+						<td>
+						</td>
+							<td>
+							</td>
+			</tr>
+				{%endif%}
     	{% endfor %}
+				</table>
 		</div>
+	</div>
 		</div>
-  {% endif %}
 	<!--container for sidebar plus content-->
 </body>
 {% endblock %}

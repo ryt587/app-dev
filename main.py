@@ -326,6 +326,8 @@ def viewapply():
         if applications_dict!={}:
             for x in applications_dict:
                 applications_list.append(applications_dict[x])
+    while len(applications_list) < 5:
+        applications_list.append(0)
     return render_template('viewapplication.html', applications_list=applications_list, user=user)
 
 
