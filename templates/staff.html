@@ -64,7 +64,7 @@
     {% endblock %}
 	<!--sidebar end-->
   {% block content %}
-		<div class="container center"><h1>Welcome Name here</h1></div>
+		<div class="container center"><h1>Welcome {{user.get_name().capitalize()}} {{user.get_last_name().capitalize()}} here</h1></div>
   {% endblock %}
 		
 </main>
