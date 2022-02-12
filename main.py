@@ -498,7 +498,7 @@ def create_electronic():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
                 os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
-                Product.set_product_image(str(Product.get_apply_id())+file_type)
+                Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
@@ -526,7 +526,7 @@ def create_clothing():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
                 os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
-                Product.set_product_image(str(Product.get_apply_id())+file_type)
+                Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
