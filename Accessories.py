@@ -1,6 +1,6 @@
 import Products as p
 
-class Clothing(p.Product):
+class Accessories(p.Product):
     def __init__(self, name, product_stock, product_image, created_product, price, colour, size,):
         super().__init__(name, product_stock, product_image, created_product, price)
         self.__colour = colour
