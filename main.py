@@ -497,7 +497,7 @@ def create_electronic():
                                                   create_product_form.Electronics_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
+                os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
                 Product.set_product_image(str(Product.get_apply_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
@@ -525,7 +525,7 @@ def create_clothing():
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
+                os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
                 Product.set_product_image(str(Product.get_apply_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
