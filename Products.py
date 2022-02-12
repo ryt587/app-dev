@@ -2,7 +2,7 @@ import shelve
 
 class Product():
 
-   def __init__(self, name, product_stock, product_image, created_product):
+   def __init__(self, name, product_stock, product_image, created_product, price):
       db = shelve.open('user.db', 'c')
       users_dict={}
       try:
@@ -24,6 +24,7 @@ class Product():
       self.__product_stock = product_stock
       self.__product_image = product_image
       self.__created_product = created_product
+      self.__price = price
       self.__impression = 0
       self.__sold = 0
 
@@ -41,6 +42,9 @@ class Product():
    
    def get_created_product(self):
       return self.__created_product
+   
+   def get_price(self):
+      return self.__price
    
    def get_impression(self):
       return self.__impression
@@ -63,6 +67,9 @@ class Product():
 
    def set_created_product(self, created_product):
       self.__created_product = created_product
+      
+   def set_price(self, price):
+      self.__price = price
       
    def set_impression(self, impression):
       self.__impression = impression

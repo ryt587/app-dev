@@ -488,7 +488,7 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),
+                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),create_product_form.Price.data,
                                                   create_product_form.Electronics_gpu.data, create_product_form.Electronics_cpu.data,
                                                   create_product_form.Electronics_storage.data, create_product_form.Electronics_memory.data,
                                                   create_product_form.Electronics_size.data)
@@ -518,7 +518,7 @@ def create_clothing():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),
+                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),create_product_form.Price.data,
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
@@ -552,6 +552,7 @@ def update_electronic(id):
         product = product_dict[id]
         product.set_name(update_product_form.Product_name.data)
         product.set_product_stock(update_product_form.Product_stock.data)
+        product.set_price(update_product_form.Price.data)
         product.set_gpu(update_product_form.Electronics_gpu.data)
         product.set_cpu(update_product_form.Electronics_cpu.data)
         product.set_storage(update_product_form.Electronics_storage.data)
@@ -572,6 +573,7 @@ def update_electronic(id):
         product= product_dict[id]
         update_product_form.Product_name.data = product.get_name()
         update_product_form.Product_stock.data = product.get_product_stock()
+        update_product_form.Price.data = product.get_price()
         update_product_form.Electronics_gpu.data = product.get_gpu()
         update_product_form.Electronics_cpu.data = product.get_cpu()
         update_product_form.Electronics_storage.data = product.get_storage()
@@ -592,6 +594,7 @@ def update_clothing(id):
         product = product_dict[id]
         product.set_name(update_product_form.Product_name.data)
         product.set_product_stock(update_product_form.Product_stock.data)
+        product.set_price(update_product_form.Price.data)
         product.set_colour(update_product_form.Clothing_colour.data)
         product.set_size(update_product_form.Clothing_size.data)
 
@@ -609,6 +612,7 @@ def update_clothing(id):
         product= product_dict[id]
         update_product_form.Product_name.data = product.get_name()
         update_product_form.Product_stock.data = product.get_product_stock()
+        update_product_form.Price.data = product.get_price()
         update_product_form.Clothing_colour.data = product.get_colour()
         update_product_form.Clothing_size.data = product.get_size()
 
@@ -1028,11 +1032,11 @@ def searchcategory(category):
     db.close()
     if category=='Electronic':
         for x, value in products_dict.items():
-            if isinstance(value, Electronics.Electronics):
+            if isinstance(value, Electronics.Electronics) and value.get_product_stock()>0:
                 product_list.append(value)    
     elif category=='Clothing':
         for x, value in products_dict.items():
-            if isinstance(value, Clothing.Clothing):
+            if isinstance(value, Clothing.Clothing) and value.get_product_stock()>0:
                 product_list.append(value)  
     return render_template("search.html", user=user, product_list=product_list)
 
@@ -1051,7 +1055,7 @@ def search():
     db.close()
     term=request.form['search']
     for x, value in products_dict.items():
-        if term in value.get_name():
+        if term in value.get_name() and value.get_product_stock()>0:
             product_list.append(value)
     return render_template("search.html", user=user, product_list=product_list)
 
@@ -1079,6 +1083,67 @@ def ordernumber():
 @app.route('/tracking/<order>', methods=['GET', 'POST'])
 def tracking(order):
     return render_template('tracking.html', user=user, transaction=order)
+
+@app.route('/payment', methods=['GET', 'POST'])
+def payment():
+    db = shelve.open('user.db', 'r')
+    products_dict={}
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    total_payment=0
+    for x in products_dict:
+        total_payment+=products_dict[x].get_price
+    product_list=[]
+    for x in user.get_cart():
+        product_list.append(products_dict[x])
+    return render_template('payment.html', user=user, total_payment=total_payment, product_list=product_list)
+
+@app.route('/transaction')
+def transasction():
+    db = shelve.open('user.db', 'r')
+    products_dict={}
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    for x in user.get_cart():
+        products_dict[x].set_product_stock(products_dict[x].get_product_stock()-1)
+    transaction=Transaction(user.get_cart())
+    user.set_cart([])
+    db = shelve.open('user.db', 'r')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    users_dict={}
+    try:
+        if 'Users' in db:
+            users_dict=db['Users']
+        else:
+            db['Users']=users_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    transactions_dict[transaction.get_id()]=transaction
+    db['Transactions']=transactions_dict
+    user.set_transaction(user.get_transaction().append(transaction.get_id()))
+    users_dict[user.get_id()]=user
+    db['Users']=users_dict
+    db.close()
+    return redirect(url_for('home'))
     
 
 if __name__ == '__main__':
