@@ -408,6 +408,8 @@ def retrieve_staff():
         if str(key)[:2]=='St':
             customer = customers_dict.get(key)
             customers_list.append(customer)
+    while len(customers_list) < 5:
+        customers_list.append(0)
     return render_template('retrievestaff.html', users_list=customers_list, user=user)
 
 
@@ -790,6 +792,8 @@ def retrieve_customer():
         if str(key)[0]=='C':
             customer = customers_dict.get(key)
             customers_list.append(customer)
+    while len(customers_list) < 5:
+        customers_list.append(0)
     return render_template('retrievecustomers.html', users_list=customers_list, user=user)
 
 @app.route('/retrievesellers')
@@ -804,6 +808,8 @@ def retrieve_seller():
         if str(key)[:2]=='Se':
             customer = customers_dict.get(key)
             customers_list.append(customer)
+    while len(customers_list) < 5:
+        customers_list.append(0)
     return render_template('retrievesellers.html', users_list=customers_list, user=user)
 
 @app.route('/banUser/<id>', methods=['GET', 'POST'])
