@@ -52,10 +52,11 @@ try:
         db['Users']=sellers_dict
     for x in sellers_dict:
         if isinstance(sellers_dict[x],Seller.Seller):
-            if not (d.date.today() in sellers_dict[x].get_earned()):
-                earned=sellers_dict[x].get_earned()
-                earned[d.date.today()]=0
-                sellers_dict[x].set_earned(earned)
+            for y in range(30,-1,-1):
+                if not (d.date.today() - d.timedelta(y) in sellers_dict[x].get_earned()):
+                    earned=sellers_dict[x].get_earned()
+                    earned[d.date.today()- d.timedelta(y)]=0
+                    sellers_dict[x].set_earned(earned)
     db['Users']=sellers_dict
 except:
     print("Error in retrieving sellers from user.db.")
@@ -237,7 +238,7 @@ def sellerapplication():
                                         create_seller_form.address2.data, create_seller_form.city.data, create_seller_form.postal.data, file.filename)
                 file.save(os.path.join(app.config['UPLOAD_PATH'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(application.get_apply_id())+file_type))
+                os.rename(app.config['UPLOAD_PATH'] + secure_filename(file.filename), app.config['UPLOAD_PATH']+(str(application.get_apply_id())+file_type))
                 application.set_image(str(application.get_apply_id())+file_type)
                 applications_dict[application.get_apply_id()] = application
                 db['Applications'] = applications_dict
@@ -407,6 +408,8 @@ def retrieve_staff():
         if str(key)[:2]=='St':
             customer = customers_dict.get(key)
             customers_list.append(customer)
+    while len(customers_list) < 5:
+        customers_list.append(0)
     return render_template('retrievestaff.html', users_list=customers_list, user=user)
 
 
@@ -789,6 +792,8 @@ def retrieve_customer():
         if str(key)[0]=='C':
             customer = customers_dict.get(key)
             customers_list.append(customer)
+    while len(customers_list) < 5:
+        customers_list.append(0)
     return render_template('retrievecustomers.html', users_list=customers_list, user=user)
 
 @app.route('/retrievesellers')
@@ -803,6 +808,8 @@ def retrieve_seller():
         if str(key)[:2]=='Se':
             customer = customers_dict.get(key)
             customers_list.append(customer)
+    while len(customers_list) < 5:
+        customers_list.append(0)
     return render_template('retrievesellers.html', users_list=customers_list, user=user)
 
 @app.route('/banUser/<id>', methods=['GET', 'POST'])
@@ -821,8 +828,10 @@ def ban_user(id):
 
     db['Users'] = users_dict
     db.close()
-
-    return redirect(url_for('retrieve_customer'))
+    if 'customer' in request.referrer:
+        return redirect(url_for('retrieve_customer'))
+    elif 'seller' in request.referrer:
+        return redirect(url_for('retrieve_seller'))
 
 @app.route('/forgetps/<id>', methods=['GET', 'POST'])
 def forgetps(id):
@@ -1040,8 +1049,9 @@ def searchcategory(category):
                 product_list.append(value)  
     return render_template("search.html", user=user, product_list=product_list)
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search')
 def search():
+    term = request.args['search']
     db=shelve.open('user.db', 'c')
     products_dict={}
     product_list=[]
@@ -1053,9 +1063,8 @@ def search():
     except:
         print("Error in retrieving Products from user.db.")
     db.close()
-    term=request.form['search']
     for x, value in products_dict.items():
-        if term in value.get_name() and value.get_product_stock()>0:
+        if (term in value.get_name()) and value.get_product_stock()>0:
             product_list.append(value)
     return render_template("search.html", user=user, product_list=product_list)
 
