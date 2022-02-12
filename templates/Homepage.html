@@ -71,6 +71,14 @@
 h3 {
     font-size: 100%
 }
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(100%);
+    width:10%;
+}
+.carousel .carousel-indicators li {  background-color: grey; }
+.carousel .carousel-indicators li.active { background-color: black; }
+
 
 </style>
   <body>
@@ -79,6 +87,7 @@ h3 {
     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item active">
@@ -119,6 +128,9 @@ h3 {
 <h3>Phones</h3>
 </div>
 </div>
-	  </section>  
+	  </section>
+  <footer>
+
+  </footer>
   </body>
 {% endblock %}
