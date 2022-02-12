@@ -7,7 +7,7 @@
 <table class="table table-borderless">
 <tbody>
     <tr>
-      <th scope="col" style="border-top: none;">Name:</th>
+      <th scope="row" style="border-top: none;">Name:</th>
       <td style="border-top: none;">{{ user.get_name() }} {{ user.get_last_name() }}</td>
     </tr>
     <tr>
@@ -22,12 +22,13 @@
       <th scope="row" style="border-top: none;">Phone Number:</th>
       <td style="border-top: none;">{{ user.get_phone_number() }}</td>
     </tr>
-  </tbody>
-</table>
+<tr>
+	<td>
 <!-- try add these inside -->
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
   <a href="/updatestaff/{{user.get_staff_id()}}">Update</a>
 </button>
+</td><td>
 <!-- delete button -->
 <form action="{{url_for('delete_staff', id=user.get_staff_id())}}" method="POST">
 <button type="button" class="btn" data-toggle="modal" data-target="myModal_{{user.get_staff_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
@@ -60,6 +61,10 @@
   </div>
 </div>      
 </form>
+	</td>
+		</tr>
+	  </tbody>
+	</table>
 	</div>
 		</div>
 </body>
