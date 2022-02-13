@@ -1,6 +1,6 @@
 from flask import Flask, render_template,  request, redirect, url_for, abort
 import Forms as f
-import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction
+import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction, Accessories
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -906,7 +906,7 @@ def forgotpsemail():
                 error="Email does not exist"
     return render_template('forgotpsemail.html',  user=user, error=error, form=forgot_ps_email_form)
 
-@app.route('/productdetail/<id>')
+@app.route('/productdetail/<int:id>')
 def productdetail(id):
     db=shelve.open('user.db', 'c')
     products_dict={}
@@ -1039,13 +1039,17 @@ def searchcategory(category):
     except:
         print("Error in retrieving Products from user.db.")
     db.close()
-    if category=='Electronic':
+    if category=='electronic':
         for x, value in products_dict.items():
             if isinstance(value, Electronics.Electronics) and value.get_product_stock()>0:
                 product_list.append(value)    
-    elif category=='Clothing':
+    elif category=='clothing':
         for x, value in products_dict.items():
             if isinstance(value, Clothing.Clothing) and value.get_product_stock()>0:
+                product_list.append(value)  
+    elif category=='accessories':
+        for x, value in products_dict.items():
+            if isinstance(value, Accessories.Accessories) and value.get_product_stock()>0:
                 product_list.append(value)  
     return render_template("search.html", user=user, product_list=product_list)
 
@@ -1064,7 +1068,7 @@ def search():
         print("Error in retrieving Products from user.db.")
     db.close()
     for x, value in products_dict.items():
-        if (term in value.get_name()) and value.get_product_stock()>0:
+        if (term.lower() in value.get_name().lower()) and value.get_product_stock()>0:
             product_list.append(value)
     return render_template("search.html", user=user, product_list=product_list)
 
@@ -1107,7 +1111,7 @@ def payment():
     db.close()
     total_payment=0
     for x in products_dict:
-        total_payment+=products_dict[x].get_price
+        total_payment+=products_dict[x].get_price()
     product_list=[]
     for x in user.get_cart():
         product_list.append(products_dict[x])

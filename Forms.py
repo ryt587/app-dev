@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField, IntegerField
+from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField, IntegerField, ValidationError
 from wtforms.fields import EmailField, DateField
 
 class CreateUserForm(Form):
@@ -158,3 +158,17 @@ class ForgotPsEmailForm(Form):
     
 class OrderNumberForm(Form):
     orderno = StringField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
+
+class PaymentForm(Form):
+    creditcard = IntegerField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
+    
+    def validate_creditcard(form, field):
+        creditlist=field.data.split('')
+        total=0
+        for i, x in enumerate(creditlist[:-1]):
+            if i%2==0:
+                total+=x*2
+            else:
+                total+=x
+        if (10-(total%10))!=creditlist[-1]:
+            raise ValidationError('Invalid credit card number')
