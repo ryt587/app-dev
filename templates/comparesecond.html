@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block title %}Compare second item{% endblock %}
+{% block content %}
+<div class="container-fluid" style="padding: 0; margin-top: 40px">
+		<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="wishlistitems">Wishlist Items:</label>
+      <select name="wishlistitems" id="wishlistitems">
+		  <!--for-->
+        <option>Electronic</option>
+      </select>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-danger">Next</button><br>
+</form>
+		</div>
+		</div>
+{%endblock%}

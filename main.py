@@ -919,7 +919,7 @@ def productdetail(id):
         print("Error in retrieving Products from user.db.")
     db.close()
     product=products_dict[id]
-    return render_template("productdetail.html", product=product, user=user)
+    return render_template("productdetailelectronic.html", product=product, user=user)
 
 @app.route('/addwishlist/<id>')
 def addwishlist(id):
@@ -1024,7 +1024,7 @@ def pastorder():
     transaction_list=user.get_transaction()
     for i, x in enumerate(transaction_list):
         transaction_list[i]=transactions_dict[x]
-    return render_template("productdetail.html", user=user, transaction_list=transaction_list)
+    return render_template("productdetailelectronic.html", user=user, transaction_list=transaction_list)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
