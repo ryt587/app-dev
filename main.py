@@ -906,7 +906,7 @@ def forgotpsemail():
                 error="Email does not exist"
     return render_template('forgotpsemail.html',  user=user, error=error, form=forgot_ps_email_form)
 
-@app.route('/productdetail/<id>')
+@app.route('/productdetail/<int:id>')
 def productdetail(id):
     db=shelve.open('user.db', 'c')
     products_dict={}
