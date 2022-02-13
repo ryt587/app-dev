@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+{% block title %}Compare{% endblock %}
+{% block content %}
+<body>
+<div class="container-fluid" style="padding: 0; margin-top: 40px">
+		<div class="container pt-3 my-3 bg-white border"> 
+			<table class="table table-striped bg-white">
+			<tr>
+			<th scope="col" class="py-3 my-3"><img src="{{url_for('static', filename='images/product_image/'+x.get_product_image())}}" alt="{{x.get_name()}}"></th>
+			<th scope="col">Vs</th>
+			<th scope="col" class="py-3 my-3"><img src="{{url_for('static', filename='images/product_image/'+y.get_product_image())}}" alt="{{y.get_name()}}"></th>
+			</tr>
+			<tr>
+			<th scope="col" class="py-3 my-3">{{x.get_name()}}</th>
+			<th scope="col">Name</th>
+			<th scope="col" class="py-3 my-3">{{y.get_name()}}</th>
+			</tr>
+			<tr>
+			<td class="py-3 my-3">{{x.get_gpu()}}</td>
+			<th scope="row">Gpu</th>
+			<td class="py-3 my-3">{{y.get_gpu()}}</td>
+			</tr>
+			<tr>
+			<td class="py-3 my-3">{{x.get_cpu()}}</td>
+			<th scope="row">Cpu</th>
+			<td class="py-3 my-3">{{y.get_cpu()}}</td>
+			</tr>
+			<tr>
+			<td class="py-3 my-3">{{x.get_storage()}}</td>
+			<th scope="row">Storage</th>
+			<td class="py-3 my-3">{{y.get_storage()}}</td>
+			</tr>
+			<tr>
+			<td class="py-3 my-3">{{x.get_memory()}}</td>
+			<th scope="row">Memory</th>
+			<td class="py-3 my-3">{{y.get_memory()}}</td>
+			</tr>
+			<tr>
+			<td class="py-3 my-3">{{x.get_size()}}</td>
+			<th scope="row">Size</th>
+			<td class="py-3 my-3">{{y.get_size()}}</td>
+			</tr>
+			</table>
+	</div>
+	</div>
+  </body>
+{%endblock%}
