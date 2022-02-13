@@ -91,9 +91,9 @@ class CreateAccessoriesForm(Form):
                              render_kw={"placeholder": ""})
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
                              render_kw={"placeholder": "Product Name"})
-    Clothing_size = StringField('Clothing_size', [validators.Length(min=1, max=150), validators.DataRequired()],
+    Accessory_size = StringField('Accessory_size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "large"})
-    Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
+    Accessory_colour = StringField('Accessory_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
     Price = IntegerField('Price', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "1000"})
     Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})

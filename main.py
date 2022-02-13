@@ -504,6 +504,34 @@ def create_electronic():
                 return redirect(url_for('seller'))
     return render_template('electronic_products.html', form=create_product_form, error=error, user=user)
 
+@app.route('/createproduct/accessories',  methods=['GET', 'POST'])
+def create_accessory():
+    create_accessory_form = f.CreateAccessoriesForm(request.form)
+    error=None
+    no_of_error=0
+    if request.method == 'POST' and CreateAccessoriesForm.validate():
+        file = request.files['file']
+        product_dict = {}
+        with shelve.open('user.db', 'c') as db:
+            try:
+                product_dict = db['Accessories']
+            except:
+                print("Error in retrieving Customers from Product.db.")
+            if not allowed_image(file.filename):
+                    error="Missing image or invalid format of image"
+                    no_of_error+=1
+            if no_of_error==0:
+                Accessories = Accessories.Accessories(create_accessory_form.Accessory_type, create_accessory_form.Product_name.data, create_accessory_form.Product_stock.data, file.filename, user.get_seller_id(),create_accessory_form.Price.data,
+                                            create_accessory_form.colour.data)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+                file_type='.'+file.filename.split('.')[-1]
+                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
+                Product.set_product_image(str(Product.get_apply_id())+file_type)
+                product_dict[Product.get_product_id()] = Product
+                db['Products'] = product_dict
+                return redirect(url_for('seller'))
+    return render_template('clothing_products.html', form=create_product_form, error=error, user=user)
+
 @app.route('/createproduct/clothing',  methods=['GET', 'POST'])
 def create_clothing():
     create_product_form = f.CreateClothingForm(request.form)
@@ -531,7 +559,6 @@ def create_clothing():
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
     return render_template('clothing_products.html', form=create_product_form, error=error, user=user)
-
 
 @app.route('/updateproduct/<int:id>', methods=['GET', 'POST'])
 def update_product(id):
@@ -620,6 +647,43 @@ def update_clothing(id):
         update_product_form.Clothing_size.data = product.get_size()
 
         return render_template('updateclothing.html', form=update_product_form, user=user)
+
+@app.route('/updateproduct/accessories/<int:id>', methods=['GET', 'POST'])
+def update_accessory(id):
+    update_product_form = f.UpdateAccessoriesForm(request.form)
+    if request.method == 'POST' and UpdateAccessoriesForm.validate():
+        product_dict = {}
+        db = shelve.open('user.db', 'w')
+        product_dict = db['Products']
+
+        product = product_dict[id]
+        product.set_type(update_product_form.Accessory_type.data)
+        product.set_name(update_product_form.Product_name.data)
+        product.set_product_stock(update_product_form.Product_stock.data)
+        product.set_price(update_product_form.Price.data)
+        product.set_colour(update_product_form.Accessory_colour.data)
+        product.set_size(update_product_form.Accessory_size.data)
+
+        product_dict[product.get_product_id()] = product
+        db['Products'] = product_dict
+
+        db.close()
+
+        return redirect(url_for('productlist'))
+    else:
+        product_dict = {}
+        db = shelve.open('user.db', 'r')
+        product_dict = db['Products']
+        db.close()
+        product= product_dict[id]
+        update_product_form.Product_name.data = product.get_name()
+        update_product_form.Product_stock.data = product.get_product_stock()
+        update_product_form.Price.data = product.get_price()
+        update_product_form.Accessory_type.data = Accessory.get_Accessory_type()
+        update_product_form.Accessory_colour.data = product.get_colour()
+        update_product_form.Accessory_size.data = product.get_size()
+
+        return render_template('updateaccessories.html', form=update_product_form, user=user)
 
 
 @app.route('/deleteproduct/<int:id>', methods=['GET', 'POST'])
