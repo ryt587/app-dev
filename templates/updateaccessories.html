@@ -1,1 +1,52 @@
+{% extends "seller.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+{% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+		<div class="container center">
+	<div class="container pt-3 my-3 bg-white border">
+<form style="padding-bottom: 10px;" method="post" enctype="multipart/form-data">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputaccessoryname">Product Name</label>
+        {{ render_field(form.Product_name, class="form-control") }}
+      </div>
+    </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputproductname">Product Name</label>
+        {{ render_field(form.Product_name, class="form-control") }}
+      </div>
+    </div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputgpu">Size</label>
+      {{ render_field(form.Accessory_size, class="form-control") }}
+    </div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputcpu">Colour</label>
+      {{ render_field(form.Accessory_colour, class="form-control") }}
+  </div>
+  	<div>
+    <div class="form-group col-md-12">
+      <label for="inputstock">Stock</label>
+      {{ render_field(form.Product_stock, class="form-control") }}
+    </div>
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group col-md-12">
+    <label for="inputgpu">Price</label>
+    {{ render_field(form.Price, class="form-control") }}
+  </div>
+</div>
+  <button type="submit" class="btn btn-danger">Update</button><br>
+</form>
+		</div>
+		</div>
+{% endblock %}
 
+#change capatalisation
