@@ -919,7 +919,7 @@ def productdetail(id):
         print("Error in retrieving Products from user.db.")
     db.close()
     product=products_dict[id]
-    return render_template("productdetailelectronic.html", product=product, user=user)
+    return render_template("productdetail.html", product=product, user=user)
 
 @app.route('/addwishlist/<id>')
 def addwishlist(id):
@@ -1024,7 +1024,7 @@ def pastorder():
     transaction_list=user.get_transaction()
     for i, x in enumerate(transaction_list):
         transaction_list[i]=transactions_dict[x]
-    return render_template("productdetailelectronic.html", user=user, transaction_list=transaction_list)
+    return render_template("productdetail.html", user=user, transaction_list=transaction_list)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
@@ -1157,10 +1157,64 @@ def transasction():
     db['Users']=users_dict
     db.close()
     return redirect(url_for('home'))
-    
+
+@app.route('/viewrefund')
+def viewrefund():
+    refund_dict={}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            applications_dict = db['refunds']
+        except:
+            print("Error in retrieving Customers from refund.db")
+        refund_list=[]
+        if refund_dict!={}:
+            for x in refund_dict:
+                refund_list.append(refund_dict[x])
+    while len(refund_list) < 5:
+        refund_list.append(0)
+    return render_template('viewrefund.html', refund_list=refund_list, user=user)
+
+@app.route('/viewtransaction')
+def viewtransaction():
+    transaction_dict={}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            transaction_dict = db['transaction']
+        except:
+            print("Error in retrieving Customers from transaction.db")
+        transaction_list=[]
+        if transaction_dict!={}:
+            for x in transaction_dict:
+                transaction_list.append(transaction_dict[x])
+    while len(transaction_list) < 5:
+        transaction_list.append(0)
+    return render_template('viewtransaction.html', transaction_list=transaction_list, user=user)
+
+@app.route('/refund/<int:id>', methods=['GET', 'POST'])
+def refund(id):
+    with shelve.open('user.db', 'c') as db:
+        try:
+            refund_dict = db['Refunds']
+        except:
+            print("Error in retrieving Customers from refund.db.")
+        refund=refund_dict[id]
+    return render_template('refund.html', refund=refund, user=user)
+
+@app.route('/changestatus/<int:id>', methods=['GET', 'POST'])
+def transaction(id):
+    with shelve.open('user.db', 'c') as db:
+        try:
+            transaction_dict = db['Transactions']
+        except:
+            print("Error in retrieving Customers from transaction.db.")
+        transaction=transaction_dict[id]
+    return render_template('transaction.html', transaction=transaction, user=user)
+
 
 if __name__ == '__main__':
     import webbrowser
 
     webbrowser.open("http://127.0.0.1:5000/")
     app.run()
+
+T
