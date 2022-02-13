@@ -1,8 +1,6 @@
 {% extends "index.html" %}
 {% block title %}Details{% endblock %}
 {% block content %}
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
 
@@ -236,38 +234,32 @@ label.radio input:checked+span::before {
             <div class="card">
                 <div class="d-flex flex-row align-items-center">
                 </div>
-                <div class="about"> <span class="font-weight-bold" style="font-size: 3em;">Cat</span>
-                    <h4 class="font-weight-bold" style="font-size: 2em;">$3,444</h4>
+                <div class="about"> <span class="font-weight-bold" style="font-size: 3em;">{{x.get_name()}}</span>
+                    <h4 class="font-weight-bold" style="font-size: 2em;">{{x.get_price()}}</h4>
                 </div>
                 <div class="buttons"> <button class="btn btn-outline-warning btn-long cart">Add to Cart</button> <button class="btn btn-warning btn-long buy">Buy it Now</button> <button class="btn btn-light wishlist"> <i class="fa fa-heart"></i> </button> </div>
                 <hr>
                     <div class="mt-2"> <span class="font-weight-bold" style="font-size: 2em;">Information:</span>
 
 						<div class="bullets my-3" >
-							<!--if electronic-->
-                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">GPU:</span><span>3090</span></div>
-                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">CPU:</span> </div>
-                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">Storage:</span></div>
-                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">Size:</span></div>
-                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">pp length:</span><span>7 inches</span></div>
-                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">memory:</span></div>
-							<!--elif clothing-->
-							<!--
-							<div class="d-flex align-items-center"><span class="bullet-text">pp length:</span><span>Test</span> </div>
-                            <div class="d-flex align-items-center"><span class="bullet-text">memory:</span><span>Test</span> </div>
-							-->
+                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">CPU:</span> <span>{{x.get_cpu()}}</span></div>
+                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">GPU:</span><span>{{x.get_gpu()}}</span></div>
+                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">Storage:</span><span>{{x.get_storage()}}</span></div>
+                            <div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">memory:</span><span>{{x.get_memory()}}</span></div>
+							<div class="d-flex align-items-center" style="font-size: 1.5em;"><span style="font-weight: bold; margin-right: 7px">Size:</span><span>{{x.get_size()}}</span></div>
                         </div>
                         
                     </div>
 					
                     <div class="mt-2"> <span class="font-weight-bold" style="font-size: 1.5em;">Store</span> </div>
                     <div class="d-flex flex-row align-items-center"> 
-                        <div class="d-flex flex-column ml-1 comment-profile"> </div> <span class="username" style="font-size: 1.2em;">Store Name</span>
+                        <div class="d-flex flex-column ml-1 comment-profile"> </div> <span class="username" style="font-size: 1.2em;">{{seller.get_name()}}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+
 </body>
 {%endblock%}

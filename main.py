@@ -1033,7 +1033,7 @@ def pastorder():
     transaction_list=user.get_transaction()
     for i, x in enumerate(transaction_list):
         transaction_list[i]=transactions_dict[x]
-    return render_template("productdetail.html", user=user, transaction_list=transaction_list)
+    return render_template("productdetailelectronic.html", user=user, transaction_list=transaction_list)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
