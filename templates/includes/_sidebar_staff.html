@@ -12,6 +12,7 @@
           Home
         </a>
       </li>
+      {% if user.get_role()=='A' %}
       <li>
         <a href="/viewapply" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="/viewapply"></use></svg>
@@ -43,11 +44,25 @@
         </a>
       </li>
       <li>
+        <a href="/refund" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+         Refund
+        </a>
+      </li>
+      <li>
         <a href="/reportstaff" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
          Revenue Report
         </a>
       </li>
+      {% elif user.get_role()=='D' %}
+      <li>
+        <a href="/delivery" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+         Deliveries
+        </a>
+      </li>
+      {% endif %}
       <li>
         <a href="/accountdetailstaff" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>

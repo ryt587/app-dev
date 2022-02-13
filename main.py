@@ -472,6 +472,8 @@ def CreateProduct():
         return redirect(url_for('create_electronic'))
     elif category=="clothing":
         return redirect(url_for('create_clothing'))
+    elif category=="accessories":
+        return redirect(url_for('create_accessories'))
     return render_template('products.html', user=user)
 
 @app.route('/createproduct/electronic',  methods=['GET', 'POST'])
@@ -543,6 +545,8 @@ def update_product(id):
         return redirect(url_for('update_electronic',id=id))
     elif isinstance(product, Clothing.Clothing):
         return redirect(url_for('update_clothing',id=id))
+    elif isinstance(product, Accessories.Accessories):
+        return redirect(url_for('update_accessories',id=id))
     
 @app.route('/updateproduct/electronic/<int:id>', methods=['GET', 'POST'])
 def update_electronic(id):
@@ -919,7 +923,12 @@ def productdetail(id):
         print("Error in retrieving Products from user.db.")
     db.close()
     product=products_dict[id]
-    return render_template("productdetail.html", product=product, user=user)
+    if isinstance(product, Electronics.Electronics):
+        return render_template("productdetailelectronic.html", product=product, user=user)
+    elif isinstance(product, Clothing.Clothing):
+        return render_template("productdetailclothing.html", product=product, user=user)
+    elif isinstance(product, Accessories.Accessories):
+        return render_template("productdetailaccessories.html", product=product, user=user)
 
 @app.route('/addwishlist/<id>')
 def addwishlist(id):
@@ -1157,6 +1166,38 @@ def transasction():
     db['Users']=users_dict
     db.close()
     return redirect(url_for('home'))
+
+@app.route('/addstatus/<id>')
+def addstatus(id):
+    db = shelve.open('user.db', 'r')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    db.close()
+    transaction=transactions_dict[id]
+    transaction.set_status(transaction.get_status()+1)
+    return redirect(url_for('delivery', id=id))
+
+@app.route('/removestatus/<id>')
+def addstatus(id):
+    db = shelve.open('user.db', 'r')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    db.close()
+    transaction=transactions_dict[id]
+    transaction.set_status(transaction.get_status()-1)
+    return redirect(url_for('delivery', id=id))
     
 
 if __name__ == '__main__':
