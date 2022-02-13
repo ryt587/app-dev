@@ -13,8 +13,8 @@
 						<th scope="col">Delivery ID</th>
 						<th scope="col">Transaction Date</th>
 						</tr>
-  		{% for x in range(applications_list|length) %}
-			{%if applications_list[x] != 0%}
+  		{% for x in range(transaction_list|length) %}
+			{%if transaction_list[x] != 0%}
 					<tr>
 						<th scope="row">{{x+1}}</th>
 						<td>{{ transaction_list[x].get_id() }}</td>

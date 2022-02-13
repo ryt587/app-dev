@@ -1,5 +1,5 @@
 {% extends "staff.html" %}
-{% block title %}Account Details Page{% endblock %}
+{% block title %}Status Page{% endblock %}
 {% block content %}
 <style>
   img {
@@ -24,17 +24,57 @@
   </tbody>
 </table>
 <!-- try add these inside -->
-<div style="background-color: #beb7b7;">
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
-  <a href="/approve/{{ application.get_apply_id() }}">Order Processed</a>
-</button>
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
-  <a href="/reject/{{ application.get_apply_id() }}">Order Shipped</a>
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
-  <a href="/reject/{{ application.get_apply_id() }}">Order En Route</a>
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
-  <a href="/reject/{{ application.get_apply_id() }}">Order Arrived</a>
-</button>     
-</div>
+{% if transaction.get_status()==1 %}
+  <div style="background-color: #beb7b7;">
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
+    Order Processed
+  </button>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    <a href="/addstatus/{{ transaction.get_id() }}">Order Shipped</a>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order En Route
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order Arrived
+  </button>     
+  </div>
+  {% if transaction.get_status()==2 %}
+  <div style="background-color: #beb7b7;">
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
+    <a href="/removestatus/{{ transaction.get_id() }}">Order Processed</a>
+  </button>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order Shipped
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    <a href="/addstatus/{{ transaction.get_id() }}">Order En Route</a>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order Arrived
+  </button>     
+  </div>
+  {% if transaction.get_status()==3 %}
+  <div style="background-color: #beb7b7;">
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
+    Order Processed
+  </button>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    <a href="/removestatus/{{ transaction.get_id() }}">Order Shipped</a>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order En Route
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    <a href="/addstatus/{{ transaction.get_id() }}">Order Arrived</a>
+  </button>     
+  </div>
+  {% if transaction.get_status()==4 %}
+  <div style="background-color: #beb7b7;">
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
+    Order Processed
+  </button>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order Shipped
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    <a href="/removestatus/{{ transaction.get_id() }}">Order En Route</a>
+  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+    Order Arrived
+  </button>     
+  </div>
 </body>
 {% endblock %}

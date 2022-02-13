@@ -14,7 +14,7 @@ class Accessories(p.Product):
         return self.__size
 
     def get_accessory_type(self):
-        return self.get_accessory_type()
+        return self.__accessory_type
 
     def set_colour(self, colour):
         self.__colour = colour
@@ -22,5 +22,5 @@ class Accessories(p.Product):
     def set_size(self, size):
         self.__size = size
 
-    def set_accessory_type(self, product_type):
+    def set_accessory_type(self, accessory_type):
         self.__accessory_type = accessory_type

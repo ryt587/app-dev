@@ -237,7 +237,15 @@ label.radio input:checked+span::before {
                 <div class="about"> <span class="font-weight-bold" style="font-size: 3em;">{{x.get_name()}}</span>
                     <h4 class="font-weight-bold" style="font-size: 2em;">{{x.get_price()}}</h4>
                 </div>
-                <div class="buttons"> <button class="btn btn-outline-warning btn-long cart">Add to Cart</button> <button class="btn btn-warning btn-long buy">Buy it Now</button> <button class="btn btn-light wishlist"> <i class="fa fa-heart"></i> </button> </div>
+                {% if user!=0 %}
+                <div class="buttons"> <a href="/addcart/{{ x.get_product_id() }}"><button class="btn btn-outline-warning btn-long cart">Add to Cart</button></a> <button class="btn btn-warning btn-long buy">Buy it Now</button> 
+                    {% if wishlist==false %}
+                    <a href="/addwishlist/{{ x.get_product_id() }}">
+                    <button class="btn btn-light wishlist"> 
+                    <i class="fa fa-heart"></i> </button></a> 
+                    {%endif%}
+                    {%endif%}
+                </div>
                 <hr>
                     <div class="mt-2"> <span class="font-weight-bold" style="font-size: 2em;">Information:</span>
 

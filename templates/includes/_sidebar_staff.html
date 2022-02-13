@@ -12,7 +12,7 @@
           Home
         </a>
       </li>
-      {% if user.get_role()=='A' %}
+      {% if user.get_staff_role()=='A' %}
       <li>
         <a href="/viewapply" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="/viewapply"></use></svg>
@@ -44,7 +44,7 @@
         </a>
       </li>
       <li>
-        <a href="/refund" class="nav-link text-white">
+        <a href="/viewrefund" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
          Refund
         </a>
@@ -55,9 +55,9 @@
          Revenue Report
         </a>
       </li>
-      {% elif user.get_role()=='D' %}
+      {% elif user.get_staff_role()=='D' %}
       <li>
-        <a href="/delivery" class="nav-link text-white">
+        <a href="/viewtransaction" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
          Deliveries
         </a>

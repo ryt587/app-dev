@@ -21,7 +21,7 @@
 						<td>{{ refund_list[x].get_id() }}</td>
 						<td>{{ refund_list[x].get_product_name() }}</td>
 						<td>{{ refund_list[x].get_reason() }}</td>
-		  <a href="/retrieveapply/{{ applications_list[x].get_apply_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
+		  <a href="/refund/{{ refund_list[x].get_apply_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 						</td>
 				</tr>
 			{%else%}
@@ -31,6 +31,8 @@
 				</th>
 					<td>
 					</td>
+						<td>
+						</td>
 						<td>
 						</td>
 							<td>
