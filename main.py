@@ -1,6 +1,6 @@
 from flask import Flask, render_template,  request, redirect, url_for, abort
 import Forms as f
-import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction
+import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction, Accessories
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -472,6 +472,8 @@ def CreateProduct():
         return redirect(url_for('create_electronic'))
     elif category=="clothing":
         return redirect(url_for('create_clothing'))
+    elif category=="accessories":
+        return redirect(url_for('create_accessories'))
     return render_template('products.html', user=user)
 
 @app.route('/createproduct/electronic',  methods=['GET', 'POST'])
@@ -497,8 +499,8 @@ def create_electronic():
                                                   create_product_form.Electronics_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
-                Product.set_product_image(str(Product.get_apply_id())+file_type)
+                os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
+                Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
@@ -553,8 +555,8 @@ def create_clothing():
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
-                Product.set_product_image(str(Product.get_apply_id())+file_type)
+                os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
+                Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
@@ -570,6 +572,8 @@ def update_product(id):
         return redirect(url_for('update_electronic',id=id))
     elif isinstance(product, Clothing.Clothing):
         return redirect(url_for('update_clothing',id=id))
+    elif isinstance(product, Accessories.Accessories):
+        return redirect(url_for('update_accessories',id=id))
     
 @app.route('/updateproduct/electronic/<int:id>', methods=['GET', 'POST'])
 def update_electronic(id):
@@ -970,7 +974,7 @@ def forgotpsemail():
                 error="Email does not exist"
     return render_template('forgotpsemail.html',  user=user, error=error, form=forgot_ps_email_form)
 
-@app.route('/productdetail/<id>')
+@app.route('/productdetail/<int:id>')
 def productdetail(id):
     db=shelve.open('user.db', 'c')
     products_dict={}
@@ -981,9 +985,29 @@ def productdetail(id):
             db['Products']=products_dict
     except:
         print("Error in retrieving Products from user.db.")
+    sellers_dict={}
+    try:
+        if 'Users' in db:
+            sellers_dict=db['Users']
+        else:
+            db['Users']=sellers_dict
+    except:
+        print("Error in retrieving sellers from user.db.") 
     db.close()
     product=products_dict[id]
-    return render_template("productdetail.html", product=product, user=user)
+    seller=sellers_dict[product.get_created_product()]
+    if user!=0 and product in user.get_wishlist():
+        wishlist=True
+    elif user!=0 and not (product in user.get_wishlist()):
+        wishlist=False
+    else:
+        wishlist=0
+    if isinstance(product, Electronics.Electronics):
+        return render_template("productdetailelectronic.html", x=product, user=user, seller=seller, wishlist=wishlist)
+    elif isinstance(product, Clothing.Clothing):
+        return render_template("productdetailclothing.html", x=product, user=user, seller=seller, wishlist=wishlist)
+    elif isinstance(product, Accessories.Accessories):
+        return render_template("productdetailaccessories.html", x=product, user=user, seller=seller, wishlist=wishlist)
 
 @app.route('/addwishlist/<id>')
 def addwishlist(id):
@@ -1103,13 +1127,17 @@ def searchcategory(category):
     except:
         print("Error in retrieving Products from user.db.")
     db.close()
-    if category=='Electronic':
+    if category=='electronic':
         for x, value in products_dict.items():
             if isinstance(value, Electronics.Electronics) and value.get_product_stock()>0:
                 product_list.append(value)    
-    elif category=='Clothing':
+    elif category=='clothing':
         for x, value in products_dict.items():
             if isinstance(value, Clothing.Clothing) and value.get_product_stock()>0:
+                product_list.append(value)  
+    elif category=='accessories':
+        for x, value in products_dict.items():
+            if isinstance(value, Accessories.Accessories) and value.get_product_stock()>0:
                 product_list.append(value)  
     return render_template("search.html", user=user, product_list=product_list)
 
@@ -1128,7 +1156,7 @@ def search():
         print("Error in retrieving Products from user.db.")
     db.close()
     for x, value in products_dict.items():
-        if (term in value.get_name()) and value.get_product_stock()>0:
+        if (term.lower() in value.get_name().lower()) and value.get_product_stock()>0:
             product_list.append(value)
     return render_template("search.html", user=user, product_list=product_list)
 
@@ -1171,7 +1199,7 @@ def payment():
     db.close()
     total_payment=0
     for x in products_dict:
-        total_payment+=products_dict[x].get_price
+        total_payment+=products_dict[x].get_price()
     product_list=[]
     for x in user.get_cart():
         product_list.append(products_dict[x])
@@ -1217,6 +1245,135 @@ def transasction():
     db['Users']=users_dict
     db.close()
     return redirect(url_for('home'))
+
+@app.route('/viewrefund')
+def viewrefund():
+    refund_dict={}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            refund_dict = db['Refunds']
+        except:
+            print("Error in retrieving Customers from refund.db")
+        refund_list=[]
+        if refund_dict!={}:
+            for x in refund_dict:
+                refund_list.append(refund_dict[x])
+    while len(refund_list) < 5:
+        refund_list.append(0)
+    return render_template('viewrefund.html', refund_list=refund_list, user=user)
+
+@app.route('/viewtransaction')
+def viewtransaction():
+    transaction_dict={}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            transaction_dict = db['Transactions']
+        except:
+            print("Error in retrieving Customers from transaction.db")
+        transaction_list=[]
+        if transaction_dict!={}:
+            for x in transaction_dict:
+                transaction_list.append(transaction_dict[x])
+    while len(transaction_list) < 5:
+        transaction_list.append(0)
+    return render_template('viewdelivery.html', transaction_list=transaction_list, user=user)
+
+@app.route('/refund/<int:id>', methods=['GET', 'POST'])
+def refund(id):
+    with shelve.open('user.db', 'c') as db:
+        try:
+            refund_dict = db['Refunds']
+        except:
+            print("Error in retrieving Customers from refund.db.")
+        refund=refund_dict[id]
+    return render_template('refund.html', refund=refund, user=user)
+
+@app.route('/changestatus/<id>', methods=['GET', 'POST'])
+def changestatus(id):
+    with shelve.open('user.db', 'c') as db:
+        try:
+            transaction_dict = db['Transactions']
+        except:
+            print("Error in retrieving Customers from transaction.db.")
+        transaction=transaction_dict[id]
+    return render_template('transaction.html', transaction=transaction, user=user)
+
+@app.route('/addstatus/<id>')
+def addstatus(id):
+    db = shelve.open('user.db', 'r')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    transaction=transactions_dict[id]
+    transaction.set_status(transaction.get_status()+1)
+    transactions_dict[id]=transaction
+    db['Transactions']=transactions_dict
+    db.close()
+    return redirect(url_for('changestatus', id=id))
+
+@app.route('/removestatus/<id>')
+def removestatus(id):
+    db = shelve.open('user.db', 'r')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    transaction=transactions_dict[id]
+    transaction.set_status(transaction.get_status()-1)
+    transactions_dict[id]=transaction
+    db['Transactions']=transactions_dict
+    db.close()
+    return redirect(url_for('changestatus', id=id))
+
+@app.route('/compare/<int:id>/<int:id2>')
+def compare(id, id2):
+    product_dict = {}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Customers from Product.db.")
+    x=product_dict[id]
+    y=product_dict[id2]
+    if isinstance(x, Electronics.Electronics):
+        return render_template('compareelectronic.html', x=x,y=y, user=user)
+    if isinstance(x, Clothing.Clothing):
+        return render_template('compareclothing.html', x=x,y=y, user=user)
+    if isinstance(x, Accessories.Accessories):
+        return render_template('compareaccessories.html', x=x,y=y, user=user)
+    
+@app.route('/compare/<int:id>')
+def comparesecond(id):
+    product_dict = {}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Customers from Product.db.")
+    x=product_dict[id]
+    product_list=[]
+    if isinstance(x,Electronics.Electronics):
+        for i, y in product_dict.items():
+            if isinstance(y,Electronics.Electronics) and i!=x.get_id():
+                product_list.append(y)
+    if isinstance(x,Clothing.Clothing):
+        for i, y in product_dict.items():
+            if isinstance(y,Clothing.Clothing) and i!=x.get_id():
+                product_list.append(y)
+    if isinstance(x,Accessories.Accessories):
+        for i, y in product_dict.items():
+            if isinstance(y,Accessories.Accessories) and i!=x.get_id():
+                product_list.append(y)
+    return render_template('comparesecond.html', x=x, user=user, product_list=product_list)
     
 
 if __name__ == '__main__':

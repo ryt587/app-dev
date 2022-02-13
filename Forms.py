@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField, IntegerField
+from wtforms import Form, StringField, SelectField, TextAreaField, validators, PasswordField, IntegerField, ValidationError
 from wtforms.fields import EmailField, DateField
 
 class CreateUserForm(Form):
@@ -74,7 +74,7 @@ class CreateElectronicForm(Form):
     Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "17 inches"})
     Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class CreateClothingForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -84,7 +84,7 @@ class CreateClothingForm(Form):
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
     Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class CreateAccessoriesForm(Form):
     Accessory_type = StringField('Product Type', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -112,7 +112,7 @@ class UpdateElectronicForm(Form):
     Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "17 inches"})
     Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 
 class UpdateClothingForm(Form):
@@ -123,7 +123,7 @@ class UpdateClothingForm(Form):
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
     Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class UpdateAccessoriesForm(Form):
     Accessory_type = StringField('Product Type', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -136,7 +136,7 @@ class UpdateAccessoriesForm(Form):
                                   render_kw={"placeholder": "red"})
     Price = IntegerField('Price', [validators.Length(min=1, max=150), validators.DataRequired()],
                          render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
 class UpdateSellerForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Store Name"})
     address = StringField('Mailing Address', [validators.length(max=200), validators.DataRequired()],render_kw={"placeholder": "1234 Main St"})
@@ -158,3 +158,17 @@ class ForgotPsEmailForm(Form):
     
 class OrderNumberForm(Form):
     orderno = StringField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
+
+class PaymentForm(Form):
+    creditcard = IntegerField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
+    
+    def validate_creditcard(form, field):
+        creditlist=field.data.split('')
+        total=0
+        for i, x in enumerate(creditlist[:-1]):
+            if i%2==0:
+                total+=x*2
+            else:
+                total+=x
+        if (10-(total%10))!=creditlist[-1]:
+            raise ValidationError('Invalid credit card number')

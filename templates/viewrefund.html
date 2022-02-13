@@ -1,0 +1,49 @@
+{% extends "staff.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<body>
+	<!--sidebar end-->
+		<div class="container-fluid" style="padding: 0; margin-top: 40px">
+		<div class="container pt-3 my-3 bg-white border">
+			<h1>Refunds:</h1>	
+				<div class="form-row justify-content-center">
+					<table class="table">
+						<tr>
+						<th scope="col">#</th>
+						<th scope="col">Product ID</th>
+						<th scope="col">Product Name</th>
+						<th scope="col">Reason</th>
+						</tr>
+  		{% for x in range(refund_list|length) %}
+			{%if refund_list[x] != 0%}
+					<tr>
+						<th scope="row">{{x+1}}</th>
+						<td>{{ refund_list[x].get_id() }}</td>
+						<td>{{ refund_list[x].get_product_name() }}</td>
+						<td>{{ refund_list[x].get_reason() }}</td>
+		  <a href="/refund/{{ refund_list[x].get_apply_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
+						</td>
+				</tr>
+			{%else%}
+			<tr>
+				<th scope="row">
+					{{x+1}}
+				</th>
+					<td>
+					</td>
+						<td>
+						</td>
+						<td>
+						</td>
+							<td>
+							</td>
+			</tr>
+				{%endif%}
+    	{% endfor %}
+				</table>
+		</div>
+	</div>
+		</div>
+	<!--container for sidebar plus content-->
+</body>
+{% endblock %}

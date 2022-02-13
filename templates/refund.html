@@ -1,0 +1,41 @@
+{% extends "staff.html" %}
+{% block title %}Refund Page{% endblock %}
+{% block content %}
+<style>
+  img {
+    border-radius: 4px;
+    padding: 5px;
+    width: 200px;
+    height: 330px;
+  }
+</style>
+<body>
+<div class="container center pt-3 my-3 bg-white border">
+<table class="table table-borderless">
+<tbody>
+    <tr>
+      <th scope="col" style="border-top: none;">Product ID:</th>
+      <td style="border-top: none;">{{ refund.get_product_id() }}</td>
+    </tr>
+    <tr>
+      <th scope="row" style="border-top: none;">Product Name:</th>
+      <td style="border-top: none;">{{ refund.get_product_name() }}</td>
+    </tr>
+    <tr>
+      <th scope="row" style="border-top: none;">Reason:</th>
+      <td style="border-top: none;">{{ refund.get_reason() }}</td>
+    </tr>
+  </tbody>
+</table>
+<!-- try add these inside -->
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
+  <a href="/approverefund/{{ refund.get_id() }}">Approve</a>
+</button>
+<!-- delete button -->
+<form action="{{url_for('reject_seller', id=application.get_apply_id())}}" method="POST">
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+  <a href="/rejectrefund/{{ refund.get_id() }}">Reject</a>
+</button>     
+</form>
+</body>
+{% endblock %}
