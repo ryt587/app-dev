@@ -1408,7 +1408,8 @@ def viewtransaction():
         transaction_list=[]
         if transaction_dict!={}:
             for x in transaction_dict:
-                transaction_list.append(transaction_dict[x])
+                if transaction_dict[x].get_delivered_date()==0:
+                    transaction_list.append(transaction_dict[x])
     while len(transaction_list) < 5:
         transaction_list.append(0)
     return render_template('viewdelivery.html', transaction_list=transaction_list, user=user)
@@ -1600,8 +1601,33 @@ def refundpastorder(id):
             db['Transactions']=transactions_dict
     except:
         print("Error in retrieving Transactions from user.db.")
+    products_dict={}
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    db.close()
+    transaction_list=transactions_dict[id].get_product_list()
+    for i, x in enumerate(transaction_list):
+        transaction_list[i]=products_dict[x]
+    return render_template("refundpastorder.html", user=user, transaction_list=transaction_list)
+
+@app.route('/finishdelivery/<id>')
+def finishdelivery(id):
+    db=shelve.open('user.db', 'c')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
     transaction=transactions_dict[id]
-    transaction.set_delivery_date(d.date.today())
+    transaction.set_delivered_date(d.date.today())
     db['Transactions']=transactions_dict
     db.close()
     return redirect(url_for("viewtransaction", user=user))

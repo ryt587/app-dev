@@ -25,7 +25,7 @@
 			<tr>
 			<th>{{x+1}}</th>
 			<td>{{product_dict[y].get_name()}}</td>
-			<td><a href="/processrefund"><img src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></a></td>
+			<td><a href="/processrefund/{{product_dict[y].get_name()}}"><img src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></a></td>
 			</tr>
 			{%endfor%}
 			</table>
