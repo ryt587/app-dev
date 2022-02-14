@@ -18,12 +18,12 @@
 </thead>
 <tbody>
     {% for Products in product_list %}
-    {% if product.get_active()==true %}
+    {% if Products.get_active()==true %}
     <tr>
       <td>{{ Products.get_name() }}</td>
       <td>{{ Products.get_product_id() }}</td>
       <td>{{ Products.get_product_stock() }}</td>
-      <td><img src="{{url_for('static', filename='images/cert/'+Products.get_product_image())}}" alt="{{Products.get_product_image()}}"></td>
+      <td><img src="{{url_for('static', filename='images/product_image/'+Products.get_product_image())}}" alt="{{Products.get_product_image()}}"></td>
       <td><form action="{{url_for('update_product', id=Products.get_product_id())}}" method="POST">
         <button type="submit" class="btn btn-danger" >
           Update
@@ -65,6 +65,7 @@
         </form>
       </td>
     </tr>
+    {% endif %}
   {% endfor %}
 </tbody>
 </table>
