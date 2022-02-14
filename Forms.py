@@ -112,7 +112,7 @@ class UpdateElectronicForm(Form):
     Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "17 inches"})
     Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=0), validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 
 class UpdateClothingForm(Form):
@@ -123,7 +123,7 @@ class UpdateClothingForm(Form):
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
     Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class UpdateAccessoriesForm(Form):
     Accessory_type = SelectField('Product Type', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -136,7 +136,7 @@ class UpdateAccessoriesForm(Form):
                                   render_kw={"placeholder": "red"})
     Price = IntegerField('Price', [validators.DataRequired()],
                          render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
     
 class UpdateSellerForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Store Name"})
