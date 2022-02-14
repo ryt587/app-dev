@@ -1,6 +1,37 @@
 {% extends "index.html" %}
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
+<script>
+.btn-long {
+    padding-left: 35px;
+    padding-right: 35px
+}
+
+.buttons {
+    margin-top: 15px
+}
+
+.buttons .btn {
+    height: 46px
+}
+
+.buttons .cart {
+    border-color: #ff7676;
+    color: #ff7676
+}
+
+.buttons .cart:hover {
+    background-color: #e86464 !important;
+    color: #fff
+}
+
+.buttons .buy {
+    color: #fff;
+    background-color: #ff7676;
+    border-color: #ff7676
+}
+
+</script>
 <body>
 	<!--sidebar end-->
 		<div class="container-fluid" style="padding: 0; margin-top: 40px">
@@ -19,8 +50,8 @@
   		{% for x in range(product_list|length) %}
 			{%if product_list[x] != 0%}
 					<tr>
-						<th scope="row"><button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-							<a href="/removewishlist/{{ product_list[x].get_product_id() }}">Remove from wishlist</a></button></th>
+						<th scope="row">
+							<a href="/removewishlist/{{ product_list[x].get_product_id() }}"><img src="https://cdn-icons.flaticon.com/png/512/4211/premiu…=1644841968~hmac=c358b6b8b82d70084b9d0eab933c64b7" alt="remove"></a></th>
 						<td>{{x+1}}</td>
 						<td>{{ product_list[x].get_name() }}</td>
 						<td>{{ product_list[x].get_price() }}</td>
@@ -28,7 +59,7 @@
 		  <a href="/productdetail/{{ product_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 						</td>
 						<td><button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-							<a href="/addcart/{{ product_list[x].get_product_id() }}">Add to cart</a></button></td>
+							<a href="/addcart/{{ product_list[x].get_product_id() }}"><button class="btn btn-outline-warning btn-long cart">Add to Cart</button></a></button></td>
 				</tr>
 			{%else%}
 			<tr>
