@@ -1250,7 +1250,7 @@ def ordernumber():
         if not order_number_form.orderno.data in transactions_dict:
             error="Order Number does not exist"
         elif transactions_dict[order_number_form.orderno.data].get_delivery_data()==0:
-            error="Transaction already successful"
+            error="Transaction already delivered"
         else:
             return redirect(url_for('tracking', order=order_number_form.orderno.data))
         db.close()
@@ -1385,8 +1385,12 @@ def transaction():
 def transactionsuccessful():
     return render_template("transactionsuccessful.html", user=user)
 
-@app.route('/viewrefund')
+@app.route('/viewrefund', methods=['GET', 'POST'])
 def viewrefund():
+    if request.method == 'POST':
+        id=request.form['id']
+        reason=request.form['reason']
+        return redirect(url_for('processrefund', id=id, reason=reason))
     refund_dict={}
     with shelve.open('user.db', 'c') as db:
         try:
@@ -1575,49 +1579,22 @@ def rejectrefund(id):
         db['Refunds'] = refund_dict
         return redirect(url_for('viewrefund'))
 
-@app.route('/processrefund/<int:id>/<int:transaction_id>', methods=['GET', 'POST'])
-def processrefund(id,transaction_id):
-    process_refund_form = f.ProcessRefundForm(request.form)
-    if request.method == 'POST' and process_refund_form.validate():
-        db=shelve.open('user.db', 'c')
-        refunds_dict={}
-        try:
-            if 'Refunds' in db:
-                refunds_dict=db['Refunds']
-            else:
-                db['Refunds']=refunds_dict
-        except:
-            print("Error in retrieving Transactions from user.db.")
-        refund=Refund.Refund(id,process_refund_form.reason.data,user.get_user_id())
-        refunds_dict[refund.get_refund_id()] = refund
-        db['Refunds'] = refunds_dict
-        db.close()
-    return redirect(url_for("refundpastorder", id=transaction_id))
-
-@app.route('/refundpastorder/<int:id>')
-def refundpastorder(id):
+@app.route('/processrefund/<int:id>/<reason>')
+def processrefund(id, reason):
     db=shelve.open('user.db', 'c')
-    transactions_dict={}
+    refunds_dict={}
     try:
-        if 'Transactions' in db:
-            transactions_dict=db['Transactions']
+        if 'Refunds' in db:
+            refunds_dict=db['Refunds']
         else:
-            db['Transactions']=transactions_dict
+            db['Refunds']=refunds_dict
     except:
         print("Error in retrieving Transactions from user.db.")
-    products_dict={}
-    try:
-        if 'Products' in db:
-            products_dict=db['Products']
-        else:
-            db['Products']=products_dict
-    except:
-        print("Error in retrieving Transactions from user.db.")
+    refund=Refund.Refund(id,reason,user.get_user_id())
+    refunds_dict[refund.get_refund_id()] = refund
+    db['Refunds'] = refunds_dict
     db.close()
-    transaction_list=transactions_dict[id].get_product_list()
-    for i, x in enumerate(transaction_list):
-        transaction_list[i]=products_dict[x]
-    return render_template("refundpastorder.html", user=user, transaction_list=transaction_list)
+    return redirect(url_for("refundsuccessful"))
 
 @app.route('/finishdelivery/<id>')
 def finishdelivery(id):
@@ -1635,6 +1612,10 @@ def finishdelivery(id):
     db['Transactions']=transactions_dict
     db.close()
     return redirect(url_for("viewtransaction", user=user))
+
+@app.route('/refundsuccessful')
+def refundsuccessful():
+    return render_template("refundsuccessful.html", user=user)
 
 if __name__ == '__main__':
     import webbrowser

@@ -164,7 +164,3 @@ class PaymentForm(Form):
     creditcard = IntegerField('Credit Card Number', [validators.DataRequired()], render_kw={"placeholder": "Credit card Number"})
     first_name = StringField('Name', [validators.DataRequired()], render_kw={"placeholder": "Name"})
     
-    
-        
-class ProcessRefundForm(Form):
-    reason=StringField('Reason', [validators.DataRequired()], render_kw={"placeholder": "Reason"})

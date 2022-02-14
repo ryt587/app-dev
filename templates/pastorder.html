@@ -71,54 +71,53 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	<div class="accordion-item">
 		<h2 class="accordion-header" id="heading{{x+1}}">
 		<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{x+1}}" aria-expanded="true" aria-controls="collapse1{{x+1}}">
-			{{x+1}} {{transaction_list[x].get_transaction_date()}} {{transaction_list[x].get_delivered_date()}}
+			{{x+1}} Delivered Date: {{transaction_list[x].get_delivered_date()}}
 		</button>
 		</h2>
 		<div id="collapse{{x+1}}" class="accordion-collapse collapse show" aria-labelledby="heading{{x+1}}" data-bs-parent="#accordionExample">
 		<div class="accordion-body">
 		<table class="table">
 			<tr>
-				<th scope="row">#</th>
 				<th scope="row">Product Name</th>
 				<th scope="row">Request for refund</th>
 			</tr>
 			{%for y in product_dict%}
 			<tr>
-			<th>{{x+1}}</th>
-			<td>{{product_dict[y].get_name()}}</td>
-			<td><button id="myBtn"><a href="/processrefund/{{product_dict[y].get_name()}}/"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></a></button></td>
+			<th>{{product_dict[y].get_name()}}</th>
+			<td>
+				<button type="button" class="btn" id="myBtn">
+					<img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></td>
+				</button>
 			</tr>
-			{%endfor%}
+			<div id="myModal" class="modal">
+
+				<form>
+	  <!-- Email input -->
+	  <div class="form-outline mb-4">
+		<input type="text" id="form1Example1" class="form-control" value="{{product_dict[y].get_product_id()}}" disabled />
+	  </div>
+	
+	  <!-- Password input -->
+	  <div class="form-outline mb-4">
+		<input type="text" id="form1Example2" class="form-control" />
+		<label class="form-label" for="form1Example2">Reason</label>
+	  </div>
+	
+	  <!-- Submit button -->
+	  <button type="submit" class="btn btn-primary btn-block">Send</button>
+	</form>
+				  </div>
+
+				  {%endfor%}
+
 
 			</table>
-			
-
 </div>
 			
 			
 			</div>
 		</div>
 	</div>
-			
-			<!-- Modal content -->
-  			<div class="modal-content">
-    		<span class="close">&times;</span>
-    		<form>
-  <!-- Email input -->
-  <div class="form-outline mb-4">
-    <input type="text" id="form1Example1" class="form-control" value="{{product_dict[y].get_product_id()}}" disabled />
-  </div>
-
-  <!-- Password input -->
-  <div class="form-outline mb-4">
-    <input type="text" id="form1Example2" class="form-control" />
-    <label class="form-label" for="form1Example2">Reason</label>
-  </div>
-
-  <!-- Submit button -->
-  <button type="submit" class="btn btn-primary btn-block">Send</button>
-</form>
-  			</div>
 	{%endfor%}
 
 </div>
