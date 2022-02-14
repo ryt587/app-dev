@@ -1,47 +1,33 @@
 {% extends "index.html" %}
+{% block title %}Past Orders{% endblock %}
 {% block content %}
-{% from "includes/_formHelper.html" import render_field %}
 <body>
-	<!--sidebar end-->
-		<div class="container-fluid" style="padding: 0; margin-top: 40px">
-		<div class="container pt-3 my-3 bg-white border">
-			<h1>Past Orders: </h1>	
-				<div class="form-row justify-content-center">
-					<table class="table">
-						<tr>
-						<th scope="col">#</th>
-						<th scope="col">Name</th>
-                        <th scope="col">Date</th>
-						<th scope="col">Refund</th>
-						</tr>
-  		{% for x in range(transactions_list|length) %}
-			{%if transactions_list[x] != 0%}
-					<tr>
-						<th scope="row">{{x+1}}</th>
-                        <td>{{ transactions_list[x].get_name() }}</td>
-                        <td>{{ transactions_list[x].get_Date() }}</td>
-						<td>
-		  <a href="/refundpastorder/{{ transactions_list[x].get_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/2947/2947554.png" alt="view"></a>
-						</td>
-				</tr>
-			{%else%}
-			<tr>
-				<th scope="row">
-					{{x+1}}
-				</th>
-					<td>
-					</td>
-						<td>
-						</td>
-							<td>
-							</td>
-			</tr>
-				{%endif%}
-    	{% endfor %}
-				</table>
+<div class="container-fluid" style="padding: 0; margin-top: 40px">
+		<div class="container pt-3 my-3 bg-white border"> 
+{%if transactions_list != []%}
+			<div class="accordion" id="accordionExample">
+{%for x in range(transactions_list|length)%}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading{{x+1}}">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{x+1}}" aria-expanded="true" aria-controls="collapse1{{x+1}}">
+        {{x+1}} {{x.get_transaction_date}} {{x.get_delivered_date}}
+      </button>
+    </h2>
+    <div id="collapse{{x+1}}" class="accordion-collapse collapse show" aria-labelledby="heading{{x+1}}" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+       <table class="table">
+		  <tr>
+		   <th scope="row">
+			  </th>
+		   </tr>
+		  </table>
 		</div>
+    </div>
+  </div>
+
+</div>
+{%endif%}
 	</div>
-		</div>
-	<!--container for sidebar plus content-->
-</body>
-{% endblock %}
+	</div>
+  </body>
+{%endblock%}
