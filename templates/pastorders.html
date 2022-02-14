@@ -17,15 +17,27 @@
       <div class="accordion-body">
        <table class="table">
 		  <tr>
-		   <th scope="row">
-			  </th>
+		   	  <th scope="row">#</th>
+			  <th scope="row">Product Name</th>
+			  <th scope="row">Request for refund</th>
 		   </tr>
+		   {%for x in range(product_dict|length)%}
+		   <tr>
+		   <th>{{x+1}}</th>
+		   <td>{{x.get_name}}</td>
+		   <td><a href="/refund"><img src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></a></td>
+		   </tr>
+		   {%endfor%}
 		  </table>
 		</div>
     </div>
   </div>
-
+{%endfor%}
 </div>
+{%else%}
+	<div class="container text-center">
+	<h1 style="font-size: 2.5em;">You have no past orders. Click <a href="/">Here</a> to start shopping</h1>
+	</div>
 {%endif%}
 	</div>
 	</div>
