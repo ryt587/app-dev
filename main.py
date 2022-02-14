@@ -255,6 +255,10 @@ def accountdetails():
 def termsandconditions():
     return render_template('termsandconditions.html')
 
+@app.route('/Aboutus')
+def Aboutus():
+    return render_template('Aboutus.html')
+
 
 @app.route('/deleteUser/', methods=['GET', 'POST'])
 def delete_user():
