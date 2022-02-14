@@ -40,36 +40,39 @@
 				<div class="form-row justify-content-center">
 					<table class="table">
 						<tr>
-						<th scope="col" style="font-weight: bold; font-size: 1.3em;">Remove</th>
+
 						<th scope="col" style="font-weight: bold; font-size: 1.3em;">#</th>
 						<th scope="col" style="font-weight: bold; font-size: 1.3em;">Name</th>
 						<th scope="col" style="font-weight: bold; font-size: 1.3em;">Price</th>
 						<th scope="col" style="font-weight: bold; font-size: 1.3em;">View</th>
+						<th scope="col" style="font-weight: bold; font-size: 1.3em;">Compare</th>
 						<th scope="col" style="font-weight: bold; font-size: 1.3em;">Cart</th>
+						<th scope="col" style="font-weight: bold; font-size: 1.3em;">Remove</th>
 						</tr>
   		{% for x in range(product_list|length) %}
 			{%if product_list[x] != 0%}
 					<tr>
-						<th scope="row">
-							<a href="/removewishlist/{{ product_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/1828/1828945.png" alt="remove"></a>
-						</th>
-						<td style="font-size:1.3em;">{{x+1}}</td>
+						<td style="font-size:1.3em; font-weight:bold;">{{x+1}}</td>
 						<td style="font-size:1.3em;">{{ product_list[x].get_name() }}</td>
 						<td style="font-size:1.3em;">{{ product_list[x].get_price() }}</td>
 						<td>
 		  <a href="/productdetail/{{ product_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 						</td>
 						<td>
+							<a href="/compare/{{ product_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/259/259473.png" alt="compare"></a>
+						</td>
+						<td>
 							<a href="/addcart/{{ product_list[x].get_product_id() }}"><button class="btn btn-outline-warning btn-long cart">Add to Cart</button></a>
 						</td>
+						<th scope="row">
+							<a href="/removewishlist/{{ product_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/1828/1828945.png" alt="remove"></a>
+						</th>
 				</tr>
 			{%else%}
 			<tr>
-				<th scope="row" style="font-size:1.3em;">
-				</th>
-				<td style="font-size:1.3em;">
+				<th style="font-weight:bold; font-size:1.3em;">
 					{{x+1}}
-				</td>
+				</th>
 					<td>
 					</td>
 						<td>
@@ -78,6 +81,10 @@
 							</td>
 							<td>
 							</td>
+				<td>
+							</td>
+				<td>
+				</td>
 			</tr>
 				{%endif%}
     	{% endfor %}
