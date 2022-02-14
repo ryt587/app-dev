@@ -1210,6 +1210,24 @@ def search():
             product_list.append(value)
     return render_template("search.html", user=user, product_list=product_list)
 
+@app.route('/searchall')
+def searchall():
+    db=shelve.open('user.db', 'c')
+    products_dict={}
+    product_list=[]
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    for x, value in products_dict.items():
+        if value.get_product_stock()>0:
+            product_list.append(value)
+    return render_template("search.html", user=user, product_list=product_list)
+
 @app.route('/ordernumber', methods=['GET', 'POST'])
 def ordernumber():
     error=None
@@ -1227,13 +1245,23 @@ def ordernumber():
         if not order_number_form.orderno.data in transactions_dict:
             error="Order Number does not exist"
         else:
-            return redirect(url_for('tracking', order=transactions_dict[order_number_form.orderno.data]))
+            return redirect(url_for('tracking', order=order_number_form.orderno.data))
         db.close()
     return render_template('ordernumber.html', form=order_number_form, error=error, user=user)
 
 @app.route('/tracking/<order>')
 def tracking(order):
-    return render_template('tracking.html', user=user, transaction=order)
+    db = shelve.open('user.db', 'r')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    transasction=transactions_dict[order]
+    return render_template('tracking.html', user=user, transaction=transasction)
 
 @app.route('/payment')
 def payment():
@@ -1257,7 +1285,7 @@ def payment():
 
 @app.route('/transaction')
 def transasction():
-    db = shelve.open('user.db', 'r')
+    db = shelve.open('user.db', 'c')
     products_dict={}
     try:
         if 'Products' in db:
@@ -1266,18 +1294,16 @@ def transasction():
             db['Products']=products_dict
     except:
         print("Error in retrieving Products from user.db.")
+    for x in user.get_cart():
+        products_dict[x].set_product_stock(products_dict[x].get_product_stock()-1)
+    transaction=Transaction.Transaction(user.get_cart())
     for x in transaction.get_product_list():
         product=products_dict[x]
         product.set_sold(product.get_sold()+1)
         product.set_product_stock(product.get_product_stock()-1)
         products_dict[x]=product
     db['Products']=products_dict
-    db.close()
-    for x in user.get_cart():
-        products_dict[x].set_product_stock(products_dict[x].get_product_stock()-1)
-    transaction=Transaction(user.get_cart())
     user.set_cart({})
-    db = shelve.open('user.db', 'r')
     transactions_dict={}
     try:
         if 'Transactions' in db:
@@ -1299,11 +1325,12 @@ def transasction():
     wishlist=user.get_transaction()
     wishlist[transaction.get_id()]=0
     user.set_transaction(wishlist)
-    users_dict[user.get_id()]=user
+    users_dict[user.get_user_id()]=user
     for x in transaction.get_product_list():
-        seller = users_dict[x.get_created_product()]
+        seller = users_dict[products_dict[x].get_created_product()]
         earning=seller.get_earned()
-        earning[d.datetime.today()]+=x.get_price()*0.9
+        print(earning)
+        earning[d.date.today()]+=products_dict[x].get_price()*0.9
         seller.set_earned(earning)
     db['Users']=users_dict
     earning_dict={}
@@ -1317,8 +1344,13 @@ def transasction():
     total_payment=0
     for x in products_dict:
         total_payment+=products_dict[x].get_price()
-    earning_dict[d.datetime.today()]+=total_payment*0.1
+    earning_dict[d.date.today()]+=total_payment*0.1
     db['Earnings']=earning_dict
+    msg = Message("Transaction completed",
+                  sender="chuaandspencer@example.com",
+                  recipients=[user.get_email()])
+    msg.body="Your transaction have been completed.\n\nYour Transaction order number is {}".format(transaction.get_id())
+    mail.send(msg)
     db.close()
     return redirect(url_for('home'))
 
@@ -1376,7 +1408,7 @@ def changestatus(id):
 
 @app.route('/addstatus/<id>')
 def addstatus(id):
-    db = shelve.open('user.db', 'r')
+    db = shelve.open('user.db', 'c')
     transactions_dict={}
     try:
         if 'Transactions' in db:
@@ -1394,7 +1426,7 @@ def addstatus(id):
 
 @app.route('/removestatus/<id>')
 def removestatus(id):
-    db = shelve.open('user.db', 'r')
+    db = shelve.open('user.db', 'cZ')
     transactions_dict={}
     try:
         if 'Transactions' in db:

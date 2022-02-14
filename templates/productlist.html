@@ -12,8 +12,7 @@
       <tr>
         <th>Name</th>
         <th>ID</th>
-        <th>Stock</th>
-        <th></th>
+        <th>Stock</th>>
     </tr>
 </thead>
 <tbody>
@@ -23,7 +22,6 @@
       <td>{{ Products.get_name() }}</td>
       <td>{{ Products.get_product_id() }}</td>
       <td>{{ Products.get_product_stock() }}</td>
-      <td><img src="{{url_for('static', filename='images/product_image/'+Products.get_product_image())}}" alt="{{Products.get_product_image()}}"></td>
       <td><form action="{{url_for('update_product', id=Products.get_product_id())}}" method="POST">
         <button type="submit" class="btn btn-danger" >
           Update

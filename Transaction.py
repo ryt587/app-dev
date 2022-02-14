@@ -9,7 +9,7 @@ class Transaction():
         self.__product_list=product_list
         self.__status=1
         self.__transaction_date=d.date.today().strftime("%Y-%m-%d")
-        self.__expected_date=d.date.today().strftime("%Y-%m-%d")+ d.timedelta(15)
+        self.__expected_date=(d.date.today() + d.timedelta(days=15)).strftime("%Y-%m-%d")
         self.__delivered_date=0
       
     def get_id(self):
