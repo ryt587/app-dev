@@ -17,7 +17,7 @@
   		{% for x in range(products_list|length) %}
 			{%if products_list[x] != 0%}
 					<tr>
-						<th scope="row"></th>
+						<th scope="row"><a href="/removecart/{{ products_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/1828/1828945.png" alt="remove"></a></th>
 						<td>{{ x+1 }}</td>
             <td>{{ products_list[x].get_name() }}</td>
 			<td>{{ products_list[x].get_price() }}</td>

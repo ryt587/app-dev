@@ -251,7 +251,9 @@ label.radio input:checked+span::before {
       <label for="wishlistitems">Wishlist Items:</label>
       <select name="wishlistitems" id="wishlistitems">
           <!--If-->
-        <option>Electronic</option>
+        {% for y in product_list %}
+        <option value="{{ y.get_product_id() }}">{{y.get_name()}}</option>
+        {% endfor %}
       </select>
     </div>
   </div>

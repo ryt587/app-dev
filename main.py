@@ -696,9 +696,9 @@ def delete_product(id):
     db = shelve.open('user.db', 'w')
     products_dict = db['Products']
     product=products_dict[id]
-    os.remove(app.config['UPLOAD_FOLDER']+str(product.get_product_image()))
-    products_dict.pop(id)
-
+    product.set_product_stock(0)
+    product.set_active(False)
+    products_dict[id]=product
     db['Products'] = products_dict
     db.close()
     return redirect(url_for('productlist'))
@@ -995,6 +995,7 @@ def productdetail(id):
         print("Error in retrieving sellers from user.db.") 
     db.close()
     product=products_dict[id]
+    product.set_impression(product.get_impression()+1)
     seller=sellers_dict[product.get_created_product()]
     if user!=0 and id in user.get_wishlist():
         wishlist=True
@@ -1090,8 +1091,8 @@ def removecart(id):
     db.close()
     if 'productdetail' in request.referrer:
         return redirect(url_for('productdetail', id=id))
-    elif 'wishlist' in request.referrer:
-        return redirect(url_for('wishlist'))
+    elif 'cart' in request.referrer:
+        return redirect(url_for('retrievecart'))
     else:
         abort(404)
 
@@ -1112,7 +1113,12 @@ def addcart(id):
     users_dict[user.get_user_id()]=user
     db['Users']=users_dict
     db.close()
-    return redirect(url_for('productdetail', id=id))
+    if 'productdetail' in request.referrer:
+        return redirect(url_for('productdetail', id=id))
+    elif 'wishlist' in request.referrer:
+        return redirect(url_for('retrievewishlist'))
+    else:
+        abort(404)
 
 @app.route('/retrievecart')
 def retrievecart():
@@ -1144,11 +1150,19 @@ def pastorder():
             db['Transactions']=transactions_dict
     except:
         print("Error in retrieving Transactions from user.db.")
+    products_dict={}
+    try:
+        if 'Products' in db:
+            transactions_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
     db.close()
     transaction_list=[x for x in user.get_transaction()]
     for i, x in enumerate(transaction_list):
         transaction_list[i]=transactions_dict[x]
-    return render_template("pastorder.html", user=user, transaction_list=transaction_list)
+    return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_dict=products_dict)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
@@ -1252,11 +1266,17 @@ def transasction():
             db['Products']=products_dict
     except:
         print("Error in retrieving Products from user.db.")
+    for x in transaction.get_product_list():
+        product=products_dict[x]
+        product.set_sold(product.get_sold()+1)
+        product.set_product_stock(product.get_product_stock()-1)
+        products_dict[x]=product
+    db['Products']=products_dict
     db.close()
     for x in user.get_cart():
         products_dict[x].set_product_stock(products_dict[x].get_product_stock()-1)
     transaction=Transaction(user.get_cart())
-    user.set_cart([])
+    user.set_cart({})
     db = shelve.open('user.db', 'r')
     transactions_dict={}
     try:
@@ -1407,8 +1427,11 @@ def compare(id, id2):
     if isinstance(x, Accessories.Accessories):
         return render_template('compareaccessories.html', x=x,y=y, user=user)
     
-@app.route('/comparesecond/<int:id>')
+@app.route('/comparesecond/<int:id>', methods=['GET', 'POST'])
 def comparesecond(id):
+    if request.method == 'POST':
+        id2=request.form.get('wishlistitems')
+        return redirect(url_for('compare', id=id, id2=id2))
     product_dict = {}
     with shelve.open('user.db', 'c') as db:
         try:
@@ -1419,16 +1442,17 @@ def comparesecond(id):
     product_list=[]
     if isinstance(x,Electronics.Electronics):
         for i, y in product_dict.items():
-            if isinstance(y,Electronics.Electronics) and i!=x.get_id():
+            if isinstance(y,Electronics.Electronics) and i!=x.get_product_id():
                 product_list.append(y)
     if isinstance(x,Clothing.Clothing):
         for i, y in product_dict.items():
-            if isinstance(y,Clothing.Clothing) and i!=x.get_id():
+            if isinstance(y,Clothing.Clothing) and i!=x.get_product_id():
                 product_list.append(y)
     if isinstance(x,Accessories.Accessories):
         for i, y in product_dict.items():
-            if isinstance(y,Accessories.Accessories) and i!=x.get_id():
+            if isinstance(y,Accessories.Accessories) and i!=x.get_product_id():
                 product_list.append(y)
+    
     return render_template('comparesecond.html', x=x, user=user, product_list=product_list)
 
 @app.route('/approverefund/<int:id>')

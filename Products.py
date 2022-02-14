@@ -25,6 +25,7 @@ class Product():
       self.__product_image = product_image
       self.__created_product = created_product
       self.__price = price
+      self.__active = True
       self.__impression = 0
       self.__sold = 0
 
@@ -45,6 +46,9 @@ class Product():
    
    def get_price(self):
       return self.__price
+   
+   def get_active(self):
+      return self.__active
    
    def get_impression(self):
       return self.__impression
@@ -70,6 +74,9 @@ class Product():
       
    def set_price(self, price):
       self.__price = price
+      
+   def set_active(self, active):
+      self.__active = active
       
    def set_impression(self, impression):
       self.__impression = impression

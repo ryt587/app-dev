@@ -18,6 +18,7 @@
 </thead>
 <tbody>
     {% for Products in product_list %}
+    {% if product.get_active()==true %}
     <tr>
       <td>{{ Products.get_name() }}</td>
       <td>{{ Products.get_product_id() }}</td>

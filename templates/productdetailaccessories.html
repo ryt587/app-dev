@@ -244,7 +244,7 @@ label.radio input:checked+span::before {
                     <h4 class="font-weight-bold" style="font-size: 2em;">{{x.get_price()}}</h4>
                 </div>
                 {% if user!=0 %}
-                <div class="buttons"> <a href="/addcart/{{ x.get_product_id() }}"><button class="btn btn-outline-warning btn-long cart">Add to Cart</button></a> <button class="btn btn-warning btn-long buy">Buy it Now</button> 
+                <div class="buttons"> <a href="/addcart/{{ x.get_product_id() }}"><button class="btn btn-outline-warning btn-long cart">Add to Cart</button></a>
                     {% if wishlist==false %}
                     <a href="/addwishlist/{{ x.get_product_id() }}">
                     <button class="btn btn-light wishlist"> 

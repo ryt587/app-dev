@@ -10,6 +10,7 @@ class Transaction():
         self.__status=1
         self.__transaction_date=d.date.today().strftime("%Y-%m-%d")
         self.__expected_date=d.date.today().strftime("%Y-%m-%d")+ d.timedelta(15)
+        self.__delivered_date=0
       
     def get_id(self):
         return self.__id
@@ -26,6 +27,9 @@ class Transaction():
     def get_expected_date(self):
         return self.__expected_date
     
+    def get_delivered_date(self):
+        return self.__delivered_date
+    
     def set_id(self, id):
         self.__id = id
     
@@ -40,3 +44,6 @@ class Transaction():
         
     def set_expected_date(self,expected_date):
         self.__expected_date = expected_date
+
+    def set_delivered_date(self,delivered_date):
+        self.__delivered_date = delivered_date
