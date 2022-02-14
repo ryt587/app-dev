@@ -1,6 +1,6 @@
 import shelve
 class Refund():
-    def __init__(self, product_name, reason, refund_by):
+    def __init__(self, product_name, reason, refund_by, transaction_by):
         db = shelve.open('user.db', 'c')
         refund_dict={}
         try:
@@ -21,6 +21,7 @@ class Refund():
         self.__product_name=product_name
         self.__reason=reason
         self.__refund_by=refund_by
+        self.__transaction_by=transaction_by
         
     def get_id(self):
         return self.__id
@@ -34,6 +35,9 @@ class Refund():
     def get_refund_by(self):
         return self.__refund_by
     
+    def get_transaction_by(self):
+        return self.__transaction_by
+    
     def set_id(self, id):
       self.__id = id
       
@@ -45,3 +49,6 @@ class Refund():
       
     def set_refund_by(self, refund_by):
       self.__refund_by = refund_by
+      
+    def set_transaction_by(self,transaction_by):
+      self.__transaction_by = transaction_by

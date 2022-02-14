@@ -1357,7 +1357,7 @@ def transaction():
     for x in transaction.get_product_list():
         seller = users_dict[products_dict[x].get_created_product()]
         earning=seller.get_earned()
-        earning[d.date.today()]+=products_dict[x].get_price()*(1/1.07)*0.9
+        earning[d.date.today()]+=products_dict[x].get_price()
         seller.set_earned(earning)
     db['Users']=users_dict
     earning_dict={}
@@ -1371,7 +1371,7 @@ def transaction():
     total_payment=0
     for x in products_dict:
         total_payment+=products_dict[x].get_price()
-    earning_dict[d.date.today()]+=total_payment*(1/1.07)*0.1
+    earning_dict[d.date.today()]+=total_payment
     db['Earnings']=earning_dict
     msg = Message("Transaction completed",
                   sender="chuaandspencer@example.com",
@@ -1530,11 +1530,13 @@ def comparesecond(id):
     
     return render_template('comparesecond.html', x=x, user=user, product_list=product_list)
 
-@app.route('/approverefund/<int:id>')
-def approverefund(id):
+@app.route('/approverefund/<int:id>/int:transaction_id>/<int:product_id>')
+def approverefund(id, transaction_id, product_id):
     refund_dict = {}
     user_dict = {}
     product_dict = {}
+    transaction_dict = {}
+    earning_dict = {}
     with shelve.open('user.db', 'c') as db:
         try:
             refund_dict = db['Refunds']
@@ -1548,14 +1550,33 @@ def approverefund(id):
             product_dict = db['Products']
         except:
             print("Error in retrieving Customers from staff.db.")
+        try:
+            transaction_dict = db['Transactions']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        try:
+            transaction_dict = db['Earnings']
+        except:
+            print("Error in retrieving Customers from staff.db.")
         refund=refund_dict[id] 
         msg = Message("Refund approved",
                   sender="chuaandspencer@example.com",
                   recipients=[user_dict[refund.get_refund_by()].get_email()])
-        msg.body="Your refund for item {} have been approved.".format(product_dict[refund.get_product_name()])
+        msg.body="Your refund for item {} have been approved.".format(product_dict[refund.get_name()])
         mail.send(msg)
+        transaction_dict[transaction_id].set_product_list(transaction_dict[transaction_id].get_product_list().pop(product_id))
         refund_dict.pop(id)
+        product=product_dict[product_id]
+        earning_dict[d.date.today()]-=product.get_price()*0.1
+        seller=user_dict[product.get_created_by()]
+        earning=seller.get_earned()
+        earning[d.date.today()]-=product.get_price()*0.9
+        seller.set_earned(earning)
+        user_dict[seller.get_seller_id()]=seller
         db['Refunds'] = refund_dict
+        db['Transactions'] = transaction_dict
+        db['Earnings'] = earning_dict
+        db['Users'] = user_dict
         return redirect(url_for('viewrefund'))
     
 @app.route('/rejectrefund/<int:id>')
@@ -1580,7 +1601,7 @@ def rejectrefund(id):
         msg = Message("Refund rejected",
                   sender="chuaandspencer@example.com",
                   recipients=[user_dict[refund.get_refund_by()].get_email()])
-        msg.body="Your refund for item {} have been rejected.".format(product_dict[refund.get_product_name()])
+        msg.body="Your refund for item {} have been rejected.".format(product_dict[refund.get_name()])
         mail.send(msg)
         refund_dict.pop(id)
         db['Refunds'] = refund_dict
@@ -1590,6 +1611,7 @@ def rejectrefund(id):
 def processrefund():
     id=int(request.args.get('id'))
     reason=request.args.get('reason')
+    transaction_id=int(request.args.get('transaction_id'))
     db=shelve.open('user.db', 'c')
     refunds_dict={}
     try:
@@ -1599,7 +1621,7 @@ def processrefund():
             db['Refunds']=refunds_dict
     except:
         print("Error in retrieving Transactions from user.db.")
-    refund=Refund.Refund(id,reason,user.get_user_id())
+    refund=Refund.Refund(id,reason,user.get_user_id(), transaction_id)
     refunds_dict[refund.get_id()] = refund
     db['Refunds'] = refunds_dict
     db.close()

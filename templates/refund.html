@@ -15,7 +15,7 @@
 <tbody>
     <tr>
       <th scope="row" style="border-top: none;">Product Name:</th>
-      <td style="border-top: none;">{{ product_dict[refund.get_product_name()].get_product_name() }}</td>
+      <td style="border-top: none;">{{ product_dict[refund.get_product_name()].get_name() }}</td>
     </tr>
     <tr>
       <th scope="row" style="border-top: none;">Reason:</th>
@@ -25,7 +25,7 @@
 </table>
 <!-- try add these inside -->
 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#" style="background-color: #EB5E55; margin-bottom: 1em;">
-  <a href="/approverefund/{{ refund.get_id() }}">Approve</a>
+  <a href="/approverefund/{{ refund.get_id() }}/{{ refund.get_transaction_by }}/{{ refund.get_product_name}}">Approve</a>
 </button>
 <!-- delete button -->
 <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">

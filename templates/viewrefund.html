@@ -20,7 +20,7 @@
 					<tr>
 						<th scope="row">{{x+1}}</th>
 						<td>{{ refund_list[x].get_id() }}</td>
-						<td>{{ product_dict[refund_list[x].get_product_name()].get_product_name() }}</td>
+						<td>{{ product_dict[refund_list[x].get_product_name()].get_name() }}</td>
 						<td>{{ refund_list[x].get_reason() }}</td>
 						<td><a href="/refund/{{ refund_list[x].get_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 						</td>
