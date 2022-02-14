@@ -90,24 +90,21 @@ body {font-family: Arial, Helvetica, sans-serif;}
 				</button>
 			</tr>
 			<div id="myModal" class="modal">
-
+				  <div class="modal-content">
+    			<span class="close">&times;</span>
 				<form>
-	  <!-- Email input -->
-	  <div class="form-outline mb-4">
-		<input type="text" id="form1Example1" class="form-control" value="{{product_dict[y].get_product_id()}}" disabled />
-	  </div>
-	
-	  <!-- Password input -->
-	  <div class="form-outline mb-4">
-		<input type="text" id="form1Example2" class="form-control" />
-		<label class="form-label" for="form1Example2">Reason</label>
-	  </div>
-	
-	  <!-- Submit button -->
-	  <button type="submit" class="btn btn-primary btn-block">Send</button>
-	</form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Product Number</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" value="{{product_dict[y].get_product_id()}}" aria-describedby="emailHelp" disabled>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Reason For Refund</label>
+    <input type="text" class="form-control" id="exampleInputPassword1">
+  </div>
+  <button type="submit" class="btn btn-primary">Send</button>
+</form>
 				  </div>
-
+			</div>
 				  {%endfor%}
 
 
