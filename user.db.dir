@@ -1,12 +1,5 @@
 'Earnings', (512, 959)
-<<<<<<< HEAD
 'Users', (49664, 4192)
 'Applications', (8192, 6)
 'Transactions', (37888, 6)
 'Products', (54272, 2659)
-=======
-'Users', (35328, 2190)
-'Applications', (8192, 402)
-'Transactions', (41984, 906)
-'Products', (40448, 1120)
->>>>>>> bedc53e818fb9a26b698e57c7111992fba44f29b
