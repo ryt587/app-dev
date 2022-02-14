@@ -2,7 +2,7 @@
 {% block title %}Product List{% endblock %}
 
 {% block content %}
-<div class="container center"">
+<div class="container center">
 <div class="container pt-3 my-3 bg-white border">
 	<table class="table">
 		<thead>
@@ -30,7 +30,9 @@
 	<tr>
 		{% for x in productlist %}
 		{% if loop.index<5 %}
-	<td><img src="{{url_for('static', filename='images/product_image/'+x.get_product_image())}}" height="100px" width="150px" alt="{{x.get_product_image()}}"></td>
+	<td>
+		<img src="{{url_for('static', filename='images/product_image/'+x.get_product_image())}}" height="100px" width="150px" alt="{{x.get_product_image()}}">
+		</td>
 		{% endif %}
 		{% endfor %}
 	</tr>
