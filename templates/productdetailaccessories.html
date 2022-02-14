@@ -121,6 +121,11 @@ hr {
     border-color: #e86464;
     color: #fff
 }
+.buttons .btn-dark {
+    background-color: #e86464;
+    border-color: #e86464;
+    color: #fff
+}
 
 .buttons .wishlist:hover i {
     color: #fff
@@ -246,7 +251,7 @@ label.radio input:checked+span::before {
                     <i class="fa fa-heart"></i> </button></a> 
                     {% elif wishlist==true %}
                     <a href="/removewishlist/{{ x.get_product_id() }}">
-                        <button class="btn btn-light wishlist"> 
+                        <button class="btn btn-dark wishlist">
                         <i class="fa fa-heart"></i> </button></a>
                     {%endif%}
                     {%endif%}
