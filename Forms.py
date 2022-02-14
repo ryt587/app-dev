@@ -173,3 +173,6 @@ class PaymentForm(Form):
                 total+=x
         if (10-(total%10))!=creditlist[-1]:
             raise ValidationError('Invalid credit card number')
+        
+class ProcessRefundForm(Form):
+    reason=StringField('Reason', [validators.DataRequired()], render_kw={"placeholder": "Reason"})

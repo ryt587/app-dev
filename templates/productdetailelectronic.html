@@ -226,7 +226,7 @@ label.radio input:checked+span::before {
         <div class="col-md-5 pr-2">
             <div class="card">
                 <div class="demo">
-                    <img src="http://placekitten.com/400/252" alt="picture" />
+                    <img src="{{url_for('static', filename='images/product_image/'+x.get_product_image())}}" alt="picture" />
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 from flask import Flask, render_template,  request, redirect, url_for, abort
 import Forms as f
-import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction, Accessories
+import shelve, Customer, Apply, Staff, Seller, Electronics, Clothing, Transaction, Accessories, Refund
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -996,6 +996,8 @@ def productdetail(id):
     db.close()
     product=products_dict[id]
     seller=sellers_dict[product.get_created_product()]
+    print(user)
+    print(user.get_wishlist())
     if user!=0 and product in user.get_wishlist():
         wishlist=True
     elif user!=0 and not (product in user.get_wishlist()):
@@ -1020,7 +1022,9 @@ def addwishlist(id):
             db['Users']=users_dict
     except:
         print("Error in retrieving Users from user.db.")
-    user.set_wishlist(user.get_wishlist().append(id))
+    wishlist=user.get_wishlist()
+    wishlist[id]=0
+    user.set_wishlist(wishlist)
     users_dict[user.get_user_id()]=user
     db['Users']=users_dict
     db.close()
@@ -1037,20 +1041,25 @@ def removewishlist(id):
             db['Users']=users_dict
     except:
         print("Error in retrieving Users from user.db.")
-    user.set_wishlist(user.get_wishlist().remove(id))
+    wishlist=user.get_wishlist()
+    wishlist.pop(id)
+    user.set_wishlist(wishlist)
     users_dict[user.get_user_id()]=user
     db['Users']=users_dict
     db.close()
     if 'productdetail' in request.referrer:
         return redirect(url_for('productdetail', id=id))
     elif 'wishlist' in request.referrer:
-        return redirect(url_for('wishlist'))
+        return redirect(url_for('retrievewishlist'))
     else:
         abort(404)
 
 @app.route('/retrievewishlist')
 def retrievewishlist():
-    products_list=user.get_wishlist()
+    products_list=[x for x in user.get_wishlist()]
+    while len(products_list)<5:
+        products_list.append(0)
+    print(products_list)
     return render_template("retrievewishlist.html", user=user, products_list=products_list)
 
 @app.route('/removecart/<id>')
@@ -1064,7 +1073,9 @@ def removecart(id):
             db['Users']=users_dict
     except:
         print("Error in retrieving Users from user.db.")
-    user.set_cart(user.get_cart().remove(id))
+    wishlist=user.get_cart()
+    wishlist.pop(id)
+    user.set_cart(wishlist)
     users_dict[user.get_user_id()]=user
     db['Users']=users_dict
     db.close()
@@ -1086,7 +1097,9 @@ def addcart(id):
             db['Users']=users_dict
     except:
         print("Error in retrieving Users from user.db.")
-    user.set_cart(user.get_cart().append(id))
+    wishlist=user.get_cart()
+    wishlist[id]=0
+    user.set_cart(wishlist)
     users_dict[user.get_user_id()]=user
     db['Users']=users_dict
     db.close()
@@ -1094,7 +1107,9 @@ def addcart(id):
 
 @app.route('/retrievecart')
 def retrievecart():
-    products_list=user.get_cart()
+    products_list=[x for x in user.get_cart()]
+    while len(products_list)<5:
+        products_list.append(0)
     return render_template("retrievecart.html", user=user, products_list=products_list)
 
 @app.route('/pastorder')
@@ -1109,10 +1124,10 @@ def pastorder():
     except:
         print("Error in retrieving Transactions from user.db.")
     db.close()
-    transaction_list=user.get_transaction()
+    transaction_list=[x for x in user.get_transaction()]
     for i, x in enumerate(transaction_list):
         transaction_list[i]=transactions_dict[x]
-    return render_template("productdetail.html", user=user, transaction_list=transaction_list)
+    return render_template("pastorder.html", user=user, transaction_list=transaction_list)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
@@ -1181,11 +1196,11 @@ def ordernumber():
         db.close()
     return render_template('ordernumber.html', form=order_number_form, error=error, user=user)
 
-@app.route('/tracking/<order>', methods=['GET', 'POST'])
+@app.route('/tracking/<order>')
 def tracking(order):
     return render_template('tracking.html', user=user, transaction=order)
 
-@app.route('/payment', methods=['GET', 'POST'])
+@app.route('/payment')
 def payment():
     db = shelve.open('user.db', 'r')
     products_dict={}
@@ -1240,7 +1255,9 @@ def transasction():
         print("Error in retrieving Users from user.db.")
     transactions_dict[transaction.get_id()]=transaction
     db['Transactions']=transactions_dict
-    user.set_transaction(user.get_transaction().append(transaction.get_id()))
+    wishlist=user.get_transaction()
+    wishlist[transaction.get_id()]=0
+    user.set_transaction(wishlist)
     users_dict[user.get_id()]=user
     for x in transaction.get_product_list():
         seller = users_dict[x.get_created_product()]
@@ -1296,7 +1313,7 @@ def viewtransaction():
         transaction_list.append(0)
     return render_template('viewdelivery.html', transaction_list=transaction_list, user=user)
 
-@app.route('/refund/<int:id>', methods=['GET', 'POST'])
+@app.route('/refund/<int:id>')
 def refund(id):
     with shelve.open('user.db', 'c') as db:
         try:
@@ -1306,7 +1323,7 @@ def refund(id):
         refund=refund_dict[id]
     return render_template('refund.html', refund=refund, user=user)
 
-@app.route('/changestatus/<id>', methods=['GET', 'POST'])
+@app.route('/changestatus/<id>')
 def changestatus(id):
     with shelve.open('user.db', 'c') as db:
         try:
@@ -1314,7 +1331,7 @@ def changestatus(id):
         except:
             print("Error in retrieving Customers from transaction.db.")
         transaction=transaction_dict[id]
-    return render_template('transaction.html', transaction=transaction, user=user)
+    return render_template('changestatus.html', transaction=transaction, user=user)
 
 @app.route('/addstatus/<id>')
 def addstatus(id):
@@ -1369,7 +1386,7 @@ def compare(id, id2):
     if isinstance(x, Accessories.Accessories):
         return render_template('compareaccessories.html', x=x,y=y, user=user)
     
-@app.route('/compare/<int:id>')
+@app.route('/comparesecond/<int:id>')
 def comparesecond(id):
     product_dict = {}
     with shelve.open('user.db', 'c') as db:
@@ -1449,6 +1466,49 @@ def rejectrefund(id):
         db['Refunds'] = refund_dict
         return redirect(url_for('viewrefund'))
     
+@app.route('/refundpastorder/<int:id>')
+def refundpastorder(id):
+    db=shelve.open('user.db', 'c')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    products_dict={}
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    db.close()
+    transaction_list=transactions_dict[id].get_product_list()
+    for i, x in enumerate(transaction_list):
+        transaction_list[i]=products_dict[x]
+    return render_template("refundpastorder.html", user=user, transaction_list=transaction_list)
+
+@app.route('/processrefund/<int:id>/<int:transaction_id>', methods=['GET', 'POST'])
+def processrefund(id,transaction_id):
+    process_refund_form = f.ProcessRefundForm(request.form)
+    if request.method == 'POST' and process_refund_form.validate():
+        db=shelve.open('user.db', 'c')
+        refunds_dict={}
+        try:
+            if 'Refunds' in db:
+                refunds_dict=db['Refunds']
+            else:
+                db['Refunds']=refunds_dict
+        except:
+            print("Error in retrieving Transactions from user.db.")
+        refund=Refund.Refund(id,process_refund_form.reason.data,user.get_user_id())
+        refunds_dict[refund.get_refund_id()] = refund
+        db['Refunds'] = refunds_dict
+        db.close()
+    return redirect(url_for("refundpastorder", id=transaction_id))
 
 if __name__ == '__main__':
     import webbrowser

@@ -27,9 +27,9 @@ class Customer(u.User):
         self.__address= address
         self.__postal= postal
         self.__city= city
-        self.__wishlist=[]
-        self.__cart=[]
-        self.__transaction=[]
+        self.__wishlist={}
+        self.__cart={}
+        self.__transaction={}
     
     def get_user_id(self):
         return self.__user_id
