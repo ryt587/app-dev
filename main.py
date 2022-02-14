@@ -1164,10 +1164,15 @@ def pastorder():
         print("Error in retrieving Transactions from user.db.")
     db.close()
     transaction_list=[]
+    product_list=[]
     for x in transactions_dict:
-        if transactions_dict[x].get_delivered_date()!=0:
+        if transactions_dict[x].get_delivered_date()!=0 and transactions_dict[x].get_product_list()!=0:
             transaction_list.append(transactions_dict[x])
-    return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_dict=products_dict)
+    for x in transaction_list:
+        if x.get_product_list()!=0:
+            for y in x.get_product_list():
+                product_list.append(products_dict[y])
+    return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_list=product_list)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
@@ -1311,7 +1316,7 @@ def payment():
         product_list.append(products_dict[x])
     return render_template('transaction.html', user=user, total_payment=total_payment, product_list=product_list, form=payment_form, error=error)
 
-@app.route('/transaction')
+@app.route('/transaction', methods=['GET', 'POST'])
 def transaction():
     db = shelve.open('user.db', 'c')
     products_dict={}
@@ -1568,7 +1573,7 @@ def approverefund(id, transaction_id, product_id):
         refund_dict.pop(id)
         product=product_dict[product_id]
         earning_dict[d.date.today()]-=product.get_price()*0.1
-        seller=user_dict[product.get_created_by()]
+        seller=user_dict[product.get_created_product()]
         earning=seller.get_earned()
         earning[d.date.today()]-=product.get_price()*0.9
         seller.set_earned(earning)

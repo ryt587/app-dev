@@ -448,7 +448,7 @@ span.month.focused.active
                                     </div>
                                 </div>
                                 <div class="col-12 panel-body creditcard-body">
-                                    <form action="#" method="post" target="_self">
+                                    <form action="{{ url_for('transaction') }}" method="post" target="_self">
                                         <fieldset>
                                             <label for="card-name">Name on the Card</label><br>
                                             <i class="fa fa-user-o" aria-hidden="true"></i><input type='text' id='card-name' name='card-name' placeholder='John Doe' title='Name on the Card'>
@@ -469,7 +469,7 @@ span.month.focused.active
                                 </div>
                                 <div class="col-12 panel-footer creditcard-footer">
                                     <div class="row">
-                                        <div class="col-12 align-right"><a href="/retrievecart"><button class="cancel">Cancel</button></a>&nbsp;<button class="confirm" type="submmit">Confirm & Pay</button></div>
+                                        <div class="col-12 align-right"><a href="/retrievecart"><button class="cancel">Cancel</button></a>&nbsp;<button class="confirm" type="submit">Confirm & Pay</button></div>
                                     </div>
                                 </form>
                                 </div>
