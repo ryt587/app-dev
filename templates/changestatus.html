@@ -37,6 +37,7 @@
     Order Arrived
   </button>     
   </div>
+  {% endif %}
   {% if transaction.get_status()==2 %}
   <div style="background-color: #beb7b7;">
   <button type="button" style="background-color: #EB5E55; margin-bottom: 1em;">
@@ -50,6 +51,7 @@
     Order Arrived
   </button>     
   </div>
+  {% endif %}
   {% if transaction.get_status()==3 %}
   <div style="background-color: #beb7b7;">
   <button type="button" class="btn" style="background-color: #EB5E55; margin-bottom: 1em;">
@@ -63,12 +65,13 @@
     <a href="/addstatus/{{ transaction.get_id() }}">Order Arrived</a>
   </button>     
   </div>
+  {% endif %}
   {% if transaction.get_status()==4 %}
   <div style="background-color: #beb7b7;">
   <button type="button" class="btn" style="background-color: #EB5E55; margin-bottom: 1em;">
     Order Processed
   </button>
-  <button type="button" class="btn style="background-color: #D81E5B; margin-bottom: 1em;">
+  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
     Order Shipped</button>
   <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
     <a href="/removestatus/{{ transaction.get_id() }}">Order En Route</a></button>
@@ -77,4 +80,5 @@
   </button>     
   </div>
 </body>
+{% endif %}
 {% endblock %}
