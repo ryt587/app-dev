@@ -996,8 +996,6 @@ def productdetail(id):
     db.close()
     product=products_dict[id]
     seller=sellers_dict[product.get_created_product()]
-    print(user)
-    print(user.get_wishlist())
     if user!=0 and product in user.get_wishlist():
         wishlist=True
     elif user!=0 and not (product in user.get_wishlist()):
@@ -1011,7 +1009,7 @@ def productdetail(id):
     elif isinstance(product, Accessories.Accessories):
         return render_template("productdetailaccessories.html", x=product, user=user, seller=seller, wishlist=wishlist)
 
-@app.route('/addwishlist/<id>')
+@app.route('/addwishlist/<int:id>')
 def addwishlist(id):
     db=shelve.open('user.db', 'c')
     users_dict={}
@@ -1056,11 +1054,22 @@ def removewishlist(id):
 
 @app.route('/retrievewishlist')
 def retrievewishlist():
-    products_list=[x for x in user.get_wishlist()]
+    db=shelve.open('user.db', 'c')
+    products_dict={}
+    try:
+        if 'Products' in db:
+            products_dict=db['Products']
+        else:
+            db['Products']=products_dict
+    except:
+        print("Error in retrieving Products from user.db.")
+    db.close()
+    products_list=[int(x) for x in user.get_wishlist()]
+    for i, x in enumerate(products_list):
+        products_list[i]=products_dict[x]
     while len(products_list)<5:
         products_list.append(0)
-    print(products_list)
-    return render_template("retrievewishlist.html", user=user, products_list=products_list)
+    return render_template("retrievewishlist.html", user=user, product_list=products_list)
 
 @app.route('/removecart/<id>')
 def removecart(id):

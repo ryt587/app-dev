@@ -78,12 +78,12 @@ h3 {
 <div class="gallery">
 {%if product_list != []%}
 	{% for x in range(product_list|length) %}
-  <a href="/productdetail/{{ product_list[x].get_product_id() }}">
 			<div class="content bg-white">
+        <a href="/productdetail/{{ product_list[x].get_product_id() }}">
 			<img src="{{url_for('static', filename='images/product_image/'+product_list[x].get_product_image())}}" alt="product_list[x].get_name()">
 			<h3>{{product_list[x].get_name()}}</h3>
+      </a>
 			</div>
-				</a>
 	{%endfor%}
 {%else%}
 	<div class="container text-center">
