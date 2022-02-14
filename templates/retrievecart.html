@@ -5,30 +5,30 @@
 	<!--sidebar end-->
 		<div class="container-fluid" style="padding: 0; margin-top: 40px">
 		<div class="container pt-3 my-3 bg-white border">
-			<h1>Past Orders: </h1>	
+			<h1>Cart:</h1>	
 				<div class="form-row justify-content-center">
 					<table class="table">
 						<tr>
+						<th scope="col">Remove</th>
 						<th scope="col">#</th>
 						<th scope="col">Name</th>
-                        <th scope="col">Date</th>
-						<th scope="col">Refund</th>
+						<th scope="col">Price</th>
 						</tr>
-  		{% for x in range(transactions_list|length) %}
-			{%if transactions_list[x] != 0%}
+  		{% for x in range(products_list|length) %}
+			{%if products_list[x] != 0%}
 					<tr>
-						<th scope="row">{{x+1}}</th>
-                        <td>{{ transactions_list[x].get_name() }}</td>
-                        <td>{{ transactions_list[x].get_Date() }}</td>
-						<td>
-		  <a href="/refundpastorder/{{ transactions_list[x].get_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/2947/2947554.png" alt="view"></a>
-						</td>
+						<th scope="row"></th>
+						<td>{{ x+1 }}</td>
+            <td>{{ products_list[x].get_name() }}</td>
+			<td>{{ products_list[x].get_price() }}</td>
 				</tr>
 			{%else%}
 			<tr>
 				<th scope="row">
-					{{x+1}}
 				</th>
+				<td>
+					{{x+1}}
+				</td>
 					<td>
 					</td>
 						<td>

@@ -416,14 +416,14 @@ span.month.focused.active
                                     </div>                                    
                                 </div>
                                 <div class="col-12 panel-body basket-body">
-                                    {{#products}}
+                                    {% for x in product_list %}
                                     <div class="row product">
                                         <div class="col-2 product-image"><img src="{{thumbnail}}"></div>
                                         <div class="col-5">{{name}}<br><span class="additional">{{additional}}</span></div>
                                         <div class="col-2 align-right"><span class="sub">{{unit}}</span> {{quantity}}</div>
                                         <div class="col-3 align-right"><span class="sub">{{{currency}}}</span> {{price}}</div>
                                     </div>
-                                    {{/products}}
+                                    {{% endfor %}}
                                 </div>
                                 <div class="col-12 panel-footer basket-footer">
                                     <hr>
