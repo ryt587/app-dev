@@ -1161,7 +1161,7 @@ def pastorder():
     db.close()
     transaction_list=[]
     for x in transactions_dict:
-        if transactions_dict[x].get_delivery_date!=0:
+        if transactions_dict[x].get_delivered_date()!=0:
             transaction_list.append(transactions_dict[x])
     return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_dict=products_dict)
 
@@ -1245,6 +1245,8 @@ def ordernumber():
             print("Error in retrieving Transactions from user.db.")
         if not order_number_form.orderno.data in transactions_dict:
             error="Order Number does not exist"
+        elif transactions_dict[order_number_form.orderno.data].get_delivery_data()==0:
+            error="Transaction already successful"
         else:
             return redirect(url_for('tracking', order=order_number_form.orderno.data))
         db.close()
@@ -1266,9 +1268,26 @@ def tracking(order):
 
 @app.route('/payment', methods=['GET', 'POST'])
 def payment():
+    error=None
     payment_form=f.PaymentForm(request.form)
     if request.method == 'POST' and payment_form.validate():
-        return redirect(url_for('transaction'))
+        payment_form.first_name.data = user.get_name()+user.get_last_name()
+        creditlist=str(payment_form.creditcard.data)
+        creditlist=[int(x) for x in creditlist]
+        total=0
+        for i, x in enumerate(creditlist[:-1]):
+            if i%2==1:
+                if x*2>9:
+                    x=sum([int(y) for y in str(x*2)])
+                    total+=x
+                else:
+                    total+=x*2
+            else:
+                total+=x
+        if (10-(total%10))!=creditlist[-1]:
+            error='Invalid credit card number'
+        else:
+            return redirect(url_for('transaction'))
     db = shelve.open('user.db', 'r')
     products_dict={}
     try:
@@ -1286,10 +1305,10 @@ def payment():
     product_list=[]
     for x in user.get_cart():
         product_list.append(products_dict[x])
-    return render_template('transaction.html', user=user, total_payment=total_payment, product_list=product_list, form=payment_form)
+    return render_template('transaction.html', user=user, total_payment=total_payment, product_list=product_list, form=payment_form, error=error)
 
 @app.route('/transaction')
-def transasction():
+def transaction():
     db = shelve.open('user.db', 'c')
     products_dict={}
     try:
@@ -1334,7 +1353,6 @@ def transasction():
     for x in transaction.get_product_list():
         seller = users_dict[products_dict[x].get_created_product()]
         earning=seller.get_earned()
-        print(earning)
         earning[d.date.today()]+=products_dict[x].get_price()*(1/1.07)*0.9
         seller.set_earned(earning)
     db['Users']=users_dict
@@ -1357,7 +1375,11 @@ def transasction():
     msg.body="Your transaction have been completed.\n\nYour Transaction order number is {}".format(transaction.get_id())
     mail.send(msg)
     db.close()
-    return redirect(url_for('home'))
+    return redirect(url_for('transactionsuccessful'))
+
+@app.route('/transactionsuccessful')
+def transactionsuccessful():
+    return render_template("transactionsuccessful.html", user=user)
 
 @app.route('/viewrefund')
 def viewrefund():
@@ -1547,31 +1569,6 @@ def rejectrefund(id):
         refund_dict.pop(id)
         db['Refunds'] = refund_dict
         return redirect(url_for('viewrefund'))
-    
-@app.route('/refundpastorder/<int:id>')
-def refundpastorder(id):
-    db=shelve.open('user.db', 'c')
-    transactions_dict={}
-    try:
-        if 'Transactions' in db:
-            transactions_dict=db['Transactions']
-        else:
-            db['Transactions']=transactions_dict
-    except:
-        print("Error in retrieving Transactions from user.db.")
-    products_dict={}
-    try:
-        if 'Products' in db:
-            products_dict=db['Products']
-        else:
-            db['Products']=products_dict
-    except:
-        print("Error in retrieving Transactions from user.db.")
-    db.close()
-    transaction_list=transactions_dict[id].get_product_list()
-    for i, x in enumerate(transaction_list):
-        transaction_list[i]=products_dict[x]
-    return render_template("refundpastorder.html", user=user, transaction_list=transaction_list)
 
 @app.route('/processrefund/<int:id>/<int:transaction_id>', methods=['GET', 'POST'])
 def processrefund(id,transaction_id):
@@ -1591,6 +1588,23 @@ def processrefund(id,transaction_id):
         db['Refunds'] = refunds_dict
         db.close()
     return redirect(url_for("refundpastorder", id=transaction_id))
+
+@app.route('/refundpastorder/<int:id>')
+def refundpastorder(id):
+    db=shelve.open('user.db', 'c')
+    transactions_dict={}
+    try:
+        if 'Transactions' in db:
+            transactions_dict=db['Transactions']
+        else:
+            db['Transactions']=transactions_dict
+    except:
+        print("Error in retrieving Transactions from user.db.")
+    transaction=transactions_dict[id]
+    transaction.set_delivery_date(d.date.today())
+    db['Transactions']=transactions_dict
+    db.close()
+    return redirect(url_for("viewtransaction", user=user))
 
 if __name__ == '__main__':
     import webbrowser
