@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<body>
+	<!--sidebar end-->
+		<div class="container-fluid" style="padding: 0; margin-top: 40px">
+		<div class="container pt-3 my-3 bg-white border">
+			<h1>Applications:</h1>	
+				<div class="form-row justify-content-center">
+					<table class="table">
+						<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">Price</th>
+						<th scope="col">View</th>
+						<th scope="col"></th>
+						</tr>
+  		{% for x in range(transaction_list|length) %}
+			{%if product_list[x] != 0%}
+					<tr>
+						<th scope="row">{{transaction_list[x].get_transaction_date()}}</th>
+						<td>{{ product_list[x].get_name() }}</td>
+						<td>{{ product_list[x].get_price() }}</td>
+						<td>
+		  <a href="/productdetail/{{ product_list[x].get_product_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
+						</td>
+						<td><button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
+							<a href="/addcart/{{ product_list[x].get_product_id() }}">Add to cart</a></button></td>
+				</tr>
+			{%else%}
+			<tr>
+				<th scope="row">
+				</th>
+				<td>
+					{{x+1}}
+				</td>
+					<td>
+					</td>
+						<td>
+						</td>
+							<td>
+							</td>
+							<td>
+							</td>
+			</tr>
+				{%endif%}
+    	{% endfor %}
+				</table>
+		</div>
+	</div>
+		</div>
+	<!--container for sidebar plus content-->
+</body>
+{% endblock %}

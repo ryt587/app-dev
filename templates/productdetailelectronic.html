@@ -243,6 +243,10 @@ label.radio input:checked+span::before {
                     <a href="/addwishlist/{{ x.get_product_id() }}">
                     <button class="btn btn-light wishlist"> 
                     <i class="fa fa-heart"></i> </button></a> 
+                    {% elif wishlist==true %}
+                    <a href="/removewishlist/{{ x.get_product_id() }}">
+                        <button class="btn btn-light wishlist"> 
+                        <i class="fa fa-heart"></i> </button></a> 
                     {%endif%}
                     {%endif%}
                 </div>

@@ -473,7 +473,7 @@ def CreateProduct():
     elif category=="clothing":
         return redirect(url_for('create_clothing'))
     elif category=="accessories":
-        return redirect(url_for('create_accessories'))
+        return redirect(url_for('create_accessory'))
     return render_template('products.html', user=user)
 
 @app.route('/createproduct/electronic',  methods=['GET', 'POST'])
@@ -493,13 +493,13 @@ def create_electronic():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),create_product_form.Price.data,
+                Product = Electronics.Electronics(create_product_form.Product_name.data, create_product_form.Product_stock.data, secure_filename(file.filename), user.get_seller_id(),create_product_form.Price.data,
                                                   create_product_form.Electronics_gpu.data, create_product_form.Electronics_cpu.data,
                                                   create_product_form.Electronics_storage.data, create_product_form.Electronics_memory.data,
                                                   create_product_form.Electronics_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
+                os.rename(app.config['UPLOAD_FOLDER'] + secure_filename(file.filename), app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
                 Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
@@ -511,28 +511,28 @@ def create_accessory():
     create_accessory_form = f.CreateAccessoriesForm(request.form)
     error=None
     no_of_error=0
-    if request.method == 'POST' and CreateAccessoriesForm.validate():
+    if request.method == 'POST' and create_accessory_form.validate():
         file = request.files['file']
         product_dict = {}
         with shelve.open('user.db', 'c') as db:
             try:
-                product_dict = db['Accessories']
+                product_dict = db['Products']
             except:
                 print("Error in retrieving Customers from Product.db.")
             if not allowed_image(file.filename):
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Accessories = Accessories.Accessories(create_accessory_form.Accessory_type, create_accessory_form.Product_name.data, create_accessory_form.Product_stock.data, file.filename, user.get_seller_id(),create_accessory_form.Price.data,
-                                            create_accessory_form.colour.data)
+                Product = Accessories.Accessories(create_accessory_form.Product_name.data, create_accessory_form.Product_stock.data, secure_filename(file.filename), user.get_seller_id(),create_accessory_form.Price.data,
+                                            create_accessory_form.Accessory_colour.data,create_accessory_form.Accessory_size.data,create_accessory_form.Accessory_type.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_PATH'] + file.filename, app.config['UPLOAD_PATH']+(str(Product.get_product_id())+file_type))
-                Product.set_product_image(str(Product.get_apply_id())+file_type)
+                os.rename(app.config['UPLOAD_FOLDER'] + secure_filename(file.filename), app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
+                Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
                 return redirect(url_for('seller'))
-    return render_template('clothing_products.html', form=create_product_form, error=error, user=user)
+    return render_template('accessory_products.html', form=create_accessory_form, error=error, user=user)
 
 @app.route('/createproduct/clothing',  methods=['GET', 'POST'])
 def create_clothing():
@@ -551,11 +551,11 @@ def create_clothing():
                     error="Missing image or invalid format of image"
                     no_of_error+=1
             if no_of_error==0:
-                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, file.filename, user.get_seller_id(),create_product_form.Price.data,
+                Product = Clothing.Clothing(create_product_form.Product_name.data, create_product_form.Product_stock.data, secure_filename(file.filename), user.get_seller_id(),create_product_form.Price.data,
                                             create_product_form.Clothing_colour.data, create_product_form.Clothing_size.data)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
                 file_type='.'+file.filename.split('.')[-1]
-                os.rename(app.config['UPLOAD_FOLDER'] + file.filename, app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
+                os.rename(app.config['UPLOAD_FOLDER'] + secure_filename(file.filename), app.config['UPLOAD_FOLDER']+(str(Product.get_product_id())+file_type))
                 Product.set_product_image(str(Product.get_product_id())+file_type)
                 product_dict[Product.get_product_id()] = Product
                 db['Products'] = product_dict
@@ -655,13 +655,13 @@ def update_clothing(id):
 @app.route('/updateproduct/accessories/<int:id>', methods=['GET', 'POST'])
 def update_accessory(id):
     update_product_form = f.UpdateAccessoriesForm(request.form)
-    if request.method == 'POST' and UpdateAccessoriesForm.validate():
+    if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
         db = shelve.open('user.db', 'w')
         product_dict = db['Products']
 
         product = product_dict[id]
-        product.set_type(update_product_form.Accessory_type.data)
+        product.set_accessory_type(update_product_form.Accessory_type.data)
         product.set_name(update_product_form.Product_name.data)
         product.set_product_stock(update_product_form.Product_stock.data)
         product.set_price(update_product_form.Price.data)
@@ -683,7 +683,7 @@ def update_accessory(id):
         update_product_form.Product_name.data = product.get_name()
         update_product_form.Product_stock.data = product.get_product_stock()
         update_product_form.Price.data = product.get_price()
-        update_product_form.Accessory_type.data = Accessory.get_Accessory_type()
+        update_product_form.Accessory_type.data = product.get_accessory_type()
         update_product_form.Accessory_colour.data = product.get_colour()
         update_product_form.Accessory_size.data = product.get_size()
 
@@ -1242,7 +1242,25 @@ def transasction():
     db['Transactions']=transactions_dict
     user.set_transaction(user.get_transaction().append(transaction.get_id()))
     users_dict[user.get_id()]=user
+    for x in transaction.get_product_list():
+        seller = users_dict[x.get_created_product()]
+        earning=seller.get_earned()
+        earning[d.datetime.today()]+=x.get_price()*0.9
+        seller.set_earned(earning)
     db['Users']=users_dict
+    earning_dict={}
+    try:
+        if 'Earnings' in db:
+            earning_dict=db['Earnings']
+        else:
+            db['Earnings']=earning_dict
+    except:
+        print("Error in retrieving Users from user.db.")
+    total_payment=0
+    for x in products_dict:
+        total_payment+=products_dict[x].get_price()
+    earning_dict[d.datetime.today()]+=total_payment*0.1
+    db['Earnings']=earning_dict
     db.close()
     return redirect(url_for('home'))
 
@@ -1374,6 +1392,62 @@ def comparesecond(id):
             if isinstance(y,Accessories.Accessories) and i!=x.get_id():
                 product_list.append(y)
     return render_template('comparesecond.html', x=x, user=user, product_list=product_list)
+
+@app.route('/approverefund/<int:id>')
+def approverefund(id):
+    refund_dict = {}
+    user_dict = {}
+    product_dict = {}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            refund_dict = db['Refunds']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        try:
+            user_dict = db['Users']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        refund=refund_dict[id] 
+        msg = Message("Refund approved",
+                  sender="chuaandspencer@example.com",
+                  recipients=[user_dict[refund.get_refund_by()].get_email()])
+        msg.body="Your refund for item {} have been approved.".format(product_dict[refund.get_product_name()])
+        mail.send(msg)
+        refund_dict.pop(id)
+        db['Refunds'] = refund_dict
+        return redirect(url_for('viewrefund'))
+    
+@app.route('/rejectrefund/<int:id>')
+def rejectrefund(id):
+    refund_dict = {}
+    user_dict = {}
+    product_dict = {}
+    with shelve.open('user.db', 'c') as db:
+        try:
+            refund_dict = db['Refunds']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        try:
+            user_dict = db['Users']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Customers from staff.db.")
+        refund=refund_dict[id] 
+        msg = Message("Refund rejected",
+                  sender="chuaandspencer@example.com",
+                  recipients=[user_dict[refund.get_refund_by()].get_email()])
+        msg.body="Your refund for item {} have been rejected.".format(product_dict[refund.get_product_name()])
+        mail.send(msg)
+        refund_dict.pop(id)
+        db['Refunds'] = refund_dict
+        return redirect(url_for('viewrefund'))
     
 
 if __name__ == '__main__':
