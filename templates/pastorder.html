@@ -2,6 +2,7 @@
 {% block title %}Past Orders{% endblock %}
 {% block content %}
 <body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <div class="container-fluid" style="padding: 0; margin-top: 40px">
 		<div class="container pt-3 my-3 bg-white border"> 
 {%if transaction_list != []%}
@@ -25,7 +26,7 @@
 			<tr>
 			<th>{{x+1}}</th>
 			<td>{{product_dict[y].get_name()}}</td>
-			<td><a href="/refund"><img src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></a></td>
+			<td><a href="/processrefund/{{product_dict[y].get_name()}}"><img src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></a></td>
 			</tr>
 			{%endfor%}
 			</table>

@@ -161,18 +161,10 @@ class OrderNumberForm(Form):
     orderno = StringField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
 
 class PaymentForm(Form):
-    creditcard = IntegerField('Order Number', [validators.DataRequired()], render_kw={"placeholder": "Order Number"})
+    creditcard = IntegerField('Credit Card Number', [validators.DataRequired()], render_kw={"placeholder": "Credit card Number"})
+    first_name = StringField('Name', [validators.DataRequired()], render_kw={"placeholder": "Name"})
     
-    def validate_creditcard(form, field):
-        creditlist=field.data.split('')
-        total=0
-        for i, x in enumerate(creditlist[:-1]):
-            if i%2==0:
-                total+=x*2
-            else:
-                total+=x
-        if (10-(total%10))!=creditlist[-1]:
-            raise ValidationError('Invalid credit card number')
+    
         
 class ProcessRefundForm(Form):
     reason=StringField('Reason', [validators.DataRequired()], render_kw={"placeholder": "Reason"})

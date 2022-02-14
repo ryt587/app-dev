@@ -393,6 +393,10 @@ span.month.focused.active
 
 <body>
 <div class="container-fluid background">
+    {% if error %}
+		<p class="error" style="background-color: white; color: red; border: solid #3A3335; padding: 5px; font-size: 30px"><strong>Error:</strong> {{ error }}</p>
+
+  {% endif %}
     <div class="row padding-top-20">
         <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 padding-horizontal-40">
             <div class="row">
@@ -461,12 +465,13 @@ span.month.focused.active
                                             <label for="card-ccv">CVC/CCV</label>&nbsp;<i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="The CVV Number on your credit card or debit card is a 3 digit number on VISA, MasterCard and Discover branded credit and debit cards. On your American Express branded credit or debit card it is a 4 digit numeric code."></i><br>
                                             <i class="fa fa-lock" aria-hidden="true"></i><input type='text' id='card-ccv' name='card-ccv' placeholder='123' title='CVC/CCV'>
                                         </fieldset>
-                                    </form>
+                                    
                                 </div>
                                 <div class="col-12 panel-footer creditcard-footer">
                                     <div class="row">
-                                        <div class="col-12 align-right"><a href="/retrievecart"><button class="cancel">Cancel</button></a>&nbsp;<a href="/transaction"><button class="confirm">Confirm & Pay</button></div></a>
+                                        <div class="col-12 align-right"><a href="/retrievecart"><button class="cancel">Cancel</button></a>&nbsp;<button class="confirm" type="submmit">Confirm & Pay</button></div>
                                     </div>
+                                </form>
                                 </div>
                             </div>
                         </div>
