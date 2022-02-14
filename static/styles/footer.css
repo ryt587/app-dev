@@ -1,4 +1,3 @@
-body{margin-top:20px;}
 .footer_area {
     position: relative;
     z-index: 1;
@@ -155,11 +154,11 @@ body{margin-top:20px;}
         left: 100%;
     }
 }
-ol li, ul li {
+.footer ol li,.footer ul li {
     list-style: none;
 }
 
-ol, ul {
+.footer ol, .footer ul {
     margin: 0;
     padding: 0;
 }
