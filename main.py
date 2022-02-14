@@ -653,7 +653,7 @@ def update_clothing(id):
         return render_template('updateclothing.html', form=update_product_form, user=user)
 
 @app.route('/updateproduct/accessories/<int:id>', methods=['GET', 'POST'])
-def update_accessory(id):
+def update_accessories(id):
     update_product_form = f.UpdateAccessoriesForm(request.form)
     if request.method == 'POST' and update_product_form.validate():
         product_dict = {}
