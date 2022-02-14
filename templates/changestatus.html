@@ -1,13 +1,89 @@
 {% extends "staff.html" %}
 {% block title %}Status Page{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 <style>
-  img {
-    border-radius: 4px;
-    padding: 5px;
-    width: 200px;
-    height: 330px;
-  }
+.bs4-order-tracking {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: #878788;
+    padding-left: 0px;
+    margin-top: 30px
+}
+
+.bs4-order-tracking li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400;
+    color: #878788;
+    text-align: center
+}
+
+.bs4-order-tracking li:first-child:before {
+    margin-left: 15px !important;
+    padding-left: 11px !important;
+    text-align: left !important
+}
+
+.bs4-order-tracking li:last-child:before {
+    margin-right: 5px !important;
+    padding-right: 11px !important;
+    text-align: right !important
+}
+
+.bs4-order-tracking li>div {
+    color: #fff;
+    width: 29px;
+    text-align: center;
+    line-height: 29px;
+    display: block;
+    font-size: 12px;
+    background: #878788;
+    border-radius: 50%;
+    margin: auto
+}
+
+.bs4-order-tracking li:after {
+    content: '';
+    width: 150%;
+    height: 2px;
+    background: #878788;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 15px;
+    z-index: -1
+}
+
+.bs4-order-tracking li:first-child:after {
+    left: 50%
+}
+
+.bs4-order-tracking li:last-child:after {
+    left: 0% !important;
+    width: 0% !important
+}
+
+.bs4-order-tracking li.active {
+    font-weight: bold;
+    color: #dc3545
+}
+
+.bs4-order-tracking li.active>div {
+    background: #dc3545
+}
+
+.bs4-order-tracking li.active:after {
+    background: #dc3545
+}
+
+.card-timeline {
+    background-color: #fff;
+    z-index: 0
+}
 </style>
 <body>
 <div class="container center pt-3 my-3 bg-white border">
@@ -21,64 +97,95 @@
       <th scope="row" style="border-top: none;">Purchase Date:</th>
       <td style="border-top: none;">{{ transaction.get_transaction_date() }}</td>
     </tr>
-  </tbody>
-</table>
+<tr>
+	<td colspan="2">
+<div class="container-fluid">
 <!-- try add these inside -->
 {% if transaction.get_status()==1 %}
-  <div style="background-color: #beb7b7;">
-  <button type="button" class="btn" style="background-color: #EB5E55; margin-bottom: 1em;">
-    Order Processed
-  </button>
-  <button type="button" class="btn">
-    <a href="/addstatus/{{ transaction.get_id() }}">Order Shipped</a></button>
-  <button type="button" class="btn">
-    Order En Route</button>
-  <button type="button" class="btn">
-    Order Arrived
-  </button>     
-  </div>
+  <div class="card card-timeline px-2 border-none">
+    <ul class="bs4-order-tracking">
+        <li class="step active">
+            <div><i class="fas fa-user"></i></div> Order Processed
+        </li>
+      <a href="/addstatus/{{ transaction.get_id() }}">
+        <li class="step">
+            <div><i class="fas fa-bread-slice"></i></div> Order Shipped
+        </li></a>
+        <li class="step">
+            <div><i class="fas fa-truck"></i></div> Order En Route
+        </li>
+        <li class="step ">
+            <div><i class="fas fa-birthday-cake"></i></div> Order Arrived
+        </li>
+    </ul>
+</div>
   {% endif %}
   {% if transaction.get_status()==2 %}
-  <div style="background-color: #beb7b7;">
-  <button type="button" style="background-color: #EB5E55; margin-bottom: 1em;">
-    <a href="/removestatus/{{ transaction.get_id() }}">Order Processed</a>
-  </button>
-  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-    Order Shipped</button>
-  <button type="button" class="btn">
-    <a href="/addstatus/{{ transaction.get_id() }}">Order En Route</a></button>
-  <button type="button" class="btn">
-    Order Arrived
-  </button>     
-  </div>
+    <div class="card card-timeline px-2 border-none">
+    <ul class="bs4-order-tracking">
+      <a href="/removestatus/{{ transaction.get_id() }}">
+        <li class="step active">
+            <div><i class="fas fa-user"></i></div> Order Processed
+        </li></a>
+        <li class="step active">
+            <div><i class="fas fa-bread-slice"></i></div> Order Shipped
+        </li>
+      <a href="/addstatus/{{ transaction.get_id() }}">
+        <li class="step">
+            <div><i class="fas fa-truck"></i></div> Order En Route
+        </li></a>
+        <li class="step">
+            <div><i class="fas fa-birthday-cake"></i></div> Order Arrived
+        </li>
+    </ul>
+</div>
   {% endif %}
   {% if transaction.get_status()==3 %}
-  <div style="background-color: #beb7b7;">
-  <button type="button" class="btn" style="background-color: #EB5E55; margin-bottom: 1em;">
-    Order Processed
-  </button>
-  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-    <a href="/removestatus/{{ transaction.get_id() }}">Order Shipped</a></button>
-  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-    Order En Route</button>
-  <button type="button" class="btn">
-    <a href="/addstatus/{{ transaction.get_id() }}">Order Arrived</a>
-  </button>     
-  </div>
+     <div class="card card-timeline px-2 border-none">
+    <ul class="bs4-order-tracking">
+        <li class="step active">
+            <div><i class="fas fa-user"></i></div> Order Processed
+        </li>
+      <a href="/removestatus/{{ transaction.get_id() }}">
+        <li class="step active">
+            <div><i class="fas fa-bread-slice"></i></div> Order Shipped
+        </li></a>
+        <li class="step active">
+            <div><i class="fas fa-truck"></i></div> Order En Route
+        </li>
+      <a href="/addstatus/{{ transaction.get_id() }}">
+        <li class="step ">
+            <div><i class="fas fa-birthday-cake"></i></div> Order Arrived
+        </li></a>
+    </ul>
+</div>
   {% endif %}
   {% if transaction.get_status()==4 %}
-  <div style="background-color: #beb7b7;">
-  <button type="button" class="btn" style="background-color: #EB5E55; margin-bottom: 1em;">
-    Order Processed
-  </button>
-  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-    Order Shipped</button>
-  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-    <a href="/removestatus/{{ transaction.get_id() }}">Order En Route</a></button>
-  <button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
-    Order Arrived
-  </button>     
-  </div>
-</body>
+     <div class="card card-timeline px-2 border-none">
+    <ul class="bs4-order-tracking">
+        <li class="step active">
+            <div><i class="fas fa-user"></i></div> Order Processed
+        </li>
+        <li class="step active">
+            <div><i class="fas fa-bread-slice"></i></div> Order Shipped
+        </li>
+<a href="/removestatus/{{ transaction.get_id() }}">
+        <li class="step active">
+            <div><i class="fas fa-truck"></i></div> Order En Route
+        </li></a>
+        <li class="step active">
+            <div><i class="fas fa-birthday-cake"></i></div> Order Arrived
+        </li>
+    </ul>
+</div>
+
 {% endif %}
+		</div>
+		</td>
+	</tr>
+
+	  </tbody>
+</table>
+</div>
+  </body>
 {% endblock %}
