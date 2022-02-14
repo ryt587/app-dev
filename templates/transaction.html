@@ -1,5 +1,6 @@
 {% block title %}Transaction{% endblock %}
 {% block content %}
+{% from "includes/_formHelper.html" import render_field %}
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
@@ -404,9 +405,6 @@ span.month.focused.active
                                         <div class="col-6 basket-title">
                                             <span class="description">review your</span><br><span class="emphasized">Cart Summary</span>
                                         </div>
-                                        <div class="col-6 order-number align-right">
-                                            <span class="description">order #</span><br><span class="emphasized">{{order_number}}</span>
-                                        </div>
                                     </div>
                                     <div class="row column-titles padding-top-10">
                                         <div class="col-2 align-center"><span>Photo</span></div>
@@ -418,10 +416,9 @@ span.month.focused.active
                                 <div class="col-12 panel-body basket-body">
                                     {% for x in product_list %}
                                     <div class="row product">
-                                        <div class="col-2 product-image"><img src="{{thumbnail}}"></div>
-                                        <div class="col-5">{{name}}<br><span class="additional">{{additional}}</span></div>
-                                        <div class="col-2 align-right"><span class="sub">{{unit}}</span> {{quantity}}</div>
-                                        <div class="col-3 align-right"><span class="sub">{{{currency}}}</span> {{price}}</div>
+                                        <div class="col-2 product-image"><img src="{{url_for('static', filename='images/cert/'+x.get_image())}}"></div>
+                                        <div class="col-5">{{x.get_name()}}<br></div>
+                                        <div class="col-3 align-right"> ${{x.get_price()}}</div>
                                     </div>
                                     {{% endfor %}}
                                 </div>
@@ -429,16 +426,14 @@ span.month.focused.active
                                     <hr>
                                     <div class="row">
                                         <div class="col-8 align-right description"><div class="dive">Subtotal</div></div>
-                                        <div class="col-4 align-right"><span class="emphasized">{{{currency}}}{{subtotal}}</span></div>
+                                        <div class="col-4 align-right"><span class="emphasized">${{total_payment}}</span></div>
                                         <div class="col-8 align-right description"><div class="dive">Taxes</div></div>
-                                        <div class="col-4 align-right"><span class="emphasized">{{{currency}}}{{taxes}}</span></div>
-                                        <div class="col-8 align-right description"><div class="dive">Shipping</div></div>
-                                        <div class="col-4 align-right"><span class="emphasized">{{{currency}}}{{shipping_cost}}</span></div>
+                                        <div class="col-4 align-right"><span class="emphasized">${{total_payment*0.07}}</span></div>
                                     </div>
                                     <hr>
                                     <div class="row">
                                         <div class="col-8 align-right description"><div class="dive">Total</div></div>
-                                        <div class="col-4 align-right"><span class="very emphasized">{{{currency}}}{{total}}</span></div>
+                                        <div class="col-4 align-right"><span class="very emphasized">${{total_payment*1.07}}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -460,7 +455,7 @@ span.month.focused.active
                                         </fieldset>
                                         <fieldset>
                                             <label for="card-number">Card Number</label><br>
-                                            <i class="fa fa-credit-card" aria-hidden="true"></i><input type='text' id='card-number' name='card-number' placeholder='1234 5678 9123 4567' title='Card Number'>
+                                            <i class="fa fa-credit-card" aria-hidden="true"></i>{{ render_field(form.creditno, class="form-control") }}
                                         </fieldset>
                                         <fieldset>
                                             <label for="card-expiration">Expiration Date</label><br>

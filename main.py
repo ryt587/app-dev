@@ -1153,15 +1153,16 @@ def pastorder():
     products_dict={}
     try:
         if 'Products' in db:
-            transactions_dict=db['Products']
+            products_dict=db['Products']
         else:
             db['Products']=products_dict
     except:
         print("Error in retrieving Transactions from user.db.")
     db.close()
-    transaction_list=[x for x in user.get_transaction()]
-    for i, x in enumerate(transaction_list):
-        transaction_list[i]=transactions_dict[x]
+    transaction_list=[]
+    for x in transactions_dict:
+        if transactions_dict[x].get_delivery_date!=0:
+            transaction_list.append(transactions_dict[x])
     return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_dict=products_dict)
 
 @app.route('/searchcategory/<category>')
@@ -1263,8 +1264,11 @@ def tracking(order):
     transasction=transactions_dict[order]
     return render_template('tracking.html', user=user, transaction=transasction)
 
-@app.route('/payment')
+@app.route('/payment', methods=['GET', 'POST'])
 def payment():
+    payment_form=f.PaymentForm(request.form)
+    if request.method == 'POST' and payment_form.validate():
+        return redirect(url_for('transaction'))
     db = shelve.open('user.db', 'r')
     products_dict={}
     try:
@@ -1281,7 +1285,7 @@ def payment():
     product_list=[]
     for x in user.get_cart():
         product_list.append(products_dict[x])
-    return render_template('payment.html', user=user, total_payment=total_payment, product_list=product_list)
+    return render_template('transaction.html', user=user, total_payment=total_payment, product_list=product_list)
 
 @app.route('/transaction')
 def transasction():
@@ -1330,7 +1334,7 @@ def transasction():
         seller = users_dict[products_dict[x].get_created_product()]
         earning=seller.get_earned()
         print(earning)
-        earning[d.date.today()]+=products_dict[x].get_price()*0.9
+        earning[d.date.today()]+=products_dict[x].get_price()*(1/1.07)*0.9
         seller.set_earned(earning)
     db['Users']=users_dict
     earning_dict={}
@@ -1344,7 +1348,7 @@ def transasction():
     total_payment=0
     for x in products_dict:
         total_payment+=products_dict[x].get_price()
-    earning_dict[d.date.today()]+=total_payment*0.1
+    earning_dict[d.date.today()]+=total_payment*(1/1.07)*0.1
     db['Earnings']=earning_dict
     msg = Message("Transaction completed",
                   sender="chuaandspencer@example.com",
