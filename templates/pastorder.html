@@ -86,20 +86,21 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			<th>{{product_dict[y].get_name()}}</th>
 			<td>
 				<button type="button" class="btn" id="myBtn">
-					<img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund"></td>
+					<img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund">
 				</button>
+				</td>
 			</tr>
 			<div id="myModal" class="modal">
 				  <div class="modal-content">
     			<span class="close">&times;</span>
-				<form>
+				<form method="GET" action="{{url_for('processrefund')}}">
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Product Number</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" value="{{product_dict[y].get_product_id()}}" aria-describedby="emailHelp" disabled readonly="readonly">
+    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{product_dict[y].get_product_id()}}" aria-describedby="emailHelp" readonly="readonly">
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Reason For Refund</label>
-    <input type="text" class="form-control" id="exampleInputPassword1">
+    <input type="text" class="form-control" name="reason" id="exampleInputPassword1">
   </div>
   <button type="submit" class="btn btn-primary">Send</button>
 </form>

@@ -15,7 +15,7 @@
 <tbody>
     <tr>
       <th scope="row" style="border-top: none;">Product Name:</th>
-      <td style="border-top: none;">{{ refund.get_product_name() }}</td>
+      <td style="border-top: none;">{{ product_dict[refund.get_product_name()].get_product_name() }}</td>
     </tr>
     <tr>
       <th scope="row" style="border-top: none;">Reason:</th>
@@ -28,10 +28,8 @@
   <a href="/approverefund/{{ refund.get_id() }}">Approve</a>
 </button>
 <!-- delete button -->
-<form action="{{url_for('reject_seller', id=application.get_apply_id())}}" method="POST">
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="myModal_{{application.get_apply_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+<button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">
   <a href="/rejectrefund/{{ refund.get_id() }}">Reject</a>
 </button>     
-</form>
 </body>
 {% endblock %}

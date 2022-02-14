@@ -13,15 +13,16 @@
 						<th scope="col">Product ID</th>
 						<th scope="col">Product Name</th>
 						<th scope="col">Reason</th>
+						<th scope="col"></th>
 						</tr>
   		{% for x in range(refund_list|length) %}
 			{%if refund_list[x] != 0%}
 					<tr>
 						<th scope="row">{{x+1}}</th>
 						<td>{{ refund_list[x].get_id() }}</td>
-						<td>{{ refund_list[x].get_product_name() }}</td>
+						<td>{{ product_dict[refund_list[x].get_product_name()].get_product_name() }}</td>
 						<td>{{ refund_list[x].get_reason() }}</td>
-		  <a href="/refund/{{ refund_list[x].get_apply_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
+						<td><a href="/refund/{{ refund_list[x].get_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 						</td>
 				</tr>
 			{%else%}

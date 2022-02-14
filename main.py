@@ -257,7 +257,7 @@ def termsandconditions():
 
 @app.route('/Aboutus')
 def Aboutus():
-    return render_template('Aboutus.html')
+    return render_template('AboutUs.html')
 
 
 @app.route('/deleteUser/', methods=['GET', 'POST'])
@@ -1143,7 +1143,7 @@ def retrievecart():
         products_list.append(0)
     return render_template("retrievecart.html", user=user, products_list=products_list)
 
-@app.route('/pastorder')
+@app.route('/pastorder', methods=['GET', 'POST'])
 def pastorder():
     db=shelve.open('user.db', 'c')
     transactions_dict={}
@@ -1385,25 +1385,26 @@ def transaction():
 def transactionsuccessful():
     return render_template("transactionsuccessful.html", user=user)
 
-@app.route('/viewrefund', methods=['GET', 'POST'])
+@app.route('/viewrefund')
 def viewrefund():
-    if request.method == 'POST':
-        id=request.form['id']
-        reason=request.form['reason']
-        return redirect(url_for('processrefund', id=id, reason=reason))
     refund_dict={}
+    product_dict = {}
     with shelve.open('user.db', 'c') as db:
         try:
             refund_dict = db['Refunds']
         except:
             print("Error in retrieving Customers from refund.db")
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Customers from Product.db.")
         refund_list=[]
         if refund_dict!={}:
             for x in refund_dict:
                 refund_list.append(refund_dict[x])
     while len(refund_list) < 5:
         refund_list.append(0)
-    return render_template('viewrefund.html', refund_list=refund_list, user=user)
+    return render_template('viewrefund.html', refund_list=refund_list, user=user, product_dict=product_dict)
 
 @app.route('/viewtransaction')
 def viewtransaction():
@@ -1424,13 +1425,19 @@ def viewtransaction():
 
 @app.route('/refund/<int:id>')
 def refund(id):
+    refund_dict={}
+    product_dict={}
     with shelve.open('user.db', 'c') as db:
         try:
             refund_dict = db['Refunds']
         except:
             print("Error in retrieving Customers from refund.db.")
+        try:
+            product_dict = db['Products']
+        except:
+            print("Error in retrieving Customers from refund.db.")
         refund=refund_dict[id]
-    return render_template('refund.html', refund=refund, user=user)
+    return render_template('refund.html', refund=refund, user=user, product_dict=product_dict)
 
 @app.route('/changestatus/<id>')
 def changestatus(id):
@@ -1579,8 +1586,10 @@ def rejectrefund(id):
         db['Refunds'] = refund_dict
         return redirect(url_for('viewrefund'))
 
-@app.route('/processrefund/<int:id>/<reason>')
-def processrefund(id, reason):
+@app.route('/processrefund')
+def processrefund():
+    id=int(request.args.get('id'))
+    reason=request.args.get('reason')
     db=shelve.open('user.db', 'c')
     refunds_dict={}
     try:
@@ -1591,7 +1600,7 @@ def processrefund(id, reason):
     except:
         print("Error in retrieving Transactions from user.db.")
     refund=Refund.Refund(id,reason,user.get_user_id())
-    refunds_dict[refund.get_refund_id()] = refund
+    refunds_dict[refund.get_id()] = refund
     db['Refunds'] = refunds_dict
     db.close()
     return redirect(url_for("refundsuccessful"))
