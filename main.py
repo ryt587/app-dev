@@ -1431,7 +1431,7 @@ def addstatus(id):
 
 @app.route('/removestatus/<id>')
 def removestatus(id):
-    db = shelve.open('user.db', 'cZ')
+    db = shelve.open('user.db', 'c')
     transactions_dict={}
     try:
         if 'Transactions' in db:
