@@ -1280,12 +1280,13 @@ def payment():
         print("Error in retrieving Products from user.db.")
     db.close()
     total_payment=0
-    for x in products_dict:
+    transaction_list= user.get_cart()
+    for x in transaction_list:
         total_payment+=products_dict[x].get_price()
     product_list=[]
     for x in user.get_cart():
         product_list.append(products_dict[x])
-    return render_template('transaction.html', user=user, total_payment=total_payment, product_list=product_list)
+    return render_template('transaction.html', user=user, total_payment=total_payment, product_list=product_list, form=payment_form)
 
 @app.route('/transaction')
 def transasction():
