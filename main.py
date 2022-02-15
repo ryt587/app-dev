@@ -136,10 +136,8 @@ def login():
                     return redirect(url_for('seller'))
                 elif isinstance(value, Staff.Staff):
                     return redirect(url_for('staff'))
-            elif value.get_email()!=create_user_form.email.data:
-                error='Email does not exist.'
             else:
-                error='Incorrect password, try again.'
+                error='Either email or password is incorrect'
         db.close()
     return render_template('Login.html', form=create_user_form, error=error)
 
