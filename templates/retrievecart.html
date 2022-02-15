@@ -40,7 +40,9 @@
 				{%endif%}
     	{% endfor %}
 				</table>
+				{%if products_list == []%}
 					<a href="/payment" style="position: absolute; bottom: 8px; right: 16px;"><button type="button" class="btn" style="background-color: #D81E5B; margin-bottom: 1em;">Checkout</button></a>
+					{%endif%}
 		</div>
 	</div>
 

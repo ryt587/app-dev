@@ -14,7 +14,6 @@ from flask_mail import Mail, Message
 import datetime as d
 import itertools
 import pyotp
-import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
