@@ -7,6 +7,7 @@
 		<div class="container pt-3 my-3 bg-white border">
 			<h1>Applications:</h1>	
 				<div class="form-row justify-content-center">
+				{%if applications_list != []%}
 					<table class="table">
 						<tr>
 						<th scope="col">#</th>
@@ -14,31 +15,22 @@
 						<th scope="col">Name</th>
 						<th scope="col">View</th>
 						</tr>
-  		{% for x in range(applications_list|length) %}
-			{%if applications_list[x] != 0%}
-					<tr>
-						<th scope="row">{{x+1}}</th>
-						<td>{{ applications_list[x].get_email() }}</td>
-						<td>{{ applications_list[x].get_name() }}</td>
-						<td>
-		  <a href="/retrieveapply/{{ applications_list[x].get_apply_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
-						</td>
-				</tr>
-			{%else%}
-			<tr>
-				<th scope="row">
-					{{x+1}}
-				</th>
-					<td>
-					</td>
-						<td>
-						</td>
+
+  					{% for x in range(applications_list|length) %}
+						<tr>
+							<th scope="row">{{x+1}}</th>
+							<td>{{ applications_list[x].get_email() }}</td>
+							<td>{{ applications_list[x].get_name() }}</td>
 							<td>
+							<a href="/retrieveapply/{{ applications_list[x].get_apply_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 							</td>
-			</tr>
+						</tr>
+					{% endfor %}
+						</table>
+				{%else%}
+					<h2>No Pending Applications</h2>
 				{%endif%}
-    	{% endfor %}
-				</table>
+
 		</div>
 	</div>
 		</div>

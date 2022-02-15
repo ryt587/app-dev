@@ -2,14 +2,16 @@
 {% block title %}Search{% endblock %}
 {% block content %}
 <style type="text/css">
-  .gallery{
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  margin: 50px 0;
-  }
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 50px 0;
+    justify-content: space-evenly;
+    align-items: stretch;
+    overflow: auto;
+    max-height: 100vh;
+}
   .content{
   width: 24%;
   margin: 15px;
@@ -82,7 +84,7 @@ h3 {
 			<div class="content bg-white">
         <a href="/productdetail/{{ product_list[x].get_product_id() }}">
 			<img src="{{url_for('static', filename='images/product_image/'+product_list[x].get_product_image())}}" alt="product_list[x].get_name()">
-			<h3>{{product_list[x].get_name()}}</h3>
+			<h2 style="font-size: 2rem;">{{product_list[x].get_name()}}</h2>
       </a>
 			</div>
 	{%endfor%}

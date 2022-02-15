@@ -2,14 +2,16 @@
 {% block title %}Homepage Page{% endblock %}
 {% block content %}
 <style type="text/css">
-  .gallery{
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  margin: 50px 0;
-  }
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 50px 0;
+    justify-content: space-evenly;
+    align-items: stretch;
+    overflow: auto;
+    max-height: 100vh;
+}
   .content{
   width: 24%;
   margin: 15px;
@@ -119,14 +121,14 @@ h3 {
 <div class="content bg-white">
   <a href="/searchcategory/electronic">
 <img src="{{url_for('static', filename='images/electronics.jpg')}}" alt="electronic">
-<h3>Electronic</h3>
+<h2 style="font-size: 2rem;">Electronic</h2>
     </a>
 </div>
 
 <div class="content bg-white">
   <a href="/searchcategory/clothing">
 <img src="{{url_for('static', filename='images/clothing.jpg')}}" alt="clothing">
-<h3>Clothing</h3>
+<h2 style="font-size: 2rem;">Clothing</h2>
     </a>
 </div>
 
@@ -134,7 +136,7 @@ h3 {
 <div class="content bg-white">
   <a href="/searchcategory/accessories">
 <img src="{{url_for('static', filename='images/accessories.jpg')}}" alt="accessories">
-<h3>Accessories</h3>
+<h2 style="font-size: 2rem;">Accessories</h2>
     </a>
 </div>
 

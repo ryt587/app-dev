@@ -5,8 +5,9 @@
 	<!--sidebar end-->
 		<div class="container-fluid" style="padding: 0;">
 		<div class="container pt-3 my-3 bg-white border">
-			<h1>Refunds:</h1>	
+			<h1>Refunds:</h1>
 				<div class="form-row justify-content-center">
+				{%if refund_list != []%}
 					<table class="table">
 						<tr>
 						<th scope="col">#</th>
@@ -15,33 +16,22 @@
 						<th scope="col">Reason</th>
 						<th scope="col"></th>
 						</tr>
-  		{% for x in range(refund_list|length) %}
-			{%if refund_list[x] != 0%}
-					<tr>
+  					{% for x in range(refund_list|length) %}
+						<tr>
 						<th scope="row">{{x+1}}</th>
 						<td>{{ refund_list[x].get_id() }}</td>
 						<td>{{ product_dict[refund_list[x].get_product_name()].get_name() }}</td>
 						<td>{{ refund_list[x].get_reason() }}</td>
 						<td><a href="/refund/{{ refund_list[x].get_id() }}"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="view"></a>
 						</td>
-				</tr>
-			{%else%}
-			<tr>
-				<th scope="row">
-					{{x+1}}
-				</th>
-					<td>
-					</td>
-						<td>
-						</td>
-						<td>
-						</td>
-							<td>
-							</td>
-			</tr>
+						</tr>
+					{% endfor %}
+						</table>
+				{%else%}
+				<h2>No Pending Refund Requests</h2>
 				{%endif%}
-    	{% endfor %}
-				</table>
+
+
 		</div>
 	</div>
 		</div>

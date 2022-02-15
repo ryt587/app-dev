@@ -5,89 +5,82 @@
 <div class="container-fluid" style="padding: 0;">
 	<div class="container pt-3 my-3 bg-white border">
 		<h1>Staff members:</h1>
-  <table class="table table-striped bg-white">
-	  
-    <thead>
-      <tr>
-		<th scope="col">#</th>
-        <th scope="col">First Name</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Staff Role</th>
-        <th scope="col">Phone Number</th>
-		<th scope="col">Update</th>
-		<th scope="col">Delete</th>
-    </tr>
-</thead>
-<tbody>
-	{% for x in range(users_list|length)%}
-		{%if users_list[x] != 0%}		 	 
-			<tr>
-			  <th>
-				  {{users_list[x].get_staff_id()}}
-				</th>
-			  <td>{{ users_list[x].get_name() }}</td>
-			  <td>{{ users_list[x].get_last_name() }}</td>
-			  <td>{{ users_list[x].get_email() }}</td>
-			  <td>{{ users_list[x].get_staff_role() }}</td>
-			  <td>{{ users_list[x].get_phone_number() }}</td>
-			  {% if users_list[x].get_email()!=user.get_email() %}
-			  <td><a href="/updatestaff/{{users_list[x].get_staff_id()}}" class="btn btn-warning">Update</a></td>
-			  <td>
-				<form action="{{url_for('delete_staff', id=users_list[x].get_staff_id())}}" method="POST">
+		{%if users_list != []%}
+			  <table class="table table-striped bg-white">
 
-				  <!-- Button to Open the Modal -->
-				  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{users_list[x].get_staff_id()}}">
-					Delete
-				  </button>
+				<thead>
+				  <tr>
+					<th scope="col">#</th>
+					<th scope="col">First Name</th>
+					<th scope="col">Last Name</th>
+					<th scope="col">Email</th>
+					<th scope="col">Staff Role</th>
+					<th scope="col">Phone Number</th>
+					<th scope="col">Update</th>
+					<th scope="col">Delete</th>
+				</tr>
+				</thead>
+				<tbody>
+			  {% for x in range(users_list|length)%}
+					<tr>
+					  <th>
+						  {{users_list[x].get_staff_id()}}
+						</th>
+					  <td>{{ users_list[x].get_name() }}</td>
+					  <td>{{ users_list[x].get_last_name() }}</td>
+					  <td>{{ users_list[x].get_email() }}</td>
+					  <td>{{ users_list[x].get_staff_role() }}</td>
+					  <td>{{ users_list[x].get_phone_number() }}</td>
+					  {% if users_list[x].get_email()!=user.get_email() %}
+					  <td><a href="/updatestaff/{{users_list[x].get_staff_id()}}" class="btn btn-warning">Update</a></td>
+					  <td>
+						<form action="{{url_for('delete_staff', id=users_list[x].get_staff_id())}}" method="POST">
 
-				  <!-- The Modal -->
-				  <div class="modal" id="myModal_{{users_list[x].get_staff_id()}}">
-					<div class="modal-dialog">
-					  <div class="modal-content">
+						  <!-- Button to Open the Modal -->
+						  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{users_list[x].get_staff_id()}}">
+							Delete
+						  </button>
 
-						<!-- Modal Header -->
-						<div class="modal-header">
-						  <h4 class="modal-title">Delete Confirmation</h4>
-						  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-						</div>
+						  <!-- The Modal -->
+						  <div class="modal" id="myModal_{{users_list[x].get_staff_id()}}">
+							<div class="modal-dialog">
+							  <div class="modal-content">
 
-						<!-- Modal body -->
-						<div class="modal-body">
-						  Are you sure you want to delete {{users_list[x].get_name()}} {{users_list[x].get_last_name()}}?
-						</div>
+								<!-- Modal Header -->
+								<div class="modal-header">
+								  <h4 class="modal-title">Delete Confirmation</h4>
+								  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+								</div>
 
-						<!-- Modal footer -->
-						<div class="modal-footer">
-						  <input type="submit" value="Delete" class="btn btn-danger">
-						  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-						</div>
+								<!-- Modal body -->
+								<div class="modal-body">
+								  Are you sure you want to delete {{users_list[x].get_name()}} {{users_list[x].get_last_name()}}?
+								</div>
 
-					  </div>
-					</div>
-				  </div>      
-				</form>
-			  </td>
-				{%else%}
-				<td></td>
-				<td></td>
-			  {% endif %}
-			</tr>
+								<!-- Modal footer -->
+								<div class="modal-footer">
+								  <input type="submit" value="Delete" class="btn btn-danger">
+								  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+								</div>
+
+							  </div>
+							</div>
+						  </div>
+						</form>
+					  </td>
+						{%else%}
+						<td></td>
+						<td></td>
+					  {% endif %}
+					</tr>
+
+			  {% endfor %}
+			  </tbody>
+			  </table>
 		{%else%}
-		<tr>
-		<th>#</th>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		</tr>
+			<h2>No Staff Currently</h2>
 		{%endif%}
-  {% endfor %}
-</tbody>
-</table>
+
 </div>
 </div>
 {% endblock %}

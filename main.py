@@ -329,8 +329,6 @@ def viewapply():
         if applications_dict!={}:
             for x in applications_dict:
                 applications_list.append(applications_dict[x])
-    while len(applications_list) < 5:
-        applications_list.append(0)
     return render_template('viewapplication.html', applications_list=applications_list, user=user)
 
 
@@ -410,8 +408,6 @@ def retrieve_staff():
         if str(key)[:2]=='St':
             customer = customers_dict.get(key)
             customers_list.append(customer)
-    while len(customers_list) < 5:
-        customers_list.append(0)
     return render_template('retrievestaff.html', users_list=customers_list, user=user)
 
 
@@ -871,8 +867,6 @@ def retrieve_customer():
         if str(key)[0]=='C':
             customer = customers_dict.get(key)
             customers_list.append(customer)
-    while len(customers_list) < 5:
-        customers_list.append(0)
     return render_template('retrievecustomers.html', users_list=customers_list, user=user)
 
 @app.route('/retrievesellers')
@@ -887,8 +881,6 @@ def retrieve_seller():
         if str(key)[:2]=='Se':
             customer = customers_dict.get(key)
             customers_list.append(customer)
-    while len(customers_list) < 5:
-        customers_list.append(0)
     return render_template('retrievesellers.html', users_list=customers_list, user=user)
 
 @app.route('/banUser/<id>', methods=['GET', 'POST'])
@@ -1427,8 +1419,6 @@ def viewrefund():
         if refund_dict!={}:
             for x in refund_dict:
                 refund_list.append(refund_dict[x])
-    while len(refund_list) < 5:
-        refund_list.append(0)
     return render_template('viewrefund.html', refund_list=refund_list, user=user, product_dict=product_dict)
 
 @app.route('/viewtransaction')
