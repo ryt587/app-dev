@@ -32,7 +32,7 @@
 	</td><td>
 <!-- delete button -->
 <form action="{{url_for('delete_staff', id=user.get_staff_id())}}" method="POST">
-<button type="button" class="btn" data-toggle="modal" data-target="myModal_{{user.get_staff_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
+<button type="button" class="btn" data-toggle="modal" data-target="#myModal_{{user.get_staff_id()}}" style="background-color: #D81E5B; margin-bottom: 1em;">
   Delete
 </button>
 
@@ -60,7 +60,7 @@
 
     </div>
   </div>
-</div>      
+</div>     
 </form>
 	</td>
 		</tr>

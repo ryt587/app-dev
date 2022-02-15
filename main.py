@@ -796,10 +796,11 @@ def delete_seller():
     users_dict = db['Users']
     products_dict=db['Products']
     products_list=[]
-    if products_dict[x].get_created_product()==user.get_seller_id():
-        products_list.append(products_dict[x])
+    for x in products_dict:
+        if products_dict[x].get_created_product()==user.get_seller_id():
+            products_list.append(products_dict[x])
     for x in products_list:
-        x.set_stock(0)
+        x.set_product_stock(0)
         x.set_created_product(0)
         products_dict[x.get_product_id()]=x
 
@@ -902,10 +903,11 @@ def ban_user(id):
     products_list = []
     user2=users_dict[id]
     if isinstance(user2, Seller.Seller):
-        if products_dict[x].get_created_product()==user2.get_seller_id():
-            products_list.append(products_dict[x])
+        for x in products_dict:
+            if products_dict[x].get_created_product()==user2.get_seller_id():
+                products_list.append(products_dict[x])
         for x in products_list:
-            x.set_stock(0)
+            x.set_product_stock(0)
             x.set_created_product(0)
             products_dict[x.get_product_id()]=x
     msg = Message("Account have been banned",
