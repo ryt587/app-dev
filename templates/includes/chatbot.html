@@ -1,8 +1,9 @@
+<link rel="stylesheet" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <style>
 #chatbot{
-   position:absolute;
-   bottom:0;
-   right:0;
+   position: fixed;
+   bottom:40px;
+   right:40px;
 }
 .btn-circle.btn-xl {
     width: 70px;
@@ -14,14 +15,23 @@
 }
 
 .btn-circle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 0px;
-    border-radius: 15px;
+    width: 70px;
+    height: 70px;
+    padding: 10px 10px;
+    border-radius: 35px;
     text-align: center;
     font-size: 12px;
-    line-height: 1.42857;
+    line-height: 1.33;
 }
-
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
 </style>
-<button id="chatbot" type="button" class="btn btn-default btn-circle btn-lg"><img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/128/5705/5705176.png"></button>
+<button id="chatbot" onclick="gopage()" type="button" class="btn btn-default btn-circle btn-lg"><img height="50px" width="50px" src="https://cdn-icons-png.flaticon.com/128/5705/5705176.png"></button>
+<script>
+    function gopage(){
+        window.open("https://console.dialogflow.com/api-client/demo/embedded/6486b1fc-abde-473e-8059-fb96d860ded9");
+    }
+</script>
