@@ -827,7 +827,7 @@ def reportseller():
                 productlist.append(users_dict[x])
     def byimpression(product):
         return product.get_impression()
-    productlist=sorted(productlist, key= byimpression)
+    productlist=(sorted(productlist, key= byimpression))[::-1]
     db.close()
     return render_template('reportseller.html', user=user, productlist=productlist, total_impression=total_impression)
 
@@ -1587,7 +1587,7 @@ def approverefund(id, transaction_id, product_id):
         msg = Message("Refund approved",
                   sender="chuaandspencer@example.com",
                   recipients=[user_dict[refund.get_refund_by()].get_email()])
-        msg.body="Your refund for item {} have been approved.".format(product_dict[refund.get_product_name()])
+        msg.body="Your refund for item {} have been approved.".format(product_dict[refund.get_product_name()].get_name())
         mail.send(msg)
         transaction_dict[transaction_id].set_product_list(transaction_dict[transaction_id].get_product_list().pop(product_id))
         refund_dict.pop(id)
@@ -1626,7 +1626,7 @@ def rejectrefund(id):
         msg = Message("Refund rejected",
                   sender="chuaandspencer@example.com",
                   recipients=[user_dict[refund.get_refund_by()].get_email()])
-        msg.body="Your refund for item {} have been rejected.".format(product_dict[refund.get_product_name()])
+        msg.body="Your refund for item {} have been rejected.".format(product_dict[refund.get_product_name()].get_name())
         mail.send(msg)
         refund_dict.pop(id)
         db['Refunds'] = refund_dict
