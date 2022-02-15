@@ -3,7 +3,6 @@
 {% block content %}
 <html>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <style>
 a {
    color: black;
@@ -21,44 +20,6 @@ div#container {
 }
 body {font-family: Arial, Helvetica, sans-serif;}
 
-/* The Modal (background) */
-.modal{
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
 </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/homepage.css') }}"/>
@@ -86,37 +47,48 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			<th>{{ product_dict[y].get_name()}}</th>
 			{% if product_dict[y].get_created_product()!=0 %}
 			<td>
-				<button type="button" class="btn" id="myBtn">
-					<img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund">
+				<!-- Button trigger modal -->
+				<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal{{x+1}}">
+				  <img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund">
 				</button>
 				</td>
 				{%else%}
 				<td></td>
 				{%endif%}
 			</tr>
-			<div id="myModal" class="modal">
-				  <div class="modal-content">
-    			<span class="close">&times;</span>
-				<form method="GET" action="{{url_for('processrefund')}}">
-  <div class="mb-3">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{y}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
-  </div>
-  <div class="mb-3">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="transaction_id" value="{{transaction_list[x].get_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Reason For Refund</label>
-    <input type="text" class="form-control" name="reason" id="exampleInputPassword1">
-  </div>
-  <button type="submit" class="btn btn-primary">Send</button>
-</form>
+
+
+			<!-- Modal -->
+			<div class="modal fade" id="modal{{x+1}}" tabindex="-1" aria-labelledby="modallabel{{x+1}}" aria-hidden="true">
+			  <div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title" id="modallabel{{x+1}}">Refund Request</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				  </div>
+					<form method="GET" action="{{url_for('processrefund')}}">
+				  <div class="modal-body">
+
+						<input type="text" id="exampleInputEmail1" name="id" value="{{y}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
+						<input type="text" id="exampleInputEmail1" name="transaction_id" value="{{transaction_list[x].get_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
+					  <div class="mb-3">
+						<label for="exampleInputPassword1" class="form-label">Reason For Refund</label>
+						<input type="text" class="form-control" name="reason" id="exampleInputPassword1">
+					  </div>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Send</button>
+				  </div>
+						</form>
+				</div>
+			  </div>
 			</div>
-				  {%endfor%}
+			{%endfor%}
 
 
 			</table>
-</div>
+			</div>
 			
 			
 			</div>
@@ -130,33 +102,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	</div>
 {%endif%}
 	</div>
-<script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>
 {%endblock%}
