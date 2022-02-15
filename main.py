@@ -60,7 +60,7 @@ try:
                     sellers_dict[x].set_earned(earned)
     db['Users']=sellers_dict
 except:
-    print("Error in retrieving sellers from user.db.")
+    print("Error in retrieving seller from user.db.")
 db.close()
 
 global user
@@ -794,9 +794,17 @@ def delete_seller():
     users_dict = {}
     db = shelve.open('user.db', 'w')
     users_dict = db['Users']
+    products_dict=db['Products']
+    products_list=[]
+    if products_dict[x].get_created_product()==user.get_seller_id():
+        products_list.append(products_dict[x])
+    for x in products_list:
+        x.set_stock(0)
+        x.set_created_product(0)
+        products_dict[x.get_product_id()]=x
 
     users_dict.pop(user.get_seller_id())
-
+    db['Products'] = products_dict
     db['Users'] = users_dict
     db.close()
 
@@ -1266,7 +1274,7 @@ def ordernumber():
             print("Error in retrieving Transactions from user.db.")
         if not order_number_form.orderno.data in transactions_dict:
             error="Order Number does not exist"
-        elif transactions_dict[order_number_form.orderno.data].get_delivery_data()==0:
+        elif transactions_dict[order_number_form.orderno.data].get_delivered_date()!=0:
             error="Transaction already delivered"
         else:
             return redirect(url_for('tracking', order=order_number_form.orderno.data))
@@ -1366,7 +1374,6 @@ def transaction():
     except:
         print("Error in retrieving Users from user.db.")
     transactions_dict[transaction.get_id()]=transaction
-    db['Transactions']=transactions_dict
     wishlist=user.get_transaction()
     wishlist[transaction.get_id()]=0
     user.set_transaction(wishlist)
@@ -1390,6 +1397,7 @@ def transaction():
         total_payment+=products_dict[x].get_price()
     earning_dict[d.date.today()]+=total_payment
     db['Earnings']=earning_dict
+    db['Transactions']=transactions_dict
     msg = Message("Transaction completed",
                   sender="chuaandspencer@example.com",
                   recipients=[user.get_email()])

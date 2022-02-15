@@ -44,7 +44,7 @@
 		{% if x.get_sold()==0 %}
 	<td>{{x.get_impression()}} impressions<br> {{x.get_impression()/1}}&#37; Conversion rate</td>
 	{% else %}
-	<td>{{x.get_impression()}} impressions<br> {{'%0.2f'| format(x.get_impression()/x.get_sold()|float)}}&#37; Conversion rate</td>
+	<td>{{x.get_impression()}} impressions<br> {{'%0.2f'| format(x.get_sold()/x.get_impression()|float)}}&#37; Conversion rate</td>
 	{% endif %}
 	{% endif %}
 		{% endfor %}
