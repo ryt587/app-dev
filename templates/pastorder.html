@@ -74,7 +74,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			{{x+1}} Delivered Date: {{transaction_list[x].get_delivered_date()}}
 		</button>
 		</h2>
-		<div id="collapse{{x+1}}" class="accordion-collapse collapse show" aria-labelledby="heading{{x+1}}" data-bs-parent="#accordionExample">
+		<div id="collapse{{x+1}}" class="accordion-collapse collapse" aria-labelledby="heading{{x+1}}" data-bs-parent="#accordionExample">
 		<div class="accordion-body">
 		<table class="table">
 			<tr>
@@ -94,24 +94,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 				<td></td>
 				{%endif%}
 			</tr>
-			<div id="myModal" class="modal">
-				  <div class="modal-content">
-    			<span class="close">&times;</span>
-				<form method="GET" action="{{url_for('processrefund')}}">
-  <div class="mb-3">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{y}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
-  </div>
-  <div class="mb-3">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="transaction_id" value="{{transaction_list[x].get_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Reason For Refund</label>
-    <input type="text" class="form-control" name="reason" id="exampleInputPassword1">
-  </div>
-  <button type="submit" class="btn btn-primary">Send</button>
-</form>
-				  </div>
-			</div>
+
 				  {%endfor%}
 
 
@@ -122,7 +105,24 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			</div>
 		</div>
 	{%endfor%}
-
+			<div id="myModal" class="modal">
+				  <div class="modal-content">
+    			<span class="close">&times;</span>
+				<form method="GET" action="{{url_for('processrefund')}}">
+  <div class="mb-3">
+    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{y}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
+  </div>
+  <div class="mb-3">
+    <input type="text" class="form-control" id="exampleInputEmail2" name="transaction_id" value="{{transaction_list[x].get_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Reason For Refund</label>
+    <input type="text" class="form-control" name="reason" id="exampleInputPassword1">
+  </div>
+  <button type="submit" class="btn btn-primary">Send</button>
+</form>
+				  </div>
+			</div>
 </div>
 </div>
 {%else%}
