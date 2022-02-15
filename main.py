@@ -126,7 +126,7 @@ def login():
             print("Error in retrieving Users from user.db.")
 
         for key, value in users_dict.items():
-            if value.get_email()==create_user_form.email.data and check_password_hash(value.get_password(), create_user_form.password.data):
+            if value.get_email().lower()==create_user_form.email.data.lower() and check_password_hash(value.get_password(), create_user_form.password.data):
                 global user
                 user=value
                 if isinstance(value, Customer.Customer):
