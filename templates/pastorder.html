@@ -48,7 +48,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			{% if product_dict[y].get_created_product()!=0 %}
 			<td>
 				<!-- Button trigger modal -->
-				<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal{{x+1}}">
+				<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modal{{y+1}}">
 				  <img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund">
 				</button>
 				</td>
@@ -59,11 +59,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 
 			<!-- Modal -->
-			<div class="modal fade" id="modal{{x+1}}" tabindex="-1" aria-labelledby="modallabel{{x+1}}" aria-hidden="true">
+			<div class="modal fade" id="modal{{y}}" tabindex="-1" aria-labelledby="modallabel{{y}}" aria-hidden="true">
 			  <div class="modal-dialog">
 				<div class="modal-content">
 				  <div class="modal-header">
-					<h5 class="modal-title" id="modallabel{{x+1}}">Refund Request</h5>
+					<h5 class="modal-title" id="modallabel{{y}}">Refund Request</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				  </div>
 					<form method="GET" action="{{url_for('processrefund')}}">
