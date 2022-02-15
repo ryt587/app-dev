@@ -14,6 +14,7 @@ from flask_mail import Mail, Message
 import datetime as d
 import itertools
 import pyotp
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY']=uuid4().hex
@@ -889,8 +890,16 @@ def ban_user(id):
     users_dict = {}
     db = shelve.open('user.db', 'w')
     users_dict = db['Users']
-
-    
+    products_dict = db['Products']
+    products_list = []
+    user2=users_dict[id]
+    if isinstance(user2, Seller.Seller):
+        if products_dict[x].get_created_product()==user2.get_seller_id():
+            products_list.append(products_dict[x])
+        for x in products_list:
+            x.set_stock(0)
+            x.set_created_product(0)
+            products_dict[x.get_product_id()]=x
     msg = Message("Account have been banned",
                   sender="chuaandspencer@example.com",
                   recipients=[users_dict[id].get_email()])
@@ -899,6 +908,7 @@ def ban_user(id):
     mail.send(msg)
 
     db['Users'] = users_dict
+    db['Products'] = products_dict
     db.close()
     if 'customer' in request.referrer:
         return redirect(url_for('retrieve_customer'))
@@ -997,9 +1007,11 @@ def productdetail(id):
             db['Users']=sellers_dict
     except:
         print("Error in retrieving sellers from user.db.") 
-    db.close()
     product=products_dict[id]
     product.set_impression(product.get_impression()+1)
+    products_dict[id]=product
+    db['Products']=products_dict
+    db.close()
     seller=sellers_dict[product.get_created_product()]
     if user!=0 and id in user.get_wishlist():
         wishlist=True

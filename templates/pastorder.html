@@ -84,11 +84,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			{%for y in product_list%}
 			<tr>
 			<th>{{ y.get_name()}}</th>
+			{% if y.get_created_product()!=0 %}
 			<td>
 				<button type="button" class="btn" id="myBtn">
 					<img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund">
 				</button>
 				</td>
+				{%else%}
+				<td></td>
+				{%endif%}
 			</tr>
 			<div id="myModal" class="modal">
 				  <div class="modal-content">
