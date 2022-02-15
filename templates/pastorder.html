@@ -81,10 +81,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 				<th scope="row">Product Name</th>
 				<th scope="row">Request for refund</th>
 			</tr>
-			{%for y in product_list%}
+			{%for y in product_list[transaction_list[x]]%}
 			<tr>
-			<th>{{ y.get_name()}}</th>
-			{% if y.get_created_product()!=0 %}
+			<th>{{ product_dict[y].get_name()}}</th>
+			{% if product_dict[y].get_created_product()!=0 %}
 			<td>
 				<button type="button" class="btn" id="myBtn">
 					<img height="35px" width="35px" src="https://cdn-icons-png.flaticon.com/512/181/181645.png" alt="refund">
@@ -99,7 +99,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     			<span class="close">&times;</span>
 				<form method="GET" action="{{url_for('processrefund')}}">
   <div class="mb-3">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{y.get_product_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
+    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{product_dict[y].get_product_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
   </div>
   <div class="mb-3">
     <input type="text" class="form-control" id="exampleInputEmail1" name="transaction_id" value="{{transaction_list[x].get_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
@@ -121,9 +121,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 			
 			</div>
 		</div>
-	</div>
 	{%endfor%}
 
+</div>
 </div>
 {%else%}
 	<div class="container text-center">

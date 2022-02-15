@@ -1186,15 +1186,16 @@ def pastorder():
         print("Error in retrieving Transactions from user.db.")
     db.close()
     transaction_list=[]
-    product_list=[]
+    product_list={}
     for x in transactions_dict:
-        if transactions_dict[x].get_delivered_date()!=0 and transactions_dict[x].get_product_list()!=0:
+        if transactions_dict[x].get_delivered_date()!=0 and transactions_dict[x].get_product_list()!=0 and transactions_dict[x].get_product_list()!={}:
             transaction_list.append(transactions_dict[x])
     for x in transaction_list:
         if x.get_product_list()!=0:
+            product_list[x]=[]
             for y in x.get_product_list():
-                product_list.append(products_dict[y])
-    return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_list=product_list)
+                product_list[x].append(y)
+    return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_list=product_list, product_dict=products_dict)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
@@ -1376,6 +1377,7 @@ def transaction():
     except:
         print("Error in retrieving Users from user.db.")
     transactions_dict[transaction.get_id()]=transaction
+    db['Transactions']=transactions_dict
     wishlist=user.get_transaction()
     wishlist[transaction.get_id()]=0
     user.set_transaction(wishlist)
@@ -1399,7 +1401,6 @@ def transaction():
         total_payment+=products_dict[x].get_price()
     earning_dict[d.date.today()]+=total_payment
     db['Earnings']=earning_dict
-    db['Transactions']=transactions_dict
     msg = Message("Transaction completed",
                   sender="chuaandspencer@example.com",
                   recipients=[user.get_email()])
