@@ -254,11 +254,11 @@ def accountdetails():
 
 @app.route('/termsandconditions')
 def termsandconditions():
-    return render_template('termsandconditions.html')
+    return render_template('termsandconditions.html', user=user)
 
 @app.route('/Aboutus')
 def Aboutus():
-    return render_template('AboutUs.html')
+    return render_template('AboutUs.html', user=user)
 
 
 @app.route('/deleteUser/', methods=['GET', 'POST'])
