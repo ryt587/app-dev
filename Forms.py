@@ -73,8 +73,8 @@ class CreateElectronicForm(Form):
                             render_kw={"placeholder": "16gb"})
     Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "17 inches"})
-    Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Price = IntegerField('Price', [validators.NumberRange(min=0),validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=1),validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class CreateClothingForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -83,8 +83,8 @@ class CreateClothingForm(Form):
                             render_kw={"placeholder": "large"})
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
-    Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Price = IntegerField('Price', [validators.NumberRange(min=0),validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=1),validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class CreateAccessoriesForm(Form):
     Accessory_type = SelectField('Product Type', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -95,8 +95,8 @@ class CreateAccessoriesForm(Form):
                             render_kw={"placeholder": "large"})
     Accessory_colour = StringField('Accessory_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
-    Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', render_kw={"placeholder": "1000"})
+    Price = IntegerField('Price', [validators.NumberRange(min=0),validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=1),validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class UpdateElectronicForm(Form):
     Product_name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -111,8 +111,8 @@ class UpdateElectronicForm(Form):
                             render_kw={"placeholder": "16gb"})
     Electronics_size = StringField('Size', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "17 inches"})
-    Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=0), validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Price = IntegerField('Price', [validators.NumberRange(min=0),validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=1), validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 
 class UpdateClothingForm(Form):
@@ -122,8 +122,8 @@ class UpdateClothingForm(Form):
                             render_kw={"placeholder": "large"})
     Clothing_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                             render_kw={"placeholder": "red"})
-    Price = IntegerField('Price', [validators.DataRequired()], render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Price = IntegerField('Price', [validators.NumberRange(min=0),validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=1), validators.DataRequired()], render_kw={"placeholder": "1000"})
 
 class UpdateAccessoriesForm(Form):
     Accessory_type = SelectField('Product Type', [validators.Length(min=1, max=150), validators.DataRequired()],
@@ -134,9 +134,9 @@ class UpdateAccessoriesForm(Form):
                                 render_kw={"placeholder": "large"})
     Accessory_colour = StringField('Clothing_colour', [validators.Length(min=1, max=150), validators.DataRequired()],
                                   render_kw={"placeholder": "red"})
-    Price = IntegerField('Price', [validators.DataRequired()],
+    Price = IntegerField('Price', [validators.NumberRange(min=0),validators.DataRequired()],
                          render_kw={"placeholder": "1000"})
-    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=0), validators.DataRequired()], render_kw={"placeholder": "1000"})
+    Product_stock = IntegerField('Product_stock', [validators.NumberRange(min=11), validators.DataRequired()], render_kw={"placeholder": "1000"})
     
 class UpdateSellerForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=150), validators.DataRequired()], render_kw={"placeholder": "Store Name"})
