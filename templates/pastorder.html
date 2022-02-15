@@ -99,7 +99,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     			<span class="close">&times;</span>
 				<form method="GET" action="{{url_for('processrefund')}}">
   <div class="mb-3">
-    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{product_dict[y].get_product_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
+    <input type="text" class="form-control" id="exampleInputEmail1" name="id" value="{{y}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
   </div>
   <div class="mb-3">
     <input type="text" class="form-control" id="exampleInputEmail1" name="transaction_id" value="{{transaction_list[x].get_id()}}" aria-describedby="emailHelp" readonly="readonly" style="visibility: hidden;">
