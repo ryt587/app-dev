@@ -1184,7 +1184,7 @@ def pastorder():
             product_list[x]=[]
             for y in x.get_product_list():
                 product_list[x].append(y)
-    return render_template("pastorder.html", user=user, transaction_list=transaction_list, product_list=product_list, product_dict=products_dict)
+    return render_template("pastorder.html", user=user, transaction_list=transaction_list[::-1], product_list=product_list, product_dict=products_dict)
 
 @app.route('/searchcategory/<category>')
 def searchcategory(category):
